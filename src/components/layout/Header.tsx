@@ -31,19 +31,19 @@ const Header = () => {
           >
             Case Study
           </Link>
-          <Link 
-            to="/about" 
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Về chúng tôi
-          </Link>
         </nav>
 
         {/* CTA */}
         <div className="flex items-center gap-3">
-          <Button variant="secondary" size="sm" className="hidden sm:inline-flex">
-            Đặt lịch trao đổi
-          </Button>
+          <a 
+            href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="secondary" size="sm" className="hidden sm:inline-flex">
+              Đặt lịch trao đổi
+            </Button>
+          </a>
         </div>
       </div>
     </header>

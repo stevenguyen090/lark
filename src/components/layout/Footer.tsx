@@ -16,8 +16,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
-              Giúp doanh nghiệp SME vận hành trơn tru hơn – mà sếp không phải lúc nào cũng nhảy vào xử lý. 
-              Chúng tôi không bán tool, chúng tôi giúp bạn giải quyết vấn đề vận hành.
+              Giúp SME vận hành trơn tru — không cần sếp can thiệp mỗi ngày.
             </p>
           </div>
 
@@ -35,11 +34,6 @@ const Footer = () => {
                   Case Study
                 </Link>
               </li>
-              <li>
-                <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Về chúng tôi
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -47,8 +41,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Liên hệ</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Email: hello@larkconsult.vn</li>
-              <li>Hotline: 0123 456 789</li>
+              <li>Email: tung1234pct@gmail.com</li>
             </ul>
           </div>
         </div>
