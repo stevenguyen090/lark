@@ -2,95 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* LARK CONSULT DESIGN SYSTEM
+   Following Lark Landing Page Style - Clean, Light, Growth-focused
+   Primary Font: Inter
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
+    /* Primary Brand Colors */
+    --primary: 222 100% 62%; /* #3B6EFF */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 222 100% 95%; /* #EAF0FF */
+    
+    /* Background & Surface */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 220 17% 14%; /* #1F2329 - Neutral 900 */
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 220 17% 14%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
+    --popover-foreground: 220 17% 14%;
+    
+    /* Secondary & Muted */
+    --secondary: 220 14% 96%; /* #F2F3F5 - Neutral 100 */
+    --secondary-foreground: 220 17% 14%;
+    
+    --muted: 220 14% 96%;
+    --muted-foreground: 218 10% 35%; /* #4E5969 - Neutral 700 */
+    
+    /* Accent */
+    --accent: 222 100% 95%;
+    --accent-foreground: 222 100% 62%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Semantic Colors */
+    --success: 145 100% 35%; /* #00B42A */
+    --warning: 30 100% 50%; /* #FF7D00 */
+    --error: 0 91% 60%; /* #F53F3F */
+    
+    /* Border & Input */
+    --border: 220 13% 91%; /* #E5E6EB - Neutral 200 */
+    --input: 220 13% 91%;
+    --ring: 222 100% 62%;
+    
+    /* Radius */
+    --radius: 0.75rem;
+    --radius-pill: 999px;
+    
+    /* Shadows */
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
+    
+    /* Sidebar (for future use) */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary: 222 100% 62%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 222 100% 62%;
   }
 }
 
@@ -98,8 +75,102 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-foreground;
+  }
+}
+
+@layer components {
+  /* Hero Gradient Background */
+  .hero-gradient {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F6F9FF 100%);
+  }
+  
+  /* Highlight text with primary blue */
+  .text-highlight {
+    @apply text-primary;
+  }
+  
+  /* Card with subtle shadow */
+  .card-elevated {
+    box-shadow: var(--shadow-card);
+    @apply bg-card rounded-xl border border-border;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  
+  .card-elevated:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+  
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  /* Container max width */
+  .container-content {
+    @apply max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8;
+  }
+  
+  /* Badge styles */
+  .badge-industry {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary;
+  }
+  
+  .badge-scale {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary text-muted-foreground;
+  }
+  
+  /* Pain point cards */
+  .pain-point-card {
+    @apply flex items-start gap-3 p-4 rounded-lg bg-secondary/50 border border-border;
+  }
+  
+  /* Step indicator */
+  .step-number {
+    @apply flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground font-semibold text-lg;
+  }
+  
+  /* CTA section background */
+  .cta-section {
+    @apply bg-gradient-to-br from-primary/5 to-primary/10;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
