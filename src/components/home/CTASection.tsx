@@ -17,10 +17,16 @@ const CTASection = () => {
           </p>
 
           {/* CTA Button */}
-          <Button variant="hero" size="xl">
-            <CalendarDays className="w-5 h-5" />
-            Đặt lịch trao đổi
-          </Button>
+          <a 
+            href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="hero" size="xl">
+              <CalendarDays className="w-5 h-5" />
+              Đặt lịch trao đổi
+            </Button>
+          </a>
 
           {/* Trust note */}
           <p className="text-sm text-muted-foreground mt-6">

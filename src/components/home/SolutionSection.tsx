@@ -1,29 +1,23 @@
-import { Search, TestTube, BarChart3, Expand } from "lucide-react";
-
 const steps = [
   {
     number: 1,
-    icon: Search,
     title: "Hiểu đúng vấn đề vận hành",
     description: "Không bắt đầu bằng tool – bắt đầu bằng việc hiểu doanh nghiệp bạn đang mất thời gian ở đâu."
   },
   {
     number: 2,
-    icon: TestTube,
-    title: "Làm thử ở phạm vi nhỏ",
-    description: "Chọn 1 quy trình cốt lõi, chuẩn hoá và chạy thử trong 2-4 tuần."
+    title: "Chọn tool vận hành phù hợp & thử ở quy mô nhỏ",
+    description: "Lựa chọn nền tảng phù hợp (Lark, Google Workspace, CRM/ERP…) và triển khai thử trong phạm vi nhỏ để kiểm chứng hiệu quả trước khi mở rộng."
   },
   {
     number: 3,
-    icon: BarChart3,
     title: "Đo hiệu quả bằng số",
     description: "Theo dõi các chỉ số cụ thể: thời gian tiết kiệm, số lần gián đoạn, mức độ chủ động của nhân viên."
   },
   {
     number: 4,
-    icon: Expand,
     title: "Mở rộng khi đã thấy kết quả",
-    description: "Chỉ khi số liệu cho thấy hiệu quả rõ ràng, hệ thống mới được mở rộng thêm."
+    description: "Chỉ khi số liệu cho thấy hiệu quả rõ ràng, mới được mở rộng sang các quy trình hoặc bộ phận khác theo lộ trình đã thống nhất."
   }
 ];
 
@@ -47,11 +41,8 @@ const SolutionSection = () => {
               className="bg-card p-6 rounded-xl border border-border animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {/* Step number and icon */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="step-number">{step.number}</div>
-                <step.icon className="w-5 h-5 text-primary" />
-              </div>
+              {/* Step number */}
+              <div className="text-5xl font-bold text-primary mb-4">{step.number}</div>
               
               {/* Content */}
               <h3 className="text-lg font-semibold text-foreground mb-2">{step.title}</h3>
