@@ -14,16 +14,130 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      case_studies: {
+        Row: {
+          context: Json
+          created_at: string
+          created_by: string | null
+          cta_question: string | null
+          id: string
+          industry: string
+          industry_label: string
+          key_insight: string | null
+          main_problem: string
+          main_problem_label: string
+          not_suitable_for: Json
+          pain_points: Json
+          previous_attempts: Json
+          previous_attempts_result: string | null
+          results: Json
+          root_causes: Json
+          scale: string
+          scale_label: string
+          slug: string
+          solution: Json
+          status: string
+          suitable_for: Json
+          summary: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          context?: Json
+          created_at?: string
+          created_by?: string | null
+          cta_question?: string | null
+          id?: string
+          industry: string
+          industry_label: string
+          key_insight?: string | null
+          main_problem: string
+          main_problem_label: string
+          not_suitable_for?: Json
+          pain_points?: Json
+          previous_attempts?: Json
+          previous_attempts_result?: string | null
+          results?: Json
+          root_causes?: Json
+          scale: string
+          scale_label: string
+          slug: string
+          solution?: Json
+          status?: string
+          suitable_for?: Json
+          summary: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          context?: Json
+          created_at?: string
+          created_by?: string | null
+          cta_question?: string | null
+          id?: string
+          industry?: string
+          industry_label?: string
+          key_insight?: string | null
+          main_problem?: string
+          main_problem_label?: string
+          not_suitable_for?: Json
+          pain_points?: Json
+          previous_attempts?: Json
+          previous_attempts_result?: string | null
+          results?: Json
+          root_causes?: Json
+          scale?: string
+          scale_label?: string
+          slug?: string
+          solution?: Json
+          status?: string
+          suitable_for?: Json
+          summary?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "consultant" | "content_editor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +264,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "consultant", "content_editor"],
+    },
   },
 } as const
