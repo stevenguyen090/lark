@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { sampleCaseStudies } from "@/data/caseStudies";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 
 const CaseStudyPreview = () => {
+  const { data: caseStudies = [], isLoading } = usePublishedCaseStudies();
+  
   // Lấy 3 case study đầu tiên để preview
-  const previewCases = sampleCaseStudies.slice(0, 3);
+  const previewCases = caseStudies.slice(0, 3);
 
   return (
     <section className="section-padding bg-background">
@@ -20,54 +22,67 @@ const CaseStudyPreview = () => {
           </p>
         </div>
 
-        {/* Case Study Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {previewCases.map((caseStudy) => (
-            <Link 
-              key={caseStudy.id}
-              to={`/case-studies/${caseStudy.slug}`}
-              className="card-elevated p-6 group"
-            >
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="badge-industry">{caseStudy.industryLabel}</span>
-                <span className="badge-scale">{caseStudy.scaleLabel}</span>
-              </div>
+        {/* Loading state */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : previewCases.length > 0 ? (
+          <>
+            {/* Case Study Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {previewCases.map((caseStudy) => (
+                <Link 
+                  key={caseStudy.id}
+                  to={`/case-studies/${caseStudy.slug}`}
+                  className="card-elevated p-6 group"
+                >
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="badge-industry">{caseStudy.industryLabel}</span>
+                    <span className="badge-scale">{caseStudy.scaleLabel}</span>
+                  </div>
 
-              {/* Title */}
-              <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                {caseStudy.title}
-              </h3>
+                  {/* Title */}
+                  <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                    {caseStudy.title}
+                  </h3>
 
-              {/* Summary */}
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                {caseStudy.summary}
-              </p>
+                  {/* Summary */}
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {caseStudy.summary}
+                  </p>
 
-              {/* Problem tag */}
-              <div className="text-xs text-muted-foreground mb-4">
-                Vấn đề chính: <span className="font-medium">{caseStudy.mainProblemLabel}</span>
-              </div>
+                  {/* Problem tag */}
+                  <div className="text-xs text-muted-foreground mb-4">
+                    Vấn đề chính: <span className="font-medium">{caseStudy.mainProblemLabel}</span>
+                  </div>
 
-              {/* CTA */}
-              <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
-                Xem chi tiết
+                  {/* CTA */}
+                  <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                    Xem chi tiết
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* View all CTA */}
+            <div className="text-center">
+              <Link 
+                to="/case-studies" 
+                className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
+              >
+                Xem tất cả case study
                 <ArrowRight className="w-4 h-4" />
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* View all CTA */}
-        <div className="text-center">
-          <Link 
-            to="/case-studies" 
-            className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
-          >
-            Xem tất cả case study
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Chưa có case study nào được công bố.</p>
+          </div>
+        )}
       </div>
     </section>
   );

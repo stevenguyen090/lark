@@ -1,14 +1,28 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, CheckCircle, XCircle, CalendarDays } from "lucide-react";
-import { sampleCaseStudies } from "@/data/caseStudies";
+import { ArrowLeft, CheckCircle, XCircle, CalendarDays, Loader2 } from "lucide-react";
+import { useCaseStudyBySlug } from "@/hooks/useCaseStudies";
+
+const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d";
 
 const CaseStudyDetail = () => {
   const { slug } = useParams();
-  const caseStudy = sampleCaseStudies.find((cs) => cs.slug === slug);
+  const { data: caseStudy, isLoading, error } = useCaseStudyBySlug(slug);
 
-  if (!caseStudy) {
+  if (isLoading) {
+    return (
+      <Layout>
+        <section className="section-padding">
+          <div className="container-content flex items-center justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        </section>
+      </Layout>
+    );
+  }
+
+  if (!caseStudy || error) {
     return (
       <Layout>
         <section className="section-padding">
@@ -226,10 +240,12 @@ const CaseStudyDetail = () => {
               <p className="text-muted-foreground mb-6">
                 Bạn không cần quyết định ngay. Hãy bắt đầu bằng một buổi đánh giá nhanh cách vận hành hiện tại.
               </p>
-              <Button variant="hero" size="lg">
-                <CalendarDays className="w-5 h-5" />
-                Đặt lịch trao đổi 30 phút
-              </Button>
+              <a href={CTA_LINK} target="_blank" rel="noopener noreferrer">
+                <Button variant="hero" size="lg">
+                  <CalendarDays className="w-5 h-5" />
+                  Đặt lịch trao đổi
+                </Button>
+              </a>
             </section>
 
             {/* Navigation */}

@@ -1,14 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Filter, X } from "lucide-react";
+import { ArrowRight, Filter, X, Loader2 } from "lucide-react";
+import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 import { 
-  sampleCaseStudies, 
   industryOptions, 
   scaleOptions, 
   problemOptions,
-  type CaseStudy
 } from "@/data/caseStudies";
 
 const CaseStudyListing = () => {
@@ -24,6 +23,9 @@ const CaseStudyListing = () => {
   const [selectedProblems, setSelectedProblems] = useState<string[]>(
     searchParams.get("problem")?.split(",").filter(Boolean) || []
   );
+
+  // Fetch published case studies from database
+  const { data: caseStudies = [], isLoading } = usePublishedCaseStudies();
 
   // Toggle filter
   const toggleFilter = (
@@ -51,13 +53,13 @@ const CaseStudyListing = () => {
 
   // Filter case studies
   const filteredCaseStudies = useMemo(() => {
-    return sampleCaseStudies.filter((cs) => {
+    return caseStudies.filter((cs) => {
       const matchIndustry = selectedIndustries.length === 0 || selectedIndustries.includes(cs.industry);
       const matchScale = selectedScales.length === 0 || selectedScales.includes(cs.scale);
       const matchProblem = selectedProblems.length === 0 || selectedProblems.includes(cs.mainProblem);
       return matchIndustry && matchScale && matchProblem;
     });
-  }, [selectedIndustries, selectedScales, selectedProblems]);
+  }, [caseStudies, selectedIndustries, selectedScales, selectedProblems]);
 
   return (
     <Layout>
@@ -170,8 +172,12 @@ const CaseStudyListing = () => {
                 </p>
               </div>
 
-              {/* Grid */}
-              {filteredCaseStudies.length > 0 ? (
+              {/* Loading state */}
+              {isLoading ? (
+                <div className="flex items-center justify-center py-16">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+              ) : filteredCaseStudies.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {filteredCaseStudies.map((caseStudy) => (
                     <Link
