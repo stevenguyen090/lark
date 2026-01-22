@@ -35,7 +35,7 @@ const SocialProofSection = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Nhiều doanh nghiệp SME đã bắt đầu từ những{" "}
+            Nhiều doanh nghiệp đã bắt đầu từ những{" "}
             <span className="text-primary">bài toán rất giống bạn</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
