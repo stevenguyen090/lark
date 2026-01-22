@@ -6,6 +6,19 @@ type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 type CaseStudyInsert = Database['public']['Tables']['case_studies']['Insert'];
 type CaseStudyUpdate = Database['public']['Tables']['case_studies']['Update'];
 
+function withTimeout<T>(promise: Promise<T>, ms: number, label = 'Request') {
+  let timeoutId: number | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = window.setTimeout(() => {
+      reject(new Error(`${label} timeout after ${ms}ms`));
+    }, ms);
+  });
+
+  return Promise.race([promise, timeout]).finally(() => {
+    if (timeoutId) window.clearTimeout(timeoutId);
+  });
+}
+
 // Transform database row to frontend format
 export function transformCaseStudy(row: CaseStudy) {
   return {
@@ -80,10 +93,13 @@ export function usePublishedCaseStudies(filters?: {
         query = query.eq('main_problem', filters.mainProblem);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await withTimeout(query, 12000, 'Load case studies');
       if (error) throw error;
       return data?.map(transformCaseStudy) || [];
     },
+    retry: 1,
+    retryDelay: 800,
+    refetchOnWindowFocus: false,
   });
 }
 
