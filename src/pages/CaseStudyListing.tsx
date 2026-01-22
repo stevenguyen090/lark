@@ -68,7 +68,7 @@ const CaseStudyListing = () => {
         <div className="container-content">
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Các doanh nghiệp SME đã{" "}
+              Các doanh nghiệp đã{" "}
               <span className="text-primary">làm như thế nào?</span>
             </h1>
             <p className="text-lg text-muted-foreground">
