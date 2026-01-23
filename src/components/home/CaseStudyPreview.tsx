@@ -3,7 +3,13 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 
 const CaseStudyPreview = () => {
-  const { data: caseStudies = [], isLoading } = usePublishedCaseStudies();
+  const {
+    data: caseStudies = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = usePublishedCaseStudies();
   
   // Lấy 3 case study đầu tiên để preview
   const previewCases = caseStudies.slice(0, 3);
@@ -22,10 +28,22 @@ const CaseStudyPreview = () => {
           </p>
         </div>
 
-        {/* Loading state */}
+        {/* Loading / Error state */}
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : isError ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-4">
+              Không tải được danh sách case study. {(error as Error)?.message ? `(${(error as Error).message})` : ""}
+            </p>
+            <button
+              onClick={() => refetch()}
+              className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+            >
+              Thử lại
+            </button>
           </div>
         ) : previewCases.length > 0 ? (
           <>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAllCaseStudies, useDeleteCaseStudy } from '@/hooks/useCaseStudies';
+import { useSeedSampleCaseStudies } from '@/hooks/useSeedSampleCaseStudies';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,6 +53,8 @@ export default function AdminDashboard() {
   
   const { signOut } = useAuth();
   const { toast } = useToast();
+
+  const seedMutation = useSeedSampleCaseStudies();
   
   const { data: caseStudies, isLoading } = useAllCaseStudies({
     status: statusFilter || undefined,
@@ -79,6 +82,25 @@ export default function AdminDashboard() {
       });
     }
     setDeleteId(null);
+  };
+
+  const handleSeedSamples = async () => {
+    try {
+      const result = await seedMutation.mutateAsync();
+      toast({
+        title: 'Đã đồng bộ dữ liệu mẫu',
+        description:
+          result.inserted === 0
+            ? `Không có bài mẫu nào cần thêm (đã đủ ${result.totalSamples}).`
+            : `Đã thêm ${result.inserted} bài mẫu (mục tiêu ${result.totalSamples}).`,
+      });
+    } catch (e) {
+      toast({
+        title: 'Lỗi đồng bộ dữ liệu mẫu',
+        description: (e as Error)?.message || 'Không thể đồng bộ dữ liệu mẫu',
+        variant: 'destructive',
+      });
+    }
   };
 
   const clearFilters = () => {
@@ -135,12 +157,22 @@ export default function AdminDashboard() {
               {caseStudies?.length || 0} bài viết
             </p>
           </div>
-          <Link to="/admin/case-studies/new">
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Tạo bài viết mới
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={handleSeedSamples}
+              disabled={seedMutation.isPending}
+              title="Chỉ thêm bài mẫu còn thiếu theo slug (không ghi đè bài đã sửa)"
+            >
+              {seedMutation.isPending ? 'Đang đồng bộ...' : 'Đồng bộ 24 bài mẫu'}
             </Button>
-          </Link>
+            <Link to="/admin/case-studies/new">
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Tạo bài viết mới
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Filters */}
