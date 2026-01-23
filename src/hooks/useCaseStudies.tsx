@@ -6,7 +6,7 @@ type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 type CaseStudyInsert = Database['public']['Tables']['case_studies']['Insert'];
 type CaseStudyUpdate = Database['public']['Tables']['case_studies']['Update'];
 
-function withTimeout<T>(promise: Promise<T>, ms: number, label = 'Request') {
+function withTimeout<T>(promise: PromiseLike<T>, ms: number, label = 'Request') {
   let timeoutId: number | undefined;
   const timeout = new Promise<never>((_, reject) => {
     timeoutId = window.setTimeout(() => {
@@ -14,7 +14,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label = 'Request') {
     }, ms);
   });
 
-  return Promise.race([promise, timeout]).finally(() => {
+  return Promise.race([Promise.resolve(promise), timeout]).finally(() => {
     if (timeoutId) window.clearTimeout(timeoutId);
   });
 }
@@ -93,6 +93,7 @@ export function usePublishedCaseStudies(filters?: {
         query = query.eq('main_problem', filters.mainProblem);
       }
 
+      // query builder là thenable (PromiseLike) => wrap bằng Promise.resolve để đảm bảo chạy đúng & có timeout
       const { data, error } = await withTimeout(Promise.resolve(query), 12000, 'Load case studies');
       if (error) throw error;
       return data?.map(transformCaseStudy) || [];

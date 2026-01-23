@@ -25,7 +25,13 @@ const CaseStudyListing = () => {
   );
 
   // Fetch published case studies from database
-  const { data: caseStudies = [], isLoading } = usePublishedCaseStudies();
+  const {
+    data: caseStudies = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = usePublishedCaseStudies();
 
   // Toggle filter
   const toggleFilter = (
@@ -172,10 +178,19 @@ const CaseStudyListing = () => {
                 </p>
               </div>
 
-              {/* Loading state */}
+              {/* Loading / Error state */}
               {isLoading ? (
                 <div className="flex items-center justify-center py-16">
                   <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+              ) : isError ? (
+                <div className="text-center py-16">
+                  <p className="text-muted-foreground mb-4">
+                    Không tải được danh sách case study. {(error as Error)?.message ? `(${(error as Error).message})` : ""}
+                  </p>
+                  <Button variant="outline" onClick={() => refetch()}>
+                    Thử lại
+                  </Button>
                 </div>
               ) : filteredCaseStudies.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
