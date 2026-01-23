@@ -1,18 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
+import { useTopCaseStudies } from "@/hooks/useCaseStudies";
 
 const CaseStudyPreview = () => {
   const {
-    data: caseStudies = [],
+    data: previewCases = [],
     isLoading,
     isError,
     error,
     refetch,
-  } = usePublishedCaseStudies();
-  
-  // Lấy 3 case study đầu tiên để preview
-  const previewCases = caseStudies.slice(0, 3);
+  } = useTopCaseStudies(3);
 
   return (
     <section className="section-padding bg-background">
