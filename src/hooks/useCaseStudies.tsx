@@ -93,7 +93,7 @@ export function usePublishedCaseStudies(filters?: {
         query = query.eq('main_problem', filters.mainProblem);
       }
 
-      const { data, error } = await withTimeout(query, 12000, 'Load case studies');
+      const { data, error } = await withTimeout(Promise.resolve(query), 12000, 'Load case studies');
       if (error) throw error;
       return data?.map(transformCaseStudy) || [];
     },
