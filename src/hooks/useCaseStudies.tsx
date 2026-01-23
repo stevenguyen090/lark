@@ -93,14 +93,40 @@ export function usePublishedCaseStudies(filters?: {
         query = query.eq('main_problem', filters.mainProblem);
       }
 
-      // query builder là thenable (PromiseLike) => wrap bằng Promise.resolve để đảm bảo chạy đúng & có timeout
-      const { data, error } = await withTimeout(Promise.resolve(query), 12000, 'Load case studies');
+      const { data, error } = await query;
       if (error) throw error;
       return data?.map(transformCaseStudy) || [];
     },
-    retry: 1,
-    retryDelay: 800,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    retry: 2,
+  });
+}
+
+// Fetch top N published case studies for homepage (optimized)
+export function useTopCaseStudies(limit: number = 3) {
+  return useQuery({
+    queryKey: ['case-studies', 'top', limit],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('case_studies')
+        .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, status')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      return data?.map(row => ({
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        summary: row.summary,
+        industryLabel: row.industry_label,
+        scaleLabel: row.scale_label,
+        mainProblemLabel: row.main_problem_label,
+      })) || [];
+    },
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
   });
 }
 
