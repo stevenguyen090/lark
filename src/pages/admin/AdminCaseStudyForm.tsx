@@ -30,6 +30,7 @@ import {
   Loader2 
 } from 'lucide-react';
 import { industryOptions, scaleOptions, problemOptions } from '@/data/caseStudies';
+import RichTextEditor from '@/components/ui/rich-text-editor';
 
 interface FormData {
   slug: string;
@@ -557,12 +558,11 @@ export default function AdminCaseStudyForm() {
                 Thêm
               </Button>
               <div className="space-y-2 mt-4">
-                <Label>Kết quả của các giải pháp đã thử</Label>
-                <Textarea
-                  value={formData.previousAttemptsResult}
-                  onChange={(e) => setFormData(prev => ({ ...prev, previousAttemptsResult: e.target.value }))}
+                <Label>Kết quả của các giải pháp đã thử (Rich Text)</Label>
+                <RichTextEditor
+                  content={formData.previousAttemptsResult}
+                  onChange={(content) => setFormData(prev => ({ ...prev, previousAttemptsResult: content }))}
                   placeholder="Mô tả kết quả không như mong đợi..."
-                  rows={3}
                 />
               </div>
             </CardContent>
@@ -645,15 +645,14 @@ export default function AdminCaseStudyForm() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Mô tả tổng quan giải pháp</Label>
-                <Textarea
-                  value={formData.solution.description}
-                  onChange={(e) => setFormData(prev => ({
+                <Label>Mô tả tổng quan giải pháp (Rich Text)</Label>
+                <RichTextEditor
+                  content={formData.solution.description}
+                  onChange={(content) => setFormData(prev => ({
                     ...prev,
-                    solution: { ...prev.solution, description: e.target.value }
+                    solution: { ...prev.solution, description: content }
                   }))}
                   placeholder="Giải thích tư duy giải pháp tổng thể..."
-                  rows={3}
                 />
               </div>
               <div className="space-y-2">
@@ -706,18 +705,17 @@ export default function AdminCaseStudyForm() {
                       }}
                       placeholder="Tiêu đề bước"
                     />
-                    <Textarea
-                      value={step.description}
-                      onChange={(e) => {
+                    <RichTextEditor
+                      content={step.description}
+                      onChange={(content) => {
                         const updated = [...formData.solution.steps];
-                        updated[index] = { ...updated[index], description: e.target.value };
+                        updated[index] = { ...updated[index], description: content };
                         setFormData(prev => ({
                           ...prev,
                           solution: { ...prev.solution, steps: updated }
                         }));
                       }}
                       placeholder="Mô tả chi tiết"
-                      rows={2}
                     />
                   </div>
                 ))}

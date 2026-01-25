@@ -154,6 +154,11 @@ export function useCaseStudyBySlug(slug: string | undefined) {
   });
 }
 
+// Escape special ILIKE characters to prevent pattern injection
+function escapeIlike(str: string): string {
+  return str.replace(/[%_\\]/g, '\\$&');
+}
+
 // Admin: Fetch all case studies
 export function useAllCaseStudies(filters?: {
   status?: string;
@@ -179,7 +184,9 @@ export function useAllCaseStudies(filters?: {
         query = query.eq('scale', filters.scale);
       }
       if (filters?.search) {
-        query = query.or(`title.ilike.%${filters.search}%,slug.ilike.%${filters.search}%`);
+        // Escape special ILIKE characters to prevent pattern injection
+        const escapedSearch = escapeIlike(filters.search);
+        query = query.or(`title.ilike.%${escapedSearch}%,slug.ilike.%${escapedSearch}%`);
       }
 
       const { data, error } = await query;

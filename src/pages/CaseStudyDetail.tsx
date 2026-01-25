@@ -3,6 +3,8 @@ import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, XCircle, CalendarDays, Loader2 } from "lucide-react";
 import { useCaseStudyBySlug } from "@/hooks/useCaseStudies";
+import RichTextViewer from "@/components/ui/rich-text-viewer";
+import AttachmentGallery from "@/components/case-study/AttachmentGallery";
 
 const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d";
 
@@ -39,6 +41,21 @@ const CaseStudyDetail = () => {
       </Layout>
     );
   }
+
+  // Helper function to check if content is rich text (HTML) or plain text
+  const isRichText = (content: string): boolean => {
+    if (!content) return false;
+    return /<[a-z][\s\S]*>/i.test(content);
+  };
+
+  // Render content as rich text or plain text
+  const renderContent = (content: string, className?: string) => {
+    if (!content) return null;
+    if (isRichText(content)) {
+      return <RichTextViewer content={content} className={className} />;
+    }
+    return <p className={className}>{content}</p>;
+  };
 
   return (
     <Layout>
@@ -113,8 +130,9 @@ const CaseStudyDetail = () => {
                   </li>
                 ))}
               </ul>
+              {/* Rich text support for previousAttemptsResult */}
               <div className="bg-secondary/50 rounded-lg p-4 border-l-4 border-warning">
-                <p className="text-foreground">{caseStudy.previousAttemptsResult}</p>
+                {renderContent(caseStudy.previousAttemptsResult, 'text-foreground')}
               </div>
             </section>
 
@@ -142,22 +160,35 @@ const CaseStudyDetail = () => {
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 Giải pháp triển khai
               </h2>
+              
+              {/* Solution description - Rich Text */}
+              {caseStudy.solution.description && (
+                <div className="mb-6">
+                  {renderContent(caseStudy.solution.description, 'text-muted-foreground')}
+                </div>
+              )}
+              
               <p className="text-muted-foreground mb-6">{caseStudy.solution.approach}</p>
               
               <div className="space-y-4 mb-8">
                 {caseStudy.solution.steps.map((step, index) => (
                   <div key={index} className="flex gap-4">
                     <div className="step-number flex-shrink-0">{index + 1}</div>
-                    <div>
+                    <div className="flex-1">
                       <h4 className="font-semibold mb-1">{step.title}</h4>
-                      <p className="text-muted-foreground text-sm">{step.description}</p>
+                      {/* Rich text support for step description */}
+                      {isRichText(step.description) ? (
+                        <RichTextViewer content={step.description} className="text-muted-foreground text-sm" />
+                      ) : (
+                        <p className="text-muted-foreground text-sm">{step.description}</p>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Before/After */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="bg-secondary/50 rounded-xl p-5 border border-border">
                   <div className="text-sm font-medium text-muted-foreground mb-2">Trước đây</div>
                   <p className="text-foreground">{caseStudy.solution.dailyChanges.before}</p>
@@ -167,6 +198,14 @@ const CaseStudyDetail = () => {
                   <p className="text-foreground">{caseStudy.solution.dailyChanges.after}</p>
                 </div>
               </div>
+
+              {/* Attachments Section */}
+              {caseStudy.solution.attachments && caseStudy.solution.attachments.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-lg font-semibold mb-4">Tài liệu đính kèm</h3>
+                  <AttachmentGallery attachments={caseStudy.solution.attachments} />
+                </div>
+              )}
             </section>
 
             {/* Section 6: Kết quả đo được */}
