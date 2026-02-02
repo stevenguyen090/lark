@@ -1,30 +1,34 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ShoppingBag, Factory, Dumbbell } from "lucide-react";
 
 const industries = [
   {
-    id: "retail",
-    icon: ShoppingBag,
-    name: "Bán lẻ",
-    pain: "Báo cáo chậm, CEO phải theo sát",
-    link: "/case-studies?industry=retail",
-    cta: "Xem case bán lẻ"
+    industry: "Fitness & Wellness",
+    painPoint: "Nhân viên PT không báo cáo đúng giờ, quản lý không nắm được tình hình",
+    metric: "Giảm 60% thời gian theo dõi công việc",
+    slug: "fitness",
+    icon: "🏋️"
   },
   {
-    id: "manufacturing",
-    icon: Factory,
-    name: "Sản xuất",
-    pain: "Phối hợp rời rạc, thông tin không đồng bộ",
-    link: "/case-studies?industry=manufacturing",
-    cta: "Xem case sản xuất"
+    industry: "Bán lẻ & Chuỗi cửa hàng",
+    painPoint: "Không kiểm soát được tồn kho và doanh thu từng điểm bán",
+    metric: "Báo cáo tự động mỗi ngày, không cần nhắc",
+    slug: "retail",
+    icon: "🛒"
   },
   {
-    id: "fitness",
-    icon: Dumbbell,
-    name: "Fitness / Dịch vụ",
-    pain: "Onboarding chậm, phụ thuộc quản lý",
-    link: "/case-studies?industry=fitness",
-    cta: "Xem case dịch vụ"
+    industry: "Sản xuất & Gia công",
+    painPoint: "Đơn hàng bị trễ vì thiếu phối hợp giữa các bộ phận",
+    metric: "Giảm 40% thời gian xử lý đơn hàng",
+    slug: "manufacturing",
+    icon: "🏭"
+  },
+  {
+    industry: "Dịch vụ chuyên môn",
+    painPoint: "Hồ sơ khách hàng rải rác, không tra cứu được nhanh",
+    metric: "100% hồ sơ được số hoá và truy xuất trong 30 giây",
+    slug: "professional-services",
+    icon: "💼"
   }
 ];
 
@@ -35,48 +39,53 @@ const SocialProofSection = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Nhiều doanh nghiệp đã bắt đầu từ những{" "}
-            <span className="text-primary">bài toán rất giống bạn</span>
+            Doanh nghiệp{" "}
+            <span className="text-primary">tương tự bạn</span>{" "}
+            đã triển khai thành công
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Từ bán lẻ, sản xuất đến dịch vụ – fitness, các doanh nghiệp này bắt đầu bằng{" "}
-            <span className="font-medium text-foreground">làm thử</span> –{" "}
-            <span className="font-medium text-foreground">đo hiệu quả</span> – rồi mới mở rộng.
+          <p className="text-muted-foreground text-lg">
+            Xem case study theo ngành để biết cách doanh nghiệp giống bạn đã giải quyết vấn đề
           </p>
         </div>
 
         {/* Industry Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {industries.map((industry) => (
-            <Link 
-              key={industry.id}
-              to={industry.link}
-              className="card-elevated p-6 group cursor-pointer"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {industries.map((item, index) => (
+            <div 
+              key={index}
+              className="card-elevated p-6 flex flex-col h-full animate-fade-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <industry.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground">{industry.name}</h3>
+              {/* Industry icon */}
+              <div className="text-3xl mb-4">{item.icon}</div>
+              
+              {/* Industry name */}
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                {item.industry}
+              </h3>
+              
+              {/* Pain point */}
+              <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                {item.painPoint}
+              </p>
+              
+              {/* Metric highlight */}
+              <div className="bg-primary/5 rounded-lg p-3 mb-4">
+                <p className="text-sm font-medium text-primary">
+                  {item.metric}
+                </p>
               </div>
-              <p className="text-muted-foreground mb-4">{industry.pain}</p>
-              <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
-                {industry.cta}
-                <ArrowRight className="w-4 h-4" />
-              </div>
-            </Link>
+              
+              {/* CTA */}
+              <Link 
+                to={`/case-studies?industry=${item.slug}`}
+                className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              >
+                Xem case tương tự
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </div>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <Link 
-            to="/case-studies" 
-            className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
-          >
-            Xem các case study theo ngành & quy mô
-            <ArrowRight className="w-4 h-4" />
-          </Link>
         </div>
       </div>
     </section>

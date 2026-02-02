@@ -8,12 +8,12 @@ const CTASection = () => {
         <div className="max-w-2xl mx-auto text-center">
           {/* Content */}
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Bạn vẫn chưa chắc doanh nghiệp mình có phù hợp?
+            Không bán phần mềm. Không ép triển khai.
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Hãy bắt đầu bằng một buổi đánh giá nhanh –{" "}
-            <span className="font-medium text-foreground">không ràng buộc</span>,{" "}
-            <span className="font-medium text-foreground">không cam kết triển khai</span>.
+            Chỉ trao đổi để xem{" "}
+            <span className="font-medium text-foreground">doanh nghiệp bạn có phù hợp</span>{" "}
+            hay không.
           </p>
 
           {/* CTA Button */}
