@@ -1,23 +1,27 @@
 const steps = [
   {
-    number: 1,
+    number: "01",
     title: "Hiểu đúng vấn đề vận hành",
-    description: "Không bắt đầu bằng tool – bắt đầu bằng việc hiểu doanh nghiệp bạn đang mất thời gian ở đâu."
+    description: "Phân tích job, pain, constraint thực tế của doanh nghiệp.",
+    highlight: false
   },
   {
-    number: 2,
-    title: "Chọn tool vận hành phù hợp & thử ở quy mô nhỏ",
-    description: "Lựa chọn nền tảng phù hợp (Lark, Google Workspace, CRM/ERP…) và triển khai thử trong phạm vi nhỏ để kiểm chứng hiệu quả trước khi mở rộng."
+    number: "02",
+    title: "Chọn đúng nền tảng vận hành & làm thử quy mô nhỏ",
+    description: "Lựa chọn nền tảng phù hợp với bài toán vận hành thực tế (Lark quản lý công việc tập trung, báo cáo, phối hợp; kết hợp các công cụ đang có nếu cần). Triển khai thử ở phạm vi nhỏ để kiểm chứng hiệu quả.",
+    highlight: true
   },
   {
-    number: 3,
+    number: "03",
     title: "Đo hiệu quả bằng số",
-    description: "Theo dõi các chỉ số cụ thể: thời gian tiết kiệm, số lần gián đoạn, mức độ chủ động của nhân viên."
+    description: "Thời gian xử lý, mức độ phụ thuộc CEO, tính chủ động nhân sự.",
+    highlight: false
   },
   {
-    number: 4,
-    title: "Mở rộng khi đã thấy kết quả",
-    description: "Chỉ khi số liệu cho thấy hiệu quả rõ ràng, mới được mở rộng sang các quy trình hoặc bộ phận khác theo lộ trình đã thống nhất."
+    number: "04",
+    title: "Mở rộng có kiểm soát",
+    description: "Chỉ mở rộng khi các chỉ số vận hành đã chứng minh hiệu quả. Mọi bước mở rộng đều có baseline và KPI rõ ràng.",
+    highlight: true
   }
 ];
 
@@ -28,25 +32,52 @@ const SolutionSection = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Chúng tôi không bắt đầu bằng tool –{" "}
-            <span className="text-primary">chúng tôi bắt đầu bằng vấn đề vận hành</span>
+            Quy trình{" "}
+            <span className="text-primary">giảm rủi ro</span>{" "}
+            khi triển khai
           </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Mỗi bước đều có thể đo lường, không triển khai ồ ạt
+          </p>
         </div>
 
-        {/* Steps */}
+        {/* Steps - Stepper style */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => (
             <div 
               key={step.number}
-              className="bg-card p-6 rounded-xl border border-border animate-fade-in"
+              className={`relative p-6 rounded-xl border animate-fade-in ${
+                step.highlight 
+                  ? 'bg-primary/5 border-primary/30' 
+                  : 'bg-card border-border'
+              }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {/* Step number */}
-              <div className="text-5xl font-bold text-primary mb-4">{step.number}</div>
+              {/* Step number - Large */}
+              <div className={`text-5xl font-bold mb-4 ${
+                step.highlight ? 'text-primary' : 'text-muted-foreground/30'
+              }`}>
+                {step.number}
+              </div>
               
               {/* Content */}
-              <h3 className="text-lg font-semibold text-foreground mb-2">{step.title}</h3>
-              <p className="text-sm text-muted-foreground">{step.description}</p>
+              <h3 className={`text-lg font-semibold mb-2 ${
+                step.highlight ? 'text-primary' : 'text-foreground'
+              }`}>
+                {step.title}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {step.description}
+              </p>
+              
+              {/* Highlight badge */}
+              {step.highlight && (
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                    Quan trọng
+                  </span>
+                </div>
+              )}
             </div>
           ))}
         </div>

@@ -1,53 +1,35 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 const AdminCaseStudyForm = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const isEditing = Boolean(id);
-  console.log('Current ID:', id);
-  console.log('Editing Mode:', isEditing);
-
-  const handleSubmit = (formData) => {
-    console.log('Form data:', formData);
-    const validationResult = validateFormData(formData);
-    console.log('Validation Result:', validationResult);
-
-    if (!validationResult.isValid) {
-      // Handle validation errors
-      return;
-    }
-
-    const dataToSave = transformDataForSubmission(formData);
-    console.log('Data to save:', dataToSave);
-
-    if (isEditing) {
-      console.log('Before calling updateMutation');
-      updateMutation.mutate({ id, data: dataToSave }, {
-        onSuccess: () => {
-          console.log('Update successful');
-        },
-        onError: (error) => {
-          console.error('Update failed:', error);
-        }
-      });
-    } else {
-      console.log('Before calling createMutation');
-      createMutation.mutate(dataToSave, {
-        onSuccess: () => {
-          console.log('Create successful');
-        },
-        onError: (error) => {
-          console.error('Create failed:', error);
-        }
-      });
-    }
-  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* form fields go here */}
-      <button type="submit">Save Case Study</button>
-    </form>
+    <div className="min-h-screen bg-secondary/30 p-6">
+      <div className="container-content">
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/admin')}
+          className="mb-6"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Quay lại Dashboard
+        </Button>
+        
+        <div className="bg-card rounded-xl border border-border p-8">
+          <h1 className="text-2xl font-bold mb-6">
+            {isEditing ? 'Chỉnh sửa Case Study' : 'Tạo Case Study mới'}
+          </h1>
+          
+          <p className="text-muted-foreground">
+            Form đang được phát triển. Vui lòng sử dụng CMS để quản lý nội dung.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 

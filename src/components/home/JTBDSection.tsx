@@ -3,19 +3,13 @@ const JTBDSection = () => {
     <section className="section-padding bg-background">
       <div className="container-content">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Header */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            Điều CEO SME thực sự cần
+          {/* Core Solution Statement */}
+          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 border border-primary/20">
+            <p className="text-xl md:text-2xl lg:text-3xl text-foreground leading-relaxed font-medium">
+              "Chúng tôi không triển khai tool ồ ạt.{" "}
+              <span className="text-primary">Chúng tôi giúp doanh nghiệp làm thử – đo hiệu quả – rồi mới mở rộng.</span>"
+            </p>
           </div>
-
-          {/* Main content */}
-          <p className="text-xl md:text-2xl text-foreground leading-relaxed">
-            Khi tìm giải pháp vận hành, CEO SME muốn chắc chắn giải pháp đó{" "}
-            <span className="font-semibold text-primary">phù hợp với doanh nghiệp mình</span>, 
-            không làm gián đoạn công việc, và có thể{" "}
-            <span className="font-semibold text-primary">đo được hiệu quả thực tế</span>{" "}
-            trước khi mở rộng.
-          </p>
         </div>
       </div>
     </section>
