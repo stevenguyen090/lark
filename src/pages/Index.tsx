@@ -1,38 +1,38 @@
 import Layout from "@/components/layout/Layout";
 import HeroSection from "@/components/home/HeroSection";
-import SocialProofSection from "@/components/home/SocialProofSection";
 import PainPointsSection from "@/components/home/PainPointsSection";
-import JTBDSection from "@/components/home/JTBDSection";
+import SocialProofSection from "@/components/home/SocialProofSection";
 import SolutionSection from "@/components/home/SolutionSection";
-import CaseStudyPreview from "@/components/home/CaseStudyPreview";
 import ReviewSection from "@/components/home/ReviewSection";
+import ServicesSection from "@/components/home/ServicesSection";
+import ComparisonSection from "@/components/home/ComparisonSection";
 import CTASection from "@/components/home/CTASection";
 
 const Index = () => {
   return (
     <Layout>
-      {/* Section 1: Hero - Value Proposition + Dual CTA */}
+      {/* 1. Hero */}
       <HeroSection />
-      
-      {/* Section 2: Social Proof theo ngành (moved up) */}
-      <SocialProofSection />
-      
-      {/* Section 3: SME Reality Check - Scan-based checklist */}
+
+      {/* 2. Pain Points – 4 cards */}
       <PainPointsSection />
-      
-      {/* Section 4: Core Solution Statement */}
-      <JTBDSection />
-      
-      {/* Section 5: Process Steps (updated Step 2 & 4) */}
+
+      {/* 3. Social Proof – logos, metrics, mini cases */}
+      <SocialProofSection />
+
+      {/* 4. Quy trình triển khai */}
       <SolutionSection />
-      
-      {/* Section 6: Case Study Preview */}
-      <CaseStudyPreview />
-      
-      {/* Section 7: Review & Feedback (NEW) */}
+
+      {/* 5. Testimonials */}
       <ReviewSection />
-      
-      {/* Section 8: Final CTA */}
+
+      {/* 6. Giải pháp cung cấp */}
+      <ServicesSection />
+
+      {/* 7. So sánh */}
+      <ComparisonSection />
+
+      {/* 8. Final CTA */}
       <CTASection />
     </Layout>
   );

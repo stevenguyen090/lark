@@ -1,52 +1,62 @@
-import { CheckCircle2 } from "lucide-react";
+import { UserCheck, BarChart3, Network, MonitorOff } from "lucide-react";
 
-const checklistItems = [
-  "Đã dùng tool nhưng không duy trì được",
-  "Nhân viên vẫn hỏi – vẫn chờ",
-  "Quy trình thay đổi là rối",
-  "Cuối cùng sếp vẫn là người xử lý"
+const painPoints = [
+  {
+    icon: UserCheck,
+    title: "CEO bị kéo vào mọi việc nhỏ.",
+    description: "Mọi quyết định đều phải chờ bạn duyệt.",
+  },
+  {
+    icon: BarChart3,
+    title: "Không có số đo hiệu quả rõ ràng.",
+    description: "Nhân sự bận nhưng không biết năng suất có thực sự tăng hay không.",
+  },
+  {
+    icon: Network,
+    title: "Phòng ban làm việc thiếu phối hợp.",
+    description: "Thông tin rời rạc giữa chat, file, bảng tính.",
+  },
+  {
+    icon: MonitorOff,
+    title: "Triển khai phần mềm nhưng không ai dùng.",
+    description: "Hệ thống có nhưng không tạo ra thay đổi thực sự.",
+  },
 ];
 
 const PainPointsSection = () => {
   return (
     <section className="section-padding bg-secondary/30">
       <div className="container-content">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-              Bạn có thấy mình trong{" "}
-              <span className="text-primary">những tình huống này?</span>
-            </h2>
-            <p className="text-muted-foreground">
-              Tick nhanh để xem doanh nghiệp bạn có đang gặp vấn đề tương tự
-            </p>
-          </div>
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+            Doanh nghiệp của bạn có đang gặp{" "}
+            <span className="text-primary">những vấn đề này?</span>
+          </h2>
+        </div>
 
-          {/* Checklist - Scan format */}
-          <div className="bg-card rounded-xl border border-border p-6 md:p-8">
-            <div className="space-y-4">
-              {checklistItems.map((item, index) => (
-                <label 
-                  key={index}
-                  className="flex items-center gap-4 p-4 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer group animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="flex-shrink-0">
-                    <div className="w-6 h-6 rounded-full border-2 border-primary/30 group-hover:border-primary flex items-center justify-center transition-colors">
-                      <CheckCircle2 className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
+        {/* Pain Point Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {painPoints.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={index}
+                className="card-elevated p-6 animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary" />
                   </div>
-                  <span className="text-foreground font-medium">{item}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Empathy statement */}
-          <p className="text-center text-muted-foreground mt-8 italic">
-            Nếu bạn tick được 2 ô trở lên, có thể bạn cần một cách tiếp cận khác.
-          </p>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
