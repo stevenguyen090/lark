@@ -1,91 +1,90 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const industries = [
+const metrics = [
+  { value: "30+", label: "Doanh nghiệp SMEs đã triển khai hệ thống vận hành" },
+  { value: "120+", label: "Quy trình được chuẩn hoá và số hoá" },
+  { value: "30–50%", label: "Giảm thời gian xử lý công việc" },
+  { value: "↓", label: "Giảm mạnh mức độ phụ thuộc vào CEO trong vận hành hàng ngày" },
+];
+
+const miniCases = [
   {
-    industry: "Fitness & Wellness",
-    painPoint: "Nhân viên PT không báo cáo đúng giờ, quản lý không nắm được tình hình",
-    metric: "Giảm 60% thời gian theo dõi công việc",
-    slug: "fitness",
-    icon: "🏋️"
+    industry: "Agency Marketing",
+    problem: "CEO duyệt từng task nhỏ, team thiếu chủ động",
+    solution: "Chuẩn hoá quy trình, phân quyền rõ ràng trên Lark",
+    result: "Giảm 40% thời gian duyệt công việc",
   },
   {
-    industry: "Bán lẻ & Chuỗi cửa hàng",
-    painPoint: "Không kiểm soát được tồn kho và doanh thu từng điểm bán",
-    metric: "Báo cáo tự động mỗi ngày, không cần nhắc",
-    slug: "retail",
-    icon: "🛒"
+    industry: "Doanh nghiệp thương mại",
+    problem: "Báo cáo rời rạc, không có số liệu tổng hợp",
+    solution: "Thiết kế dashboard KPI tập trung",
+    result: "Ban lãnh đạo có báo cáo realtime mỗi ngày",
   },
-  {
-    industry: "Sản xuất & Gia công",
-    painPoint: "Đơn hàng bị trễ vì thiếu phối hợp giữa các bộ phận",
-    metric: "Giảm 40% thời gian xử lý đơn hàng",
-    slug: "manufacturing",
-    icon: "🏭"
-  },
-  {
-    industry: "Dịch vụ chuyên môn",
-    painPoint: "Hồ sơ khách hàng rải rác, không tra cứu được nhanh",
-    metric: "100% hồ sơ được số hoá và truy xuất trong 30 giây",
-    slug: "professional-services",
-    icon: "💼"
-  }
 ];
 
 const SocialProofSection = () => {
   return (
     <section className="section-padding bg-background">
       <div className="container-content">
-        {/* Header */}
+        {/* 3.1 Logo Carousel Placeholder */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Doanh nghiệp{" "}
-            <span className="text-primary">tương tự bạn</span>{" "}
-            đã triển khai thành công
+            Doanh nghiệp đã{" "}
+            <span className="text-primary">tin tưởng triển khai</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Xem case study theo ngành để biết cách doanh nghiệp giống bạn đã giải quyết vấn đề
-          </p>
+          <div className="flex items-center justify-center gap-8 py-6 opacity-40">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Building2 className="w-8 h-8 text-muted-foreground" />
+                <div className="h-3 w-16 bg-muted-foreground/30 rounded" />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground italic">Logo khách hàng sẽ được cập nhật</p>
         </div>
 
-        {/* Industry Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {industries.map((item, index) => (
-            <div 
-              key={index}
-              className="card-elevated p-6 flex flex-col h-full animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Industry icon */}
-              <div className="text-3xl mb-4">{item.icon}</div>
-              
-              {/* Industry name */}
-              <h3 className="text-lg font-semibold text-foreground mb-2">
-                {item.industry}
-              </h3>
-              
-              {/* Pain point */}
-              <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                {item.painPoint}
-              </p>
-              
-              {/* Metric highlight */}
-              <div className="bg-primary/5 rounded-lg p-3 mb-4">
-                <p className="text-sm font-medium text-primary">
-                  {item.metric}
-                </p>
+        {/* 3.2 Metrics */}
+        <div className="mb-16">
+          <h3 className="text-xl md:text-2xl font-bold text-center mb-8">
+            Kết quả triển khai thực tế
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {metrics.map((m, i) => (
+              <div key={i} className="text-center animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{m.value}</div>
+                <p className="text-sm text-muted-foreground">{m.label}</p>
               </div>
-              
-              {/* CTA */}
-              <Link 
-                to={`/case-studies?industry=${item.slug}`}
-                className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-              >
-                Xem case tương tự
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* 3.3 Mini Case Snapshots */}
+        <div>
+          <h3 className="text-xl md:text-2xl font-bold text-center mb-8">
+            Mini Case Snapshot
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {miniCases.map((c, i) => (
+              <div key={i} className="card-elevated p-6 animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                <span className="badge-industry mb-3 inline-block">{c.industry}</span>
+                <div className="space-y-2 text-sm">
+                  <p><span className="font-medium text-foreground">Vấn đề:</span>{" "}<span className="text-muted-foreground">{c.problem}</span></p>
+                  <p><span className="font-medium text-foreground">Giải pháp:</span>{" "}<span className="text-muted-foreground">{c.solution}</span></p>
+                  <p><span className="font-medium text-primary">Kết quả:</span>{" "}<span className="text-primary font-medium">{c.result}</span></p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link
+              to="/case-studies"
+              className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
+            >
+              Xem tất cả case study
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
