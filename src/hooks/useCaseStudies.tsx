@@ -109,7 +109,7 @@ export function useTopCaseStudies(limit: number = 3) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('case_studies')
-        .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, status')
+        .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, results, status')
         .eq('status', 'published')
         .order('created_at', { ascending: false })
         .limit(limit);
@@ -123,6 +123,7 @@ export function useTopCaseStudies(limit: number = 3) {
         industryLabel: row.industry_label,
         scaleLabel: row.scale_label,
         mainProblemLabel: row.main_problem_label,
+        results: Array.isArray(row.results) ? row.results as Array<{ metric: string; value: string }> : [],
       })) || [];
     },
     staleTime: 1000 * 60 * 5,
