@@ -4,8 +4,6 @@ import PainPointsSection from "@/components/home/PainPointsSection";
 import SocialProofSection from "@/components/home/SocialProofSection";
 import SolutionSection from "@/components/home/SolutionSection";
 import ReviewSection from "@/components/home/ReviewSection";
-import ServicesSection from "@/components/home/ServicesSection";
-import ComparisonSection from "@/components/home/ComparisonSection";
 import CTASection from "@/components/home/CTASection";
 
 const Index = () => {
@@ -14,10 +12,10 @@ const Index = () => {
       {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. Pain Points – 4 cards */}
+      {/* 2. Pain Points */}
       <PainPointsSection />
 
-      {/* 3. Social Proof – logos, metrics, mini cases */}
+      {/* 3. Social Proof */}
       <SocialProofSection />
 
       {/* 4. Quy trình triển khai */}
@@ -26,13 +24,7 @@ const Index = () => {
       {/* 5. Testimonials */}
       <ReviewSection />
 
-      {/* 6. Giải pháp cung cấp */}
-      <ServicesSection />
-
-      {/* 7. So sánh */}
-      <ComparisonSection />
-
-      {/* 8. Final CTA */}
+      {/* 6. Final CTA */}
       <CTASection />
     </Layout>
   );
