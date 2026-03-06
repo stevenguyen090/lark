@@ -12,7 +12,7 @@ const CaseStudyPreview = () => {
   } = useTopCaseStudies(3);
 
   return (
-    <section className="section-padding bg-background">
+    <section className="section-padding bg-secondary/20">
       <div className="container-content">
         {/* Header */}
         <div className="text-center mb-12">
@@ -63,15 +63,14 @@ const CaseStudyPreview = () => {
                     {caseStudy.title}
                   </h3>
 
-                  {/* Summary */}
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {caseStudy.summary}
-                  </p>
-
-                  {/* Problem tag */}
-                  <div className="text-xs text-muted-foreground mb-4">
-                    Vấn đề chính: <span className="font-medium">{caseStudy.mainProblemLabel}</span>
-                  </div>
+                  {/* Result highlight */}
+                  {caseStudy.results && caseStudy.results.length > 0 && (
+                    <div className="bg-primary/5 rounded-lg p-3 mb-4">
+                      <p className="text-sm font-medium text-primary">
+                        {caseStudy.results[0].metric}: {caseStudy.results[0].value}
+                      </p>
+                    </div>
+                  )}
 
                   {/* CTA */}
                   <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
