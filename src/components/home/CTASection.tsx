@@ -26,7 +26,7 @@ const CTASection = () => {
             </a>
 
             <a
-              href="https://zalo.me/your-zalo-id"
+              href="https://zalo.me/0905652628"
               target="_blank"
               rel="noopener noreferrer"
             >
