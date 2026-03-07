@@ -3,7 +3,7 @@ import { TrendingUp, Clock, Award } from "lucide-react";
 const metrics = [
   {
     icon: Award,
-    value: "80",
+    value: "92",
     unit: "NPS",
     label: "Mức độ hài lòng",
     description: "Doanh nghiệp sẵn sàng giới thiệu cho network của mình",
