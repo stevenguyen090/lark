@@ -1,7 +1,7 @@
 import Layout from "@/components/layout/Layout";
 import HeroSection from "@/components/home/HeroSection";
-import PainPointsSection from "@/components/home/PainPointsSection";
 import SocialProofSection from "@/components/home/SocialProofSection";
+import BeforeAfterSection from "@/components/home/BeforeAfterSection";
 import ResultsSection from "@/components/home/ResultsSection";
 import SolutionSection from "@/components/home/SolutionSection";
 import CaseStudyPreview from "@/components/home/CaseStudyPreview";
@@ -14,19 +14,19 @@ const Index = () => {
       {/* 1. Hero – Hook & Value Prop */}
       <HeroSection />
 
-      {/* 2. Pain Points – TIN: "Bạn có đang gặp vấn đề này?" */}
-      <PainPointsSection />
-
-      {/* 3. Social Proof Logos – TIN: Trust signals */}
+      {/* 2. Social Proof Logos – ngay dưới dashboard */}
       <SocialProofSection />
 
-      {/* 4. Kết quả thực tế – HIỂU: Understand value */}
+      {/* 3. Before/After – TIN: Relatability */}
+      <BeforeAfterSection />
+
+      {/* 4. Kết quả thực tế – HIỂU: Proof */}
       <ResultsSection />
 
       {/* 5. Quy trình triển khai – HIỂU: How we work */}
       <SolutionSection />
 
-      {/* 6. Case Study – HIỂU: Proof from similar businesses */}
+      {/* 6. Case Study – HIỂU: Evidence */}
       <CaseStudyPreview />
 
       {/* 7. Testimonials – MUA: Social proof push */}

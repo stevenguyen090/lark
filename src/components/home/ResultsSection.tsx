@@ -1,16 +1,18 @@
-import { TrendingUp, Clock, Users } from "lucide-react";
+import { TrendingUp, Clock, Award } from "lucide-react";
 
 const metrics = [
   {
-    icon: Users,
-    value: "30+",
-    label: "Doanh nghiệp SMEs",
-    description: "đã triển khai hệ thống vận hành",
+    icon: Award,
+    value: "80",
+    unit: "NPS",
+    label: "Mức độ hài lòng",
+    description: "Doanh nghiệp sẵn sàng giới thiệu cho network của mình",
     color: "from-primary to-primary/80",
   },
   {
     icon: Clock,
     value: "120+",
+    unit: "",
     label: "Quy trình",
     description: "được chuẩn hoá và số hoá",
     color: "from-primary/90 to-primary/70",
@@ -18,6 +20,7 @@ const metrics = [
   {
     icon: TrendingUp,
     value: "30–50%",
+    unit: "",
     label: "Giảm thời gian",
     description: "xử lý công việc hàng ngày",
     color: "from-primary/80 to-primary/60",
@@ -45,21 +48,19 @@ const ResultsSection = () => {
               className="relative overflow-hidden rounded-2xl border border-border bg-card p-8 text-center group hover:shadow-lg transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${i * 0.15}s` }}
             >
-              {/* Decorative gradient top bar */}
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${m.color}`} />
               
-              {/* Icon */}
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary mb-5 group-hover:scale-110 transition-transform">
                 <m.icon className="w-7 h-7" />
               </div>
 
-              {/* Value */}
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">{m.value}</div>
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-1">
+                {m.value}
+                {m.unit && <span className="text-2xl md:text-3xl ml-1">{m.unit}</span>}
+              </div>
               
-              {/* Label */}
               <div className="text-lg font-semibold text-foreground mb-1">{m.label}</div>
               
-              {/* Description */}
               <p className="text-sm text-muted-foreground">{m.description}</p>
             </div>
           ))}

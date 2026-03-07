@@ -9,7 +9,7 @@ const CaseStudyPreview = () => {
     isError,
     error,
     refetch,
-  } = useTopCaseStudies(3);
+  } = useTopCaseStudies(4);
 
   return (
     <section className="section-padding bg-secondary/20">
@@ -44,13 +44,12 @@ const CaseStudyPreview = () => {
           </div>
         ) : previewCases.length > 0 ? (
           <>
-            {/* Case Study Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* Case Study Cards - following original structure */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {previewCases.map((caseStudy) => (
-                <Link 
+                <div
                   key={caseStudy.id}
-                  to={`/case-studies/${caseStudy.slug}`}
-                  className="card-elevated p-6 group"
+                  className="rounded-2xl border border-border bg-card p-6 flex flex-col group hover:shadow-lg transition-all duration-300"
                 >
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -59,9 +58,20 @@ const CaseStudyPreview = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
                     {caseStudy.title}
                   </h3>
+
+                  {/* Summary */}
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2 flex-grow">
+                    {caseStudy.summary}
+                  </p>
+
+                  {/* Main problem */}
+                  <p className="text-xs text-muted-foreground mb-3">
+                    <span className="font-medium text-foreground">Vấn đề chính:</span>{" "}
+                    {caseStudy.mainProblemLabel}
+                  </p>
 
                   {/* Result highlight */}
                   {caseStudy.results && caseStudy.results.length > 0 && (
@@ -73,11 +83,14 @@ const CaseStudyPreview = () => {
                   )}
 
                   {/* CTA */}
-                  <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                  <Link
+                    to={`/case-studies/${caseStudy.slug}`}
+                    className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all mt-auto"
+                  >
                     Xem chi tiết
                     <ArrowRight className="w-4 h-4" />
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
 
