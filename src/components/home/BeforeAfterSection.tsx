@@ -2,6 +2,7 @@ import beforeCeo from "@/assets/before-ceo.png";
 import beforeChannels from "@/assets/before-channels.png";
 import beforeNometrics from "@/assets/before-nometrics.png";
 import beforeLatereport from "@/assets/before-latereport.png";
+import { CheckCircle2 } from "lucide-react";
 
 const beforeItems = [
   {
@@ -47,78 +48,83 @@ const afterItems = [
 
 const BeforeAfterSection = () => {
   return (
-    <section className="section-padding bg-secondary/30">
-      <div className="container-content">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Doanh nghiệp của bạn đang ở{" "}
-            <span className="text-primary">giai đoạn nào?</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* BEFORE Column */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-destructive/10 text-destructive text-sm font-bold">✕</span>
-              <h3 className="text-lg md:text-xl font-bold text-destructive">
-                BEFORE – Khi chưa có hệ thống rõ ràng
-              </h3>
-            </div>
-            <div className="space-y-4">
-              {beforeItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-4 rounded-xl border border-destructive/20 bg-destructive/5 p-4 animate-fade-in"
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-1 text-sm md:text-base">
-                      🔴 {item.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+    <>
+      {/* BEFORE Section */}
+      <section className="section-padding bg-secondary/30">
+        <div className="container-content">
+          <div className="text-center mb-10">
+            <span className="inline-block text-sm font-semibold text-destructive bg-destructive/10 px-4 py-1.5 rounded-full mb-4 uppercase tracking-wide">
+              Trước khi có hệ thống
+            </span>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
+              Vấn đề doanh nghiệp <span className="text-destructive">thường gặp</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Khi chưa có hệ thống vận hành rõ ràng, mọi thứ đều phụ thuộc vào sếp.
+            </p>
           </div>
 
-          {/* AFTER Column */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[hsl(var(--success))]/10 text-[hsl(var(--success))] text-sm font-bold">✓</span>
-              <h3 className="text-lg md:text-xl font-bold text-[hsl(var(--success))]">
-                AFTER – Khi hệ thống vận hành được thiết kế lại
-              </h3>
-            </div>
-            <div className="space-y-4">
-              {afterItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-4 rounded-xl border border-[hsl(var(--success))]/20 bg-[hsl(var(--success))]/5 p-4 animate-fade-in"
-                  style={{ animationDelay: `${i * 0.1 + 0.4}s` }}
-                >
-                  <span className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-[hsl(var(--success))]/10 text-[hsl(var(--success))] text-2xl flex-shrink-0">
-                    🟢
-                  </span>
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-1 text-sm md:text-base">
-                      {item.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {beforeItems.map((item, i) => (
+              <div
+                key={i}
+                className="flex gap-5 rounded-2xl border border-destructive/15 bg-card p-5 shadow-sm hover:shadow-md transition-shadow animate-fade-in"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
+                />
+                <div className="flex flex-col justify-center">
+                  <h4 className="font-semibold text-foreground mb-1 text-sm md:text-base">
+                    {item.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* AFTER Section */}
+      <section className="section-padding bg-[hsl(var(--success))]/5">
+        <div className="container-content">
+          <div className="text-center mb-10">
+            <span className="inline-block text-sm font-semibold text-[hsl(var(--success))] bg-[hsl(var(--success))]/10 px-4 py-1.5 rounded-full mb-4 uppercase tracking-wide">
+              Sau khi được Lark Consult tư vấn
+            </span>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
+              Khi hệ thống vận hành được <span className="text-[hsl(var(--success))]">thiết kế lại</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Đội ngũ chủ động, lãnh đạo tập trung vào chiến lược.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {afterItems.map((item, i) => (
+              <div
+                key={i}
+                className="flex gap-5 rounded-2xl border border-[hsl(var(--success))]/15 bg-card p-5 shadow-sm hover:shadow-md transition-shadow animate-fade-in"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                <div className="flex items-center justify-center w-20 h-20 rounded-xl bg-[hsl(var(--success))]/10 flex-shrink-0">
+                  <CheckCircle2 className="w-10 h-10 text-[hsl(var(--success))]" />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <h4 className="font-semibold text-foreground mb-1 text-sm md:text-base">
+                    {item.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 

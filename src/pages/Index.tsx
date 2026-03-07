@@ -17,22 +17,22 @@ const Index = () => {
       {/* 2. Social Proof Logos – ngay dưới dashboard */}
       <SocialProofSection />
 
-      {/* 3. Before/After – TIN: Relatability */}
-      <BeforeAfterSection />
-
-      {/* 4. Kết quả thực tế – HIỂU: Proof */}
+      {/* 3. Kết quả thực tế – Proof */}
       <ResultsSection />
 
-      {/* 5. Quy trình triển khai – HIỂU: How we work */}
+      {/* 4. Before/After – Relatability */}
+      <BeforeAfterSection />
+
+      {/* 5. Quy trình triển khai – How we work */}
       <SolutionSection />
 
-      {/* 6. Case Study – HIỂU: Evidence */}
+      {/* 6. Case Study – Evidence */}
       <CaseStudyPreview />
 
-      {/* 7. Testimonials – MUA: Social proof push */}
+      {/* 7. Testimonials – Social proof push */}
       <ReviewSection />
 
-      {/* 8. Final CTA – MUA: Action */}
+      {/* 8. Final CTA – Action */}
       <CTASection />
     </Layout>
   );

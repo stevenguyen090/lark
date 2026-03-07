@@ -13,23 +13,24 @@ const logos = [
 ];
 
 const SocialProofSection = () => {
-  // Duplicate logos for seamless infinite scroll
-  const scrollLogos = [...logos, ...logos];
-
   return (
-    <section className="py-10 bg-secondary/20 border-y border-border overflow-hidden">
+    <section className="py-12 md:py-16 bg-background">
       <div className="container-content">
-        <p className="text-center text-muted-foreground font-medium mb-8 text-sm md:text-base">
-          Được hơn <span className="text-primary font-bold">30+</span> doanh nghiệp đã tin tưởng triển khai
-        </p>
-      </div>
-      {/* Auto-scrolling logo slider */}
-      <div className="relative">
-        <div className="flex items-center gap-12 md:gap-16 animate-scroll-x">
-          {scrollLogos.map((logo, i) => (
+        {/* Heading with decorative lines */}
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <div className="h-px flex-1 max-w-[120px] bg-border" />
+          <p className="text-center text-muted-foreground font-medium text-base md:text-lg tracking-wide uppercase">
+            Được hơn <span className="text-primary font-bold">30+</span> doanh nghiệp đã tin tưởng triển khai
+          </p>
+          <div className="h-px flex-1 max-w-[120px] bg-border" />
+        </div>
+
+        {/* Static logo grid - centered */}
+        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
+          {logos.map((logo, i) => (
             <div
               key={i}
-              className="flex-shrink-0 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
+              className="flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
             >
               <img
                 src={logo.src}
