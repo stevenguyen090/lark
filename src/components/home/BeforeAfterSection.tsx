@@ -1,4 +1,4 @@
-import { XCircle, CheckCircle2 } from "lucide-react";
+import { XCircle, CheckCircle2, HeartHandshake } from "lucide-react";
 
 const beforeItems = [
   {
@@ -44,13 +44,10 @@ const BeforeAfterSection = () => {
       <div className="container-content">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
             Trước và sau khi được Lark Consult{" "}
             <span className="text-primary">tư vấn hệ thống vận hành</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Đồng hành xuyên suốt trong quá trình vận hành – từ phân tích, thiết kế đến tối ưu liên tục
-          </p>
         </div>
 
         {/* Before / After Grid */}
@@ -112,6 +109,23 @@ const BeforeAfterSection = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Commitment Banner */}
+        <div className="mt-10 max-w-3xl mx-auto">
+          <div className="flex items-center gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-5 md:p-6">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <HeartHandshake className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <p className="font-semibold text-foreground mb-1">
+                Đồng hành xuyên suốt – không bỏ rơi giữa chừng
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Lark Consult không chỉ triển khai rồi rời đi. Chúng tôi đồng hành cùng doanh nghiệp từ khâu phân tích, thiết kế hệ thống đến tối ưu liên tục trong quá trình vận hành thực tế.
+              </p>
             </div>
           </div>
         </div>
