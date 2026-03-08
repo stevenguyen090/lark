@@ -50,12 +50,12 @@ const ReviewSection = () => {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <span className="text-primary font-semibold text-sm">
-                    {review.role.charAt(0)}
+                    {review.name.charAt(0)}
                   </span>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground text-sm">— {review.role}</p>
-                  <p className="text-muted-foreground text-sm">{review.company}</p>
+                  <p className="font-medium text-foreground text-sm">{review.name}</p>
+                  <p className="text-muted-foreground text-xs">{review.role} – {review.company}</p>
                 </div>
               </div>
             </div>
