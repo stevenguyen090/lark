@@ -45,11 +45,11 @@ const BeforeAfterSection = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
-            Doanh nghiệp của bạn đang ở{" "}
-            <span className="text-primary">giai đoạn nào?</span>
+            Trước và sau khi được Lark Consult{" "}
+            <span className="text-primary">tư vấn hệ thống vận hành</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            So sánh trước và sau khi được Lark Consult tư vấn hệ thống vận hành
+            Đồng hành xuyên suốt trong quá trình vận hành – từ phân tích, thiết kế đến tối ưu liên tục
           </p>
         </div>
 
