@@ -151,7 +151,7 @@ export function useCaseStudyBySlug(slug: string | undefined) {
         if (error.code === 'PGRST116') return null;
         throw error;
       }
-      return data ? transformCaseStudy(data) : null;
+      return data ? transformCaseStudy(data as any) : null;
     },
     enabled: !!slug,
   });
