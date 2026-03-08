@@ -1,12 +1,13 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, XCircle, CalendarDays, Loader2 } from "lucide-react";
+import { ArrowLeft, CheckCircle, XCircle, CalendarDays, MessageCircle, Loader2 } from "lucide-react";
 import { useCaseStudyBySlug } from "@/hooks/useCaseStudies";
 import RichTextViewer from "@/components/ui/rich-text-viewer";
 import AttachmentGallery from "@/components/case-study/AttachmentGallery";
 
 const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d";
+const ZALO_LINK = "https://zalo.me/0905652628";
 
 const CaseStudyDetail = () => {
   const { slug } = useParams();
@@ -279,12 +280,20 @@ const CaseStudyDetail = () => {
               <p className="text-muted-foreground mb-6">
                 Bạn không cần quyết định ngay. Hãy bắt đầu bằng một buổi đánh giá nhanh cách vận hành hiện tại.
               </p>
-              <a href={CTA_LINK} target="_blank" rel="noopener noreferrer">
-                <Button variant="hero" size="lg">
-                  <CalendarDays className="w-5 h-5" />
-                  Đặt lịch trao đổi
-                </Button>
-              </a>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href={CTA_LINK} target="_blank" rel="noopener noreferrer">
+                  <Button variant="hero" size="lg">
+                    <CalendarDays className="w-5 h-5" />
+                    Đặt lịch trao đổi
+                  </Button>
+                </a>
+                <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/5">
+                    <MessageCircle className="w-5 h-5" />
+                    Nhắn Zalo để trao đổi nhanh
+                  </Button>
+                </a>
+              </div>
             </section>
 
             {/* Navigation */}

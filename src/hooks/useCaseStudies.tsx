@@ -109,22 +109,27 @@ export function useTopCaseStudies(limit: number = 3) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('case_studies')
-        .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, results, status')
+        .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, results, solution, status')
         .eq('status', 'published')
         .order('created_at', { ascending: false })
         .limit(limit);
 
       if (error) throw error;
-      return data?.map(row => ({
-        id: row.id,
-        slug: row.slug,
-        title: row.title,
-        summary: row.summary,
-        industryLabel: row.industry_label,
-        scaleLabel: row.scale_label,
-        mainProblemLabel: row.main_problem_label,
-        results: Array.isArray(row.results) ? row.results as Array<{ metric: string; value: string }> : [],
-      })) || [];
+      return data?.map(row => {
+        const solution = row.solution as { attachments?: { type: string; url: string; caption: string }[] } | null;
+        const firstImage = solution?.attachments?.find(a => a.type === 'image');
+        return {
+          id: row.id,
+          slug: row.slug,
+          title: row.title,
+          summary: row.summary,
+          industryLabel: row.industry_label,
+          scaleLabel: row.scale_label,
+          mainProblemLabel: row.main_problem_label,
+          results: Array.isArray(row.results) ? row.results as Array<{ metric: string; value: string }> : [],
+          thumbnailUrl: firstImage?.url || null,
+        };
+      }) || [];
     },
     staleTime: 1000 * 60 * 5,
     retry: 2,
