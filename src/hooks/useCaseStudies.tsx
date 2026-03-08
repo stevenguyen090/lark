@@ -141,12 +141,10 @@ export function useCaseStudyBySlug(slug: string | undefined) {
     queryFn: async () => {
       if (!slug) return null;
       
-      const PUBLIC_COLUMNS = 'id,slug,industry,industry_label,scale,scale_label,main_problem,main_problem_label,title,summary,context,pain_points,previous_attempts,previous_attempts_result,root_causes,solution,results,key_insight,suitable_for,not_suitable_for,cta_question,status,created_at,updated_at';
       const { data, error } = await supabase
-        .from('case_studies')
-        .select(PUBLIC_COLUMNS)
+        .from('case_studies_public' as any)
+        .select('*')
         .eq('slug', slug)
-        .eq('status', 'published')
         .single();
 
       if (error) {
