@@ -15,7 +15,14 @@ const CaseStudyPreview = () => {
     refetch,
   } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
 
-  const previewCases = allCases.slice(0, 3);
+  // Prioritize case studies with images
+  const previewCases = [...allCases]
+    .sort((a, b) => {
+      const aHas = !!(a.solution as { attachments?: { type: string }[] })?.attachments?.some(att => att.type === 'image');
+      const bHas = !!(b.solution as { attachments?: { type: string }[] })?.attachments?.some(att => att.type === 'image');
+      return (bHas ? 1 : 0) - (aHas ? 1 : 0);
+    })
+    .slice(0, 3);
 
   // Extract thumbnail from solution attachments
   const getThumbnail = (cs: typeof allCases[number]) => {
