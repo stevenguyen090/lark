@@ -14,7 +14,7 @@ const HeroSection = () => {
 
           {/* Sub-headline */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            Lark Consult tư vấn vận hành và triển khai hệ thống quản lý trên nền tảng Lark, giúp doanh nghiệp làm việc rõ ràng và lãnh đạo nắm được tình hình bằng dữ liệu.
+            Tư vấn và triển khai hệ thống quản lý trên nền tảng Lark, đồng hành cùng doanh nghiệp tối ưu vận hành
           </p>
 
           {/* Dual CTA */}
