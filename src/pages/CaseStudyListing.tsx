@@ -198,33 +198,48 @@ const CaseStudyListing = () => {
                     <Link
                       key={caseStudy.id}
                       to={`/case-studies/${caseStudy.slug}`}
-                      className="card-elevated p-6 group"
+                      className="card-elevated overflow-hidden group"
                     >
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        <span className="badge-industry">{caseStudy.industryLabel}</span>
-                        <span className="badge-scale">{caseStudy.scaleLabel}</span>
-                      </div>
+                      {/* Thumbnail */}
+                      {caseStudy.solution?.attachments && caseStudy.solution.attachments.length > 0 && 
+                        caseStudy.solution.attachments.find((a: any) => a.type === 'image') && (
+                        <div className="aspect-video w-full overflow-hidden bg-secondary">
+                          <img
+                            src={caseStudy.solution.attachments.find((a: any) => a.type === 'image')!.url}
+                            alt={caseStudy.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
 
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                        {caseStudy.title}
-                      </h3>
+                      <div className="p-6">
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          <span className="badge-industry">{caseStudy.industryLabel}</span>
+                          <span className="badge-scale">{caseStudy.scaleLabel}</span>
+                        </div>
 
-                      {/* Summary */}
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {caseStudy.summary}
-                      </p>
+                        {/* Title */}
+                        <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                          {caseStudy.title}
+                        </h3>
 
-                      {/* Problem tag */}
-                      <div className="text-xs text-muted-foreground mb-4">
-                        Vấn đề chính: <span className="font-medium">{caseStudy.mainProblemLabel}</span>
-                      </div>
+                        {/* Summary */}
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {caseStudy.summary}
+                        </p>
 
-                      {/* CTA */}
-                      <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
-                        Xem chi tiết
-                        <ArrowRight className="w-4 h-4" />
+                        {/* Problem tag */}
+                        <div className="text-xs text-muted-foreground mb-4">
+                          Vấn đề chính: <span className="font-medium">{caseStudy.mainProblemLabel}</span>
+                        </div>
+
+                        {/* CTA */}
+                        <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                          Xem chi tiết
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
                     </Link>
                   ))}
