@@ -48,7 +48,7 @@ const CaseStudyPreview = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {previewCases.map((caseStudy) => (
                 <div
-51:                   key={caseStudy.id}
+key={caseStudy.id}
                   className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300"
                 >
                   {/* Thumbnail */}
