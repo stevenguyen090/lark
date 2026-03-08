@@ -107,14 +107,13 @@ export function useTopCaseStudies(limit: number = 3) {
     queryKey: ['case-studies', 'top', limit],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('case_studies')
+        .from('case_studies_public' as any)
         .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, results, solution, status')
-        .eq('status', 'published')
         .order('created_at', { ascending: false })
         .limit(limit);
 
       if (error) throw error;
-      return data?.map(row => {
+      return (data as any[])?.map(row => {
         const solution = row.solution as { attachments?: { type: string; url: string; caption: string }[] } | null;
         const firstImage = solution?.attachments?.find(a => a.type === 'image');
         return {
