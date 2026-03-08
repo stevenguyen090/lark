@@ -124,7 +124,87 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      case_studies_public: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          cta_question: string | null
+          id: string | null
+          industry: string | null
+          industry_label: string | null
+          key_insight: string | null
+          main_problem: string | null
+          main_problem_label: string | null
+          not_suitable_for: Json | null
+          pain_points: Json | null
+          previous_attempts: Json | null
+          previous_attempts_result: string | null
+          results: Json | null
+          root_causes: Json | null
+          scale: string | null
+          scale_label: string | null
+          slug: string | null
+          solution: Json | null
+          status: string | null
+          suitable_for: Json | null
+          summary: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          cta_question?: string | null
+          id?: string | null
+          industry?: string | null
+          industry_label?: string | null
+          key_insight?: string | null
+          main_problem?: string | null
+          main_problem_label?: string | null
+          not_suitable_for?: Json | null
+          pain_points?: Json | null
+          previous_attempts?: Json | null
+          previous_attempts_result?: string | null
+          results?: Json | null
+          root_causes?: Json | null
+          scale?: string | null
+          scale_label?: string | null
+          slug?: string | null
+          solution?: Json | null
+          status?: string | null
+          suitable_for?: Json | null
+          summary?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          cta_question?: string | null
+          id?: string | null
+          industry?: string | null
+          industry_label?: string | null
+          key_insight?: string | null
+          main_problem?: string | null
+          main_problem_label?: string | null
+          not_suitable_for?: Json | null
+          pain_points?: Json | null
+          previous_attempts?: Json | null
+          previous_attempts_result?: string | null
+          results?: Json | null
+          root_causes?: Json | null
+          scale?: string | null
+          scale_label?: string | null
+          slug?: string | null
+          solution?: Json | null
+          status?: string | null
+          suitable_for?: Json | null
+          summary?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
