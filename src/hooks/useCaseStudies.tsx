@@ -77,11 +77,9 @@ export function usePublishedCaseStudies(filters?: {
   return useQuery({
     queryKey: ['case-studies', 'published', filters],
     queryFn: async () => {
-      const PUBLIC_COLUMNS = 'id,slug,industry,industry_label,scale,scale_label,main_problem,main_problem_label,title,summary,context,pain_points,previous_attempts,previous_attempts_result,root_causes,solution,results,key_insight,suitable_for,not_suitable_for,cta_question,status,created_at,updated_at';
       let query = supabase
-        .from('case_studies')
-        .select(PUBLIC_COLUMNS)
-        .eq('status', 'published')
+        .from('case_studies_public' as any)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (filters?.industry) {
@@ -96,7 +94,7 @@ export function usePublishedCaseStudies(filters?: {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data?.map(transformCaseStudy) || [];
+      return (data as any[])?.map(transformCaseStudy) || [];
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
     retry: 2,
@@ -109,14 +107,13 @@ export function useTopCaseStudies(limit: number = 3) {
     queryKey: ['case-studies', 'top', limit],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('case_studies')
+        .from('case_studies_public' as any)
         .select('id, slug, title, summary, industry_label, scale_label, main_problem_label, results, solution, status')
-        .eq('status', 'published')
         .order('created_at', { ascending: false })
         .limit(limit);
 
       if (error) throw error;
-      return data?.map(row => {
+      return (data as any[])?.map(row => {
         const solution = row.solution as { attachments?: { type: string; url: string; caption: string }[] } | null;
         const firstImage = solution?.attachments?.find(a => a.type === 'image');
         return {
@@ -144,19 +141,17 @@ export function useCaseStudyBySlug(slug: string | undefined) {
     queryFn: async () => {
       if (!slug) return null;
       
-      const PUBLIC_COLUMNS = 'id,slug,industry,industry_label,scale,scale_label,main_problem,main_problem_label,title,summary,context,pain_points,previous_attempts,previous_attempts_result,root_causes,solution,results,key_insight,suitable_for,not_suitable_for,cta_question,status,created_at,updated_at';
       const { data, error } = await supabase
-        .from('case_studies')
-        .select(PUBLIC_COLUMNS)
+        .from('case_studies_public' as any)
+        .select('*')
         .eq('slug', slug)
-        .eq('status', 'published')
         .single();
 
       if (error) {
         if (error.code === 'PGRST116') return null;
         throw error;
       }
-      return data ? transformCaseStudy(data) : null;
+      return data ? transformCaseStudy(data as any) : null;
     },
     enabled: !!slug,
   });
