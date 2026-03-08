@@ -77,11 +77,9 @@ export function usePublishedCaseStudies(filters?: {
   return useQuery({
     queryKey: ['case-studies', 'published', filters],
     queryFn: async () => {
-      const PUBLIC_COLUMNS = 'id,slug,industry,industry_label,scale,scale_label,main_problem,main_problem_label,title,summary,context,pain_points,previous_attempts,previous_attempts_result,root_causes,solution,results,key_insight,suitable_for,not_suitable_for,cta_question,status,created_at,updated_at';
       let query = supabase
-        .from('case_studies')
-        .select(PUBLIC_COLUMNS)
-        .eq('status', 'published')
+        .from('case_studies_public' as any)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (filters?.industry) {
