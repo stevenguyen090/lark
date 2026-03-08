@@ -15,7 +15,7 @@ const CaseStudyPreview = () => {
     refetch,
   } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
 
-  const previewCases = allCases.slice(0, 4);
+  const previewCases = allCases.slice(0, 3);
 
   // Extract thumbnail from solution attachments
   const getThumbnail = (cs: typeof allCases[number]) => {
@@ -83,7 +83,7 @@ const CaseStudyPreview = () => {
           </div>
         ) : previewCases.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {previewCases.map((caseStudy) => {
                 const thumbnailUrl = getThumbnail(caseStudy);
                 return (
