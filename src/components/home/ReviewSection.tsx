@@ -3,16 +3,19 @@ import { Quote } from "lucide-react";
 const reviews = [
   {
     quote: "Sau 3 tháng triển khai, chúng tôi giảm gần 40% thời gian xử lý công việc. CEO không còn phải duyệt từng task nhỏ.",
+    name: "Khang Phạm",
     role: "Founder",
     company: "Agency Marketing",
   },
   {
     quote: "Hệ thống dashboard giúp chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng.",
+    name: "Huy Trần",
     role: "Giám đốc vận hành",
     company: "Công ty thương mại",
   },
   {
     quote: "Quan trọng nhất là đội ngũ chủ động hơn, không còn phụ thuộc quá nhiều vào lãnh đạo.",
+    name: "Hưng Nguyễn",
     role: "CEO",
     company: "Doanh nghiệp dịch vụ",
   },
