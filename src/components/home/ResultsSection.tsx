@@ -4,7 +4,7 @@ const metrics = [
   {
     icon: Award,
     value: "92",
-    unit: "NPS",
+    unit: "/100",
     label: "Mức độ hài lòng",
     description: "Doanh nghiệp sẵn sàng giới thiệu cho network của mình",
     color: "from-primary to-primary/80",
@@ -56,7 +56,7 @@ const ResultsSection = () => {
 
               <div className="text-4xl md:text-5xl font-bold text-primary mb-1">
                 {m.value}
-                {m.unit && <span className="text-2xl md:text-3xl ml-1">{m.unit}</span>}
+                {m.unit && <span className="text-2xl md:text-3xl text-primary/70">{m.unit}</span>}
               </div>
               
               <div className="text-lg font-semibold text-foreground mb-1">{m.label}</div>

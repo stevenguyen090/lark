@@ -1,4 +1,7 @@
 import { Search, Settings, HeartHandshake } from "lucide-react";
+import solutionStep1 from "@/assets/solution-step1.png";
+import solutionStep2 from "@/assets/solution-step2.png";
+import solutionStep3 from "@/assets/solution-step3.png";
 
 const services = [
   {
@@ -13,6 +16,7 @@ const services = [
       "Xác định trách nhiệm của từng vị trí",
     ],
     outcome: "Mục tiêu là giúp đội ngũ biết mình cần làm gì và chịu trách nhiệm ra sao.",
+    image: solutionStep1,
   },
   {
     icon: Settings,
@@ -27,6 +31,7 @@ const services = [
       "Tích hợp hệ thống bên thứ 3 (Pancake, Shopify, Chatbot AI, ViettelPost…)",
     ],
     outcome: "Nhờ đó doanh nghiệp có thể làm việc trên một nền tảng thống nhất.",
+    image: solutionStep2,
   },
   {
     icon: HeartHandshake,
@@ -40,6 +45,7 @@ const services = [
       "Tối ưu dashboard và báo cáo",
     ],
     outcome: "Để hệ thống thực sự giúp doanh nghiệp vận hành tốt hơn theo thời gian.",
+    image: solutionStep3,
   },
 ];
 
@@ -61,51 +67,65 @@ const SolutionSection = () => {
           </p>
         </div>
 
-        {/* Services */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={service.number}
-              className="relative p-6 md:p-8 rounded-2xl border bg-card border-border shadow-sm hover:shadow-lg transition-all animate-fade-in group"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Icon & Number */}
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="w-7 h-7 text-primary" />
+        {/* Services - alternating layout */}
+        <div className="space-y-16">
+          {services.map((service, index) => {
+            const isEven = index % 2 === 0;
+            return (
+              <div
+                key={service.number}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Text Content */}
+                <div className={isEven ? "lg:order-1" : "lg:order-2"}>
+                  {/* Icon & Number */}
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <service.icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <span className="text-5xl font-bold text-primary/15">{service.number}</span>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                    {service.subtitle}
+                  </p>
+
+                  {service.intro && (
+                    <p className="text-sm font-medium text-foreground mb-2">{service.intro}</p>
+                  )}
+                  <ul className="space-y-2 mb-5">
+                    {service.bullets.map((bullet, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <p className="text-sm font-medium text-primary/80 border-t border-border pt-4">
+                    {service.outcome}
+                  </p>
                 </div>
-                <span className="text-4xl font-bold text-primary/15">{service.number}</span>
+
+                {/* Image */}
+                <div className={isEven ? "lg:order-2" : "lg:order-1"}>
+                  <div className="rounded-2xl overflow-hidden border border-border shadow-lg bg-card">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
               </div>
-
-              {/* Title */}
-              <h3 className="text-lg font-bold text-foreground mb-2">
-                {service.title}
-              </h3>
-
-              {/* Subtitle */}
-              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                {service.subtitle}
-              </p>
-
-              {/* Intro + Bullets */}
-              {service.intro && (
-                <p className="text-sm font-medium text-foreground mb-2">{service.intro}</p>
-              )}
-              <ul className="space-y-2 mb-5">
-                {service.bullets.map((bullet, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Outcome */}
-              <p className="text-sm font-medium text-primary/80 border-t border-border pt-4">
-                {service.outcome}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
