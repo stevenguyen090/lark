@@ -20,7 +20,7 @@ function withTimeout<T>(promise: PromiseLike<T>, ms: number, label = 'Request') 
 }
 
 // Transform database row to frontend format
-export function transformCaseStudy(row: CaseStudy) {
+export function transformCaseStudy(row: Omit<CaseStudy, 'created_by' | 'updated_by'> & { created_by?: string | null; updated_by?: string | null }) {
   return {
     id: row.id,
     slug: row.slug,
