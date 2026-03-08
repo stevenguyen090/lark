@@ -94,7 +94,7 @@ export function usePublishedCaseStudies(filters?: {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data?.map(transformCaseStudy) || [];
+      return (data as any[])?.map(transformCaseStudy) || [];
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
     retry: 2,
