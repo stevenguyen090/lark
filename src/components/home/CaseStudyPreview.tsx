@@ -48,9 +48,22 @@ const CaseStudyPreview = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {previewCases.map((caseStudy) => (
                 <div
-                  key={caseStudy.id}
-                  className="rounded-2xl border border-border bg-card p-6 flex flex-col group hover:shadow-lg transition-all duration-300"
+51:                   key={caseStudy.id}
+                  className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300"
                 >
+                  {/* Thumbnail */}
+                  {caseStudy.thumbnailUrl && (
+                    <div className="aspect-video w-full overflow-hidden bg-secondary">
+                      <img
+                        src={caseStudy.thumbnailUrl}
+                        alt={caseStudy.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-6 flex flex-col flex-grow">
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="badge-industry">{caseStudy.industryLabel}</span>
@@ -90,6 +103,7 @@ const CaseStudyPreview = () => {
                     Xem chi tiết
                     <ArrowRight className="w-4 h-4" />
                   </Link>
+                  </div>
                 </div>
               ))}
             </div>
