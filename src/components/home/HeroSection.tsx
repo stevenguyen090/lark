@@ -10,7 +10,7 @@ const HeroSection = () => {
           {/* Headline — Pain-first hook */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 animate-fade-in">
             Doanh nghiệp bạn đang chạy bằng{" "}
-            <span className="text-primary">Zalo và Excel?</span>
+            <span className="text-primary">Xây hệ thống vận hành </span>
           </h1>
 
           {/* Sub-headline */}
@@ -35,8 +35,8 @@ const HeroSection = () => {
             <a
               href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
+              
               <Button variant="hero" size="lg" className="w-full sm:w-auto">
                 Đặt lịch tư vấn miễn phí
                 <ArrowRight className="w-5 h-5" />
@@ -46,8 +46,8 @@ const HeroSection = () => {
             <a
               href="https://zalo.me/0905652628"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
+              
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 <MessageCircle className="w-5 h-5" />
                 Nhắn Zalo ngay
@@ -68,14 +68,14 @@ const HeroSection = () => {
                 src={heroDashboard}
                 alt="Lark Consult – Hệ thống quản lý vận hành tập trung"
                 className="w-full h-auto"
-                loading="eager"
-              />
+                loading="eager" />
+              
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default HeroSection;
