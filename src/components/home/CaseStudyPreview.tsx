@@ -36,8 +36,8 @@ const CaseStudyPreview = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Xem doanh nghiệp{" "}
-            <span className="text-primary">giống bạn</span> đã làm như thế nào
+            Doanh nghiệp giống bạn đã{" "}
+            <span className="text-primary">giải quyết bài toán vận hành</span> như thế nào?
           </h2>
           <p className="text-lg text-muted-foreground">
             Mỗi case study đều bắt đầu từ một vấn đề vận hành thực tế

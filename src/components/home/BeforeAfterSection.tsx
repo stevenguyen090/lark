@@ -1,41 +1,19 @@
 import { XCircle, CheckCircle2, HeartHandshake } from "lucide-react";
 
 const beforeItems = [
-  {
-    title: "CEO bị kéo vào quá nhiều việc nhỏ",
-    description: "Mọi quyết định đều phải chờ lãnh đạo duyệt.",
-  },
-  {
-    title: "Công việc được giao qua nhiều kênh khác nhau",
-    description: "Chat, file, email, bảng tính… khiến thông tin rời rạc.",
-  },
-  {
-    title: "Nhân sự làm việc chăm chỉ nhưng khó đo hiệu quả",
-    description: "Không có dashboard hoặc chỉ số rõ ràng để theo dõi.",
-  },
-  {
-    title: "Báo cáo thường đến chậm",
-    description: "Lãnh đạo chỉ biết vấn đề khi sự việc đã xảy ra.",
-  },
+  { title: "CEO bị kéo vào mọi việc nhỏ" },
+  { title: "Giao việc qua Zalo/chat rời rạc" },
+  { title: "Không có số liệu theo dõi hiệu suất" },
+  { title: "Báo cáo đến cuối tháng mới có" },
+  { title: "Nhân sự không biết ưu tiên gì" },
 ];
 
 const afterItems = [
-  {
-    title: "Quy trình làm việc rõ ràng",
-    description: "Nhân sự biết mình cần làm gì và chịu trách nhiệm cho phần việc nào.",
-  },
-  {
-    title: "Công việc và thông tin được tập trung trong một hệ thống",
-    description: "Đội ngũ phối hợp dễ dàng hơn.",
-  },
-  {
-    title: "Lãnh đạo có dashboard theo dõi tình hình vận hành",
-    description: "Có thể nắm được tiến độ và vấn đề quan trọng trong vài phút.",
-  },
-  {
-    title: "CEO tập trung vào chiến lược thay vì xử lý từng việc nhỏ",
-    description: "Đội ngũ chủ động hơn trong công việc hàng ngày.",
-  },
+  { title: "CEO tập trung vào chiến lược" },
+  { title: "Công việc tập trung 1 nền tảng" },
+  { title: "Dashboard realtime — nhìn là biết" },
+  { title: "Thông tin có ngay trong ngày" },
+  { title: "Mọi người biết rõ việc mình cần làm" },
 ];
 
 const BeforeAfterSection = () => {
@@ -53,60 +31,44 @@ const BeforeAfterSection = () => {
         {/* Before / After Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* BEFORE Column */}
-          <div>
+          <div className="rounded-2xl bg-destructive/5 border border-destructive/15 p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
                 <XCircle className="w-5 h-5 text-destructive" />
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-destructive">BEFORE</h3>
-                <p className="text-sm text-muted-foreground">Khi chưa có hệ thống rõ ràng</p>
-              </div>
+              <h3 className="text-lg font-bold text-destructive">BEFORE</h3>
             </div>
             <div className="space-y-4">
               {beforeItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 rounded-xl border border-destructive/15 bg-card p-4 shadow-sm animate-fade-in"
-                  style={{ animationDelay: `${i * 0.08}s` }}
+                  className="flex items-center gap-3 animate-fade-in"
+                  style={{ animationDelay: `${i * 0.06}s` }}
                 >
-                  <div className="flex-shrink-0 mt-0.5">
-                    <XCircle className="w-5 h-5 text-destructive/60" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground text-sm mb-1">{item.title}</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                  </div>
+                  <XCircle className="w-5 h-5 text-destructive/60 flex-shrink-0" />
+                  <span className="font-medium text-foreground text-sm">{item.title}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* AFTER Column */}
-          <div>
+          <div className="rounded-2xl bg-[hsl(var(--success))]/5 border border-[hsl(var(--success))]/15 p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-[hsl(var(--success))]/10 flex items-center justify-center">
                 <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))]" />
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-[hsl(var(--success))]">AFTER</h3>
-                <p className="text-sm text-muted-foreground">Khi được Lark Consult tư vấn</p>
-              </div>
+              <h3 className="text-lg font-bold text-[hsl(var(--success))]">AFTER</h3>
             </div>
             <div className="space-y-4">
               {afterItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 rounded-xl border border-[hsl(var(--success))]/15 bg-card p-4 shadow-sm animate-fade-in"
-                  style={{ animationDelay: `${i * 0.08}s` }}
+                  className="flex items-center gap-3 animate-fade-in"
+                  style={{ animationDelay: `${i * 0.06}s` }}
                 >
-                  <div className="flex-shrink-0 mt-0.5">
-                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))]/60" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground text-sm mb-1">{item.title}</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))]/60 flex-shrink-0" />
+                  <span className="font-medium text-foreground text-sm">{item.title}</span>
                 </div>
               ))}
             </div>
@@ -124,7 +86,7 @@ const BeforeAfterSection = () => {
                 Đồng hành xuyên suốt – không bỏ rơi giữa chừng
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Lark Consult không chỉ triển khai rồi rời đi. Chúng tôi đồng hành cùng doanh nghiệp từ khâu phân tích, thiết kế hệ thống đến tối ưu liên tục trong quá trình vận hành thực tế.
+                Lark Consult không chỉ triển khai rồi rời đi. Chúng tôi đồng hành cùng doanh nghiệp từ khâu phân tích, thiết kế hệ thống đến tối ưu liên tục.
               </p>
             </div>
           </div>

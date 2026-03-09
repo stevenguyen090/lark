@@ -1,4 +1,4 @@
-import { Search, Settings, HeartHandshake } from "lucide-react";
+import { Search, Settings, HeartHandshake, Clock } from "lucide-react";
 import solutionStep1 from "@/assets/solution-step1.png";
 import solutionStep2 from "@/assets/solution-step2.png";
 import solutionStep3 from "@/assets/solution-step3.png";
@@ -7,51 +7,35 @@ const services = [
   {
     icon: Search,
     number: "01",
-    title: "Tư vấn và chuẩn hoá vận hành",
-    subtitle: "Phân tích mô hình vận hành hiện tại và xác định điểm nghẽn.",
-    intro: "Chúng tôi cùng doanh nghiệp:",
-    bullets: [
-      "Rà soát quy trình làm việc",
-      "Thiết kế cách giao việc rõ ràng",
-      "Xác định trách nhiệm của từng vị trí",
-    ],
-    outcome: "Mục tiêu là giúp đội ngũ biết mình cần làm gì và chịu trách nhiệm ra sao.",
+    title: "Tư vấn & chuẩn hoá vận hành",
+    subtitle: "Rà soát quy trình, xác định điểm nghẽn, thiết kế cách giao việc rõ ràng.",
+    outcome: "Đội ngũ biết mình cần làm gì và chịu trách nhiệm phần nào.",
+    duration: "1–2 tuần",
     image: solutionStep1,
   },
   {
     icon: Settings,
     number: "02",
-    title: "Triển khai hệ thống quản lý trên Lark",
-    subtitle: "Sau khi quy trình được chuẩn hoá, chúng tôi thiết lập hệ thống làm việc tập trung trên Lark.",
-    intro: "Bao gồm:",
-    bullets: [
-      "Quản lý công việc & dự án",
-      "Lưu trữ tài liệu",
-      "Dashboard vận hành",
-      "Tích hợp hệ thống bên thứ 3 (Pancake, Shopify, Chatbot AI, ViettelPost…)",
-    ],
-    outcome: "Nhờ đó doanh nghiệp có thể làm việc trên một nền tảng thống nhất.",
+    title: "Triển khai hệ thống Lark",
+    subtitle: "Thiết lập task management, docs, dashboard, tích hợp tool bên thứ 3 (Pancake, Shopify, CRM…).",
+    outcome: "Doanh nghiệp làm việc trên 1 nền tảng thống nhất.",
+    duration: "3–4 tuần",
     image: solutionStep2,
   },
   {
     icon: HeartHandshake,
     number: "03",
-    title: "Đồng hành tối ưu hệ thống",
-    subtitle: "Sau khi triển khai, Lark Consult tiếp tục đồng hành:",
-    intro: "",
-    bullets: [
-      "Theo dõi việc sử dụng hệ thống",
-      "Điều chỉnh quy trình khi cần",
-      "Tối ưu dashboard và báo cáo",
-    ],
-    outcome: "Để hệ thống thực sự giúp doanh nghiệp vận hành tốt hơn theo thời gian.",
+    title: "Đồng hành tối ưu",
+    subtitle: "Theo dõi việc dùng hệ thống, điều chỉnh quy trình, tối ưu dashboard.",
+    outcome: "Hệ thống hoạt động tốt hơn theo thời gian.",
+    duration: "Liên tục",
     image: solutionStep3,
   },
 ];
 
 const SolutionSection = () => {
   return (
-    <section className="section-padding bg-secondary/30">
+    <section id="services" className="section-padding bg-secondary/30">
       <div className="container-content">
         {/* Header */}
         <div className="text-center mb-12">
@@ -63,7 +47,7 @@ const SolutionSection = () => {
             <span className="text-primary">triển khai hệ thống Lark</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-            Chúng tôi giúp doanh nghiệp thiết kế cách vận hành rõ ràng và triển khai hệ thống làm việc trên Lark để đội ngũ phối hợp tốt hơn và lãnh đạo có thể theo dõi tình hình trong vài phút.
+            Chúng tôi giúp doanh nghiệp thiết kế cách vận hành rõ ràng và triển khai hệ thống làm việc trên Lark.
           </p>
         </div>
 
@@ -95,21 +79,15 @@ const SolutionSection = () => {
                     {service.subtitle}
                   </p>
 
-                  {service.intro && (
-                    <p className="text-sm font-medium text-foreground mb-2">{service.intro}</p>
-                  )}
-                  <ul className="space-y-2 mb-5">
-                    {service.bullets.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="text-sm font-medium text-primary/80 border-t border-border pt-4">
+                  <p className="text-sm font-medium text-primary/80 border-t border-border pt-4 mb-3">
                     {service.outcome}
                   </p>
+
+                  {/* Duration badge */}
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-xs font-medium text-primary">
+                    <Clock className="w-3.5 h-3.5" />
+                    {service.duration}
+                  </div>
                 </div>
 
                 {/* Image */}

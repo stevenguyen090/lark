@@ -1,11 +1,14 @@
 import Layout from "@/components/layout/Layout";
 import HeroSection from "@/components/home/HeroSection";
 import SocialProofSection from "@/components/home/SocialProofSection";
-import ResultsSection from "@/components/home/ResultsSection";
-import SolutionSection from "@/components/home/SolutionSection";
+import WhoIsThisForSection from "@/components/home/WhoIsThisForSection";
 import BeforeAfterSection from "@/components/home/BeforeAfterSection";
+import SolutionSection from "@/components/home/SolutionSection";
+import ResultsSection from "@/components/home/ResultsSection";
+import PricingSection from "@/components/home/PricingSection";
 import CaseStudyPreview from "@/components/home/CaseStudyPreview";
 import ReviewSection from "@/components/home/ReviewSection";
+import FAQSection from "@/components/home/FAQSection";
 import CTASection from "@/components/home/CTASection";
 
 const Index = () => {
@@ -17,22 +20,31 @@ const Index = () => {
       {/* 2. Social Proof Logos */}
       <SocialProofSection />
 
-      {/* 3. Kết quả triển khai thực tế */}
-      <ResultsSection />
+      {/* 3. Dành cho ai? */}
+      <WhoIsThisForSection />
 
-      {/* 4. Lark Consult làm gì cho doanh nghiệp */}
-      <SolutionSection />
-
-      {/* 5. Before/After – So sánh trước và sau */}
+      {/* 4. Before/After */}
       <BeforeAfterSection />
 
-      {/* 6. Case Study – Evidence */}
+      {/* 5. Dịch vụ */}
+      <SolutionSection />
+
+      {/* 6. Kết quả thực tế */}
+      <ResultsSection />
+
+      {/* 7. Pricing */}
+      <PricingSection />
+
+      {/* 8. Case Studies */}
       <CaseStudyPreview />
 
-      {/* 7. Testimonials */}
+      {/* 9. Testimonials */}
       <ReviewSection />
 
-      {/* 8. Final CTA */}
+      {/* 10. FAQ */}
+      <FAQSection />
+
+      {/* 11. Final CTA */}
       <CTASection />
     </Layout>
   );
