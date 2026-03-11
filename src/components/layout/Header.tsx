@@ -10,7 +10,7 @@ const Header = () => {
     { label: "Dịch vụ", href: "/#services" },
     { label: "Case Study", to: "/case-studies" },
     { label: "Pricing", href: "/#pricing" },
-    { label: "Về chúng tôi", href: "/#about" },
+    { label: "FAQ", href: "/#faq" },
   ];
 
   return (

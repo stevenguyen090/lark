@@ -14,7 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Be Vietnam Pro', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Syne', 'Be Vietnam Pro', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -42,6 +44,7 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          ai: "hsl(var(--accent-ai))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -54,6 +57,25 @@ export default {
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",
         error: "hsl(var(--error))",
+        blue: {
+          DEFAULT: "hsl(var(--blue))",
+          dark: "hsl(var(--blue-dark))",
+          light: "hsl(var(--blue-light))",
+          mid: "hsl(var(--blue-mid))",
+          bright: "hsl(var(--blue-bright))",
+        },
+        dark: {
+          DEFAULT: "hsl(var(--dark))",
+          "2": "hsl(var(--dark2))",
+          bg: "hsl(var(--dark-bg))",
+          surface: "hsl(var(--dark-surface))",
+          surface2: "hsl(var(--dark-surface2))",
+          surface3: "hsl(var(--dark-surface3))",
+        },
+        gray: {
+          DEFAULT: "hsl(var(--gray))",
+          "2": "hsl(var(--gray2))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -74,6 +96,10 @@ export default {
       boxShadow: {
         card: "var(--shadow-card)",
         hover: "var(--shadow-hover)",
+        "hero-visual": "var(--shadow-hero-visual)",
+        "btn-primary": "var(--shadow-button-primary)",
+        "btn-hover": "var(--shadow-button-hover)",
+        badge: "var(--shadow-badge)",
       },
       keyframes: {
         "accordion-down": {
