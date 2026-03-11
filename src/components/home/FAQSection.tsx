@@ -30,14 +30,22 @@ const faqs = [
     q: "Lark phù hợp với ngành của tôi không?",
     a: "Đã triển khai cho agency, fitness, bán lẻ, thương mại, dịch vụ. Buổi tư vấn miễn phí sẽ xác định Lark có phù hợp không trước khi bạn quyết định.",
   },
+  {
+    q: "AI Agent hoạt động như thế nào trên Lark?",
+    a: "AI Agent được kết nối trực tiếp với Lark Base (database), task management và các tích hợp đã thiết lập. Nó đọc data thật từ hệ thống của bạn và trả lời bằng ngôn ngữ tự nhiên — không phải chatbot kịch bản cứng. Điều kiện để hoạt động đúng: hệ thống Lark phải được chuẩn hoá tốt (Gói 2).",
+  },
 ];
 
 const FAQSection = () => {
   return (
-    <section className="section-padding bg-secondary/30">
+    <section id="faq" className="section-padding bg-white">
       <div className="container-content">
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+          <span className="section-tag">FAQ</span>
+          <h2
+            className="font-display font-extrabold mb-4"
+            style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", lineHeight: 1.2 }}
+          >
             Câu hỏi <span className="text-primary">thường gặp</span>
           </h2>
         </div>
