@@ -2,8 +2,10 @@ import Layout from "@/components/layout/Layout";
 import HeroSection from "@/components/home/HeroSection";
 import SocialProofSection from "@/components/home/SocialProofSection";
 import WhoIsThisForSection from "@/components/home/WhoIsThisForSection";
+import VisionSection from "@/components/home/VisionSection";
 import BeforeAfterSection from "@/components/home/BeforeAfterSection";
 import SolutionSection from "@/components/home/SolutionSection";
+import AIAgentSection from "@/components/home/AIAgentSection";
 import ResultsSection from "@/components/home/ResultsSection";
 import PricingSection from "@/components/home/PricingSection";
 import CaseStudyPreview from "@/components/home/CaseStudyPreview";
@@ -14,37 +16,43 @@ import CTASection from "@/components/home/CTASection";
 const Index = () => {
   return (
     <Layout>
-      {/* 1. Hero – Hook & Value Prop */}
+      {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. Social Proof Logos */}
+      {/* 2. Logo Bar */}
       <SocialProofSection />
 
       {/* 3. Dành cho ai? */}
       <WhoIsThisForSection />
 
-      {/* 4. Before/After */}
+      {/* 4. Vision (MỚI v2.0) */}
+      <VisionSection />
+
+      {/* 5. Before/After */}
       <BeforeAfterSection />
 
-      {/* 5. Dịch vụ */}
+      {/* 6. Services - 2 Tầng */}
       <SolutionSection />
 
-      {/* 6. Kết quả thực tế */}
+      {/* 7. AI Agent Use Cases (MỚI v2.0) */}
+      <AIAgentSection />
+
+      {/* 8. Stats - Dark bg */}
       <ResultsSection />
 
-      {/* 7. Pricing */}
+      {/* 9. Pricing - 3 gói */}
       <PricingSection />
 
-      {/* 8. Case Studies */}
+      {/* 10. Case Studies */}
       <CaseStudyPreview />
 
-      {/* 9. Testimonials */}
+      {/* 11. Testimonials */}
       <ReviewSection />
 
-      {/* 10. FAQ */}
+      {/* 12. FAQ */}
       <FAQSection />
 
-      {/* 11. Final CTA */}
+      {/* 13. Final CTA */}
       <CTASection />
     </Layout>
   );
