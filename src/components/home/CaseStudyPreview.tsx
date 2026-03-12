@@ -4,7 +4,7 @@ import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 
 const CaseStudyPreview = () => {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
-  const { data: allCases, isLoading } = usePublishedCaseStudies(selectedIndustry || undefined);
+  const { data: allCases, isLoading } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const o = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); o.unobserve(e.target); } }), { threshold: 0.08 });
