@@ -47,10 +47,10 @@ const CaseStudyPreview = () => {
               return (
                 <Link key={cs.id} to={`/case-studies/${cs.slug}`} className={`card-dark p-6 cursor-pointer reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
                   <div className="flex gap-2 flex-wrap mb-4">
-                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: tc.bg, color: tc.color }}>{cs.industry_label}</span>
-                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: "#132540", color: "#4E6380" }}>{cs.scale_label}</span>
+                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: tc.bg, color: tc.color }}>{cs.industryLabel}</span>
+                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: "#132540", color: "#4E6380" }}>{cs.scaleLabel}</span>
                   </div>
-                  <div className="text-[11px] font-semibold text-t-tertiary mb-1.5">Vấn đề: {cs.main_problem_label}</div>
+                  <div className="text-[11px] font-semibold text-t-tertiary mb-1.5">Vấn đề: {cs.mainProblemLabel}</div>
                   <div className="font-semibold text-base text-t-primary mb-4" style={{ lineHeight: 1.5 }}>{cs.title}</div>
                   {result && <div className="text-sm font-bold text-g-400 flex items-center gap-1.5">⚡ {result}</div>}
                   <div className="text-sm font-semibold text-b-500 mt-3 flex items-center gap-1">Xem chi tiết →</div>
