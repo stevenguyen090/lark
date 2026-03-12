@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Be Vietnam Pro', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Syne', 'Be Vietnam Pro', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -27,7 +28,6 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          light: "hsl(var(--primary-light))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -44,7 +44,6 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
-          ai: "hsl(var(--accent-ai))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -53,28 +52,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        success: "hsl(var(--success))",
-        warning: "hsl(var(--warning))",
-        error: "hsl(var(--error))",
-        blue: {
-          DEFAULT: "hsl(var(--blue))",
-          dark: "hsl(var(--blue-dark))",
-          light: "hsl(var(--blue-light))",
-          mid: "hsl(var(--blue-mid))",
-          bright: "hsl(var(--blue-bright))",
-        },
-        dark: {
-          DEFAULT: "hsl(var(--dark))",
-          "2": "hsl(var(--dark2))",
-          bg: "hsl(var(--dark-bg))",
-          surface: "hsl(var(--dark-surface))",
-          surface2: "hsl(var(--dark-surface2))",
-          surface3: "hsl(var(--dark-surface3))",
-        },
-        gray: {
-          DEFAULT: "hsl(var(--gray))",
-          "2": "hsl(var(--gray2))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -86,20 +63,37 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Direct dark theme colors
+        "n-950": "#060D18",
+        "n-900": "#0A1628",
+        "n-850": "#0E1E35",
+        "n-800": "#132540",
+        "n-750": "#182D4C",
+        "n-700": "#1E3558",
+        "n-600": "#2A4570",
+        "n-400": "#64748B",
+        "n-300": "#94A3B8",
+        "n-200": "#CBD5E1",
+        "n-50": "#F8FAFC",
+        "b-500": "#3B82F6",
+        "b-600": "#2563EB",
+        "b-700": "#1D4ED8",
+        "c-400": "#22D3EE",
+        "c-500": "#06B6D4",
+        "a-400": "#FBBF24",
+        "a-500": "#F59E0B",
+        "g-400": "#34D399",
+        "g-500": "#10B981",
+        "r-400": "#F87171",
+        "r-500": "#EF4444",
+        "t-primary": "#F0F6FF",
+        "t-secondary": "#94A3B8",
+        "t-tertiary": "#4E6380",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        pill: "var(--radius-pill)",
-      },
-      boxShadow: {
-        card: "var(--shadow-card)",
-        hover: "var(--shadow-hover)",
-        "hero-visual": "var(--shadow-hero-visual)",
-        "btn-primary": "var(--shadow-button-primary)",
-        "btn-hover": "var(--shadow-button-hover)",
-        badge: "var(--shadow-badge)",
       },
       keyframes: {
         "accordion-down": {
@@ -110,25 +104,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "fade-in": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
-        },
-        "slide-up": {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        "scroll-x": {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.5s ease-out forwards",
-        "slide-up": "slide-up 0.5s ease-out forwards",
-        "scroll-x": "scroll-x 20s linear infinite",
       },
     },
   },

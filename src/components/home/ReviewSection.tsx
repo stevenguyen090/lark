@@ -1,62 +1,29 @@
-import { Quote } from "lucide-react";
-
+import { useEffect, useRef } from "react";
 const reviews = [
-  {
-    quote: "Trước đây mỗi sáng tôi mất 1 tiếng chỉ để check xem ai đang làm gì. Sau 6 tuần triển khai với Lark Consult, tôi chỉ cần nhìn dashboard 5 phút là nắm được tất cả. Team chủ động hơn rõ rệt.",
-    name: "Khang Phạm",
-    role: "Founder",
-    company: "VIFIT Active",
-  },
-  {
-    quote: "Hệ thống dashboard giúp chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng. Giảm gần 40% thời gian xử lý công việc.",
-    name: "Huy Trần",
-    role: "Giám đốc vận hành",
-    company: "EcomElite",
-  },
-  {
-    quote: "Quan trọng nhất là đội ngũ chủ động hơn, không còn phụ thuộc quá nhiều vào lãnh đạo. CEO giờ có thời gian tập trung chiến lược.",
-    name: "Hưng Nguyễn",
-    role: "CEO",
-    company: "Bơ Hometel",
-  },
+  { quote: "Trước mỗi sáng tôi mất 1 tiếng chỉ để check xem ai đang làm gì. Sau 6 tuần triển khai, tôi chỉ nhìn dashboard 5 phút là nắm tất cả.", name: "Khang Phạm", role: "Founder – Agency Marketing · 15 nhân sự", color: "#2563EB", initial: "K" },
+  { quote: "Dashboard giúp chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng. Quan trọng hơn là phát hiện vấn đề sớm hơn.", name: "Huy Trần", role: "Giám đốc vận hành – Công ty thương mại", color: "#10B981", initial: "H" },
+  { quote: "Quan trọng nhất là đội ngũ chủ động hơn. Sau 3 tháng, chúng tôi giảm gần 40% thời gian xử lý công việc hàng ngày.", name: "Hưng Nguyễn", role: "CEO – Doanh nghiệp dịch vụ · 25 nhân sự", color: "#F59E0B", initial: "H" },
 ];
-
 const ReviewSection = () => {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const o = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); o.unobserve(e.target); } }), { threshold: 0.08 });
+    ref.current?.querySelectorAll(".reveal").forEach(el => o.observe(el));
+    return () => o.disconnect();
+  }, []);
   return (
-    <section className="section-padding bg-background">
+    <section ref={ref} className="section-padding-sm">
       <div className="container-content">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Khách hàng nói gì{" "}
-            <span className="text-primary">sau khi triển khai</span>
-          </h2>
-        </div>
-
-        {/* Testimonial Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviews.map((review, index) => (
-            <div
-              key={index}
-              className="bg-card rounded-xl border border-border p-6 animate-fade-in flex flex-col"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="mb-4">
-                <Quote className="w-8 h-8 text-primary/30" />
-              </div>
-              <blockquote className="text-foreground mb-6 leading-relaxed text-sm flex-grow">
-                "{review.quote}"
-              </blockquote>
-              <div className="flex items-center gap-3 pt-4 border-t border-border">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-semibold text-sm">
-                    {review.name.charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground text-sm">{review.name}</p>
-                  <p className="text-muted-foreground text-xs">{review.role} – {review.company}</p>
-                </div>
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Khách hàng nói gì</div>
+        <h2 className="heading-h2 reveal">Sau khi <span className="kw">triển khai hệ thống</span></h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
+          {reviews.map((r, i) => (
+            <div key={i} className={`card-dark p-7 reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
+              <div className="text-[48px] opacity-30 leading-[0.8] mb-4" style={{ color: "#2563EB" }}>"</div>
+              <p className="text-sm text-t-secondary mb-5 italic" style={{ lineHeight: 1.75 }}>{r.quote}</p>
+              <div className="flex items-center gap-3">
+                <div className="w-[38px] h-[38px] rounded-[10px] flex items-center justify-center font-extrabold text-base text-white flex-shrink-0" style={{ background: r.color }}>{r.initial}</div>
+                <div><div className="font-bold text-sm text-t-primary">{r.name}</div><div className="text-xs text-t-tertiary mt-0.5">{r.role}</div></div>
               </div>
             </div>
           ))}
@@ -65,5 +32,4 @@ const ReviewSection = () => {
     </section>
   );
 };
-
 export default ReviewSection;

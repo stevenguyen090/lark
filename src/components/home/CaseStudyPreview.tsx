@@ -1,174 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Loader2 } from "lucide-react";
 import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
-import { industryOptions } from "@/data/caseStudies";
 
 const CaseStudyPreview = () => {
-  const [selectedIndustry, setSelectedIndustry] = useState<string | undefined>(undefined);
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const { data: allCases, isLoading } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const o = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); o.unobserve(e.target); } }), { threshold: 0.08 });
+    ref.current?.querySelectorAll(".reveal").forEach(el => o.observe(el));
+    return () => o.disconnect();
+  }, []);
 
-  const {
-    data: allCases = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
+  const industries = [
+    { value: null, label: "Tất cả" },
+    { value: "service", label: "Dịch vụ" },
+    { value: "retail", label: "Bán lẻ" },
+    { value: "fitness", label: "Fitness" },
+    { value: "manufacturing", label: "Sản xuất" },
+  ];
 
-  // Prioritize case studies with images
-  const previewCases = [...allCases]
-    .sort((a, b) => {
-      const aHas = !!(a.solution as { attachments?: { type: string }[] })?.attachments?.some(att => att.type === 'image');
-      const bHas = !!(b.solution as { attachments?: { type: string }[] })?.attachments?.some(att => att.type === 'image');
-      return (bHas ? 1 : 0) - (aHas ? 1 : 0);
-    })
-    .slice(0, 3);
-
-  // Extract thumbnail from solution attachments
-  const getThumbnail = (cs: typeof allCases[number]) => {
-    const sol = cs.solution as { attachments?: { type: string; url: string }[] } | undefined;
-    return sol?.attachments?.find(a => a.type === 'image')?.url || null;
+  const getThumbnail = (cs: any): string | null => {
+    try { const sol = cs.solution as any; if (sol?.attachments) { const img = sol.attachments.find((a: any) => a.type === "image"); if (img) return img.url; } } catch {} return null;
+  };
+  const previewCases = [...(allCases || [])].sort((a, b) => { const aH = !!getThumbnail(a); const bH = !!getThumbnail(b); return (bH ? 1 : 0) - (aH ? 1 : 0); }).slice(0, 3);
+  const getKeyResult = (cs: any): string | null => { try { const r = cs.results as any; if (Array.isArray(r) && r.length > 0) return r[0].label || r[0].value || null; } catch {} return null; };
+  const tagColor = (ind: string) => {
+    switch (ind) { case "service": return { bg: "rgba(37,99,235,0.1)", color: "#3B82F6" }; case "fitness": return { bg: "rgba(245,158,11,0.1)", color: "#FBBF24" }; case "retail": return { bg: "rgba(16,185,129,0.1)", color: "#34D399" }; default: return { bg: "rgba(37,99,235,0.1)", color: "#3B82F6" }; }
   };
 
   return (
-    <section className="section-padding bg-secondary/20">
+    <section id="cases" ref={ref} className="section-padding">
       <div className="container-content">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            Doanh nghiệp giống bạn đã{" "}
-            <span className="text-primary">giải quyết bài toán vận hành</span> như thế nào?
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Mỗi case study đều bắt đầu từ một vấn đề vận hành thực tế
-          </p>
-        </div>
-
-        {/* Industry Filter Chips */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          <button
-            onClick={() => setSelectedIndustry(undefined)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-              !selectedIndustry
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
-            }`}
-          >
-            Tất cả
-          </button>
-          {industryOptions.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setSelectedIndustry(selectedIndustry === opt.value ? undefined : opt.value)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-                selectedIndustry === opt.value
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
-              }`}
-            >
-              {opt.label}
-            </button>
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Case Studies</div>
+        <h2 className="heading-h2 reveal">Doanh nghiệp giống bạn đã giải quyết <span className="kw">như thế nào?</span></h2>
+        <div className="flex gap-2 flex-wrap mt-8 mb-6 reveal">
+          {industries.map((ind) => (
+            <button key={ind.label} onClick={() => setSelectedIndustry(ind.value)} className="px-3.5 py-1.5 rounded-full text-sm font-semibold transition-all cursor-pointer" style={{ background: selectedIndustry === ind.value ? "#2563EB" : "#0E1E35", color: selectedIndustry === ind.value ? "white" : "#94A3B8", border: `1px solid ${selectedIndustry === ind.value ? "#2563EB" : "rgba(255,255,255,0.09)"}`, fontFamily: "Inter, system-ui, sans-serif" }}>{ind.label}</button>
           ))}
         </div>
-
-        {/* Loading / Error state */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
-        ) : isError ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4">
-              Không tải được danh sách case study. {(error as Error)?.message ? `(${(error as Error).message})` : ""}
-            </p>
-            <button
-              onClick={() => refetch()}
-              className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-            >
-              Thử lại
-            </button>
-          </div>
-        ) : previewCases.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {previewCases.map((caseStudy) => {
-                const thumbnailUrl = getThumbnail(caseStudy);
-                return (
-                  <div
-                    key={caseStudy.id}
-                    className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300"
-                  >
-                    {thumbnailUrl && (
-                      <div className="aspect-video w-full overflow-hidden bg-secondary">
-                        <img
-                          src={thumbnailUrl}
-                          alt={caseStudy.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        <span className="badge-industry">{caseStudy.industryLabel}</span>
-                        <span className="badge-scale">{caseStudy.scaleLabel}</span>
-                      </div>
-
-                      <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                        {caseStudy.title}
-                      </h3>
-
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2 flex-grow">
-                        {caseStudy.summary}
-                      </p>
-
-                      <p className="text-xs text-muted-foreground mb-3">
-                        <span className="font-medium text-foreground">Vấn đề chính:</span>{" "}
-                        {caseStudy.mainProblemLabel}
-                      </p>
-
-                      {caseStudy.results && caseStudy.results.length > 0 && (
-                        <div className="bg-primary/5 rounded-lg p-3 mb-4">
-                          <p className="text-sm font-medium text-primary">
-                            {caseStudy.results[0].metric}: {caseStudy.results[0].value}
-                          </p>
-                        </div>
-                      )}
-
-                      <Link
-                        to={`/case-studies/${caseStudy.slug}`}
-                        className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all mt-auto"
-                      >
-                        Xem chi tiết
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
+        {isLoading ? <div className="text-center py-12 text-t-secondary">Đang tải...</div> : previewCases.length === 0 ? <div className="text-center py-12 text-t-secondary">Chưa có case study.</div> : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {previewCases.map((cs, i) => {
+              const tc = tagColor(cs.industry || "");
+              const result = getKeyResult(cs);
+              return (
+                <Link key={cs.id} to={`/case-studies/${cs.slug}`} className={`card-dark p-6 cursor-pointer reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
+                  <div className="flex gap-2 flex-wrap mb-4">
+                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: tc.bg, color: tc.color }}>{cs.industryLabel}</span>
+                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: "#132540", color: "#4E6380" }}>{cs.scaleLabel}</span>
                   </div>
-                );
-              })}
-            </div>
-
-            <div className="text-center">
-              <Link
-                to="/case-studies"
-                className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
-              >
-                Xem tất cả case study
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              {selectedIndustry ? "Không có case study nào cho lĩnh vực này." : "Chưa có case study nào được công bố."}
-            </p>
+                  <div className="text-[11px] font-semibold text-t-tertiary mb-1.5">Vấn đề: {cs.mainProblemLabel}</div>
+                  <div className="font-semibold text-base text-t-primary mb-4" style={{ lineHeight: 1.5 }}>{cs.title}</div>
+                  {result && <div className="text-sm font-bold text-g-400 flex items-center gap-1.5">⚡ {result}</div>}
+                  <div className="text-sm font-semibold text-b-500 mt-3 flex items-center gap-1">Xem chi tiết →</div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
     </section>
   );
 };
-
 export default CaseStudyPreview;

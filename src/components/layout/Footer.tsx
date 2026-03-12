@@ -1,87 +1,45 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, Calendar } from "lucide-react";
-
 const Footer = () => {
   return (
-    <footer style={{ background: "#0D1B2A" }}>
-      <div className="container-content py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
+    <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "48px 0 32px" }}>
+      <div className="container-content">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-8 mb-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">L</span>
-              </div>
-              <span className="font-semibold text-xl">
-                <span style={{ color: "hsl(var(--blue))" }}>Lark</span>
-                <span style={{ color: "white" }}>Consult</span>
-              </span>
-            </Link>
-            <p className="text-sm max-w-md leading-relaxed" style={{ color: "#94A3B8" }}>
-              Xây hệ thống đủ chuẩn để AI làm việc thay bạn
-            </p>
+            <div className="font-extrabold text-base flex items-center gap-[7px] mb-3 text-t-primary">
+              <div className="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center text-[11px] text-white" style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)" }}>✦</div>
+              LarkConsult
+            </div>
+            <p className="text-sm text-t-tertiary max-w-[260px]" style={{ lineHeight: 1.6 }}>Hệ thống vận hành tập trung cho doanh nghiệp Việt Nam — để AI Agent giúp các sếp quản lý nhàn hơn.</p>
           </div>
-
-          {/* Navigation */}
           <div>
-            <h4 className="font-semibold mb-4" style={{ color: "white" }}>Điều hướng</h4>
-            <ul className="space-y-2">
-              {[
-                { label: "Dịch vụ", href: "/#services" },
-                { label: "Case Study", to: "/case-studies" },
-                { label: "Pricing", href: "/#pricing" },
-                { label: "FAQ", href: "/#faq" },
-              ].map((item) => (
-                <li key={item.label}>
-                  {item.to ? (
-                    <Link to={item.to} className="text-sm hover:text-primary transition-colors" style={{ color: "#94A3B8" }}>
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <a href={item.href} className="text-sm hover:text-primary transition-colors" style={{ color: "#94A3B8" }}>
-                      {item.label}
-                    </a>
-                  )}
-                </li>
+            <div className="text-[11px] font-bold text-t-tertiary mb-4" style={{ letterSpacing: 1 }}>ĐIỀU HƯỚNG</div>
+            <ul className="flex flex-col gap-3 list-none">
+              {[{ label: "Dành cho ai", href: "/#for" }, { label: "Dịch vụ", href: "/#services" }, { label: "AI Agent", href: "/#ai-agent" }, { label: "Pricing", href: "/#pricing" }, { label: "FAQ", href: "/#faq" }].map(item => (
+                <li key={item.label}><a href={item.href} className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">{item.label}</a></li>
               ))}
             </ul>
           </div>
-
-          {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4" style={{ color: "white" }}>Liên hệ</h4>
-            <ul className="space-y-3 text-sm" style={{ color: "#94A3B8" }}>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <a href="https://zalo.me/0905652628" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  Zalo: 0905 652 628
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <a href="mailto:tung1234pct@gmail.com" className="hover:text-primary transition-colors">
-                  tung1234pct@gmail.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <a href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  Đặt lịch tư vấn
-                </a>
-              </li>
+            <div className="text-[11px] font-bold text-t-tertiary mb-4" style={{ letterSpacing: 1 }}>CASE STUDIES</div>
+            <ul className="flex flex-col gap-3 list-none">
+              <li><Link to="/case-studies" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Tất cả Case Study</Link></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-[11px] font-bold text-t-tertiary mb-4" style={{ letterSpacing: 1 }}>LIÊN HỆ</div>
+            <ul className="flex flex-col gap-3 list-none">
+              <li><a href="https://zalo.me/0905652628" target="_blank" rel="noopener noreferrer" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Zalo: 0905.652.628</a></li>
+              <li><a href="mailto:hello@larkconsult.vn" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">hello@larkconsult.vn</a></li>
+              <li><a href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d" target="_blank" rel="noopener noreferrer" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Đặt lịch tư vấn</a></li>
             </ul>
           </div>
         </div>
-
-        {/* Copyright */}
-        <div className="mt-8 pt-8 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-          <p className="text-sm" style={{ color: "#64748B" }}>
-            © 2025 Lark Consult. Tất cả quyền được bảo lưu.
-          </p>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+          <span className="text-xs text-t-tertiary">© 2025 Lark Consult — All rights reserved.</span>
+          <span className="text-xs text-t-tertiary">Built to help Vietnamese businesses operate better.</span>
         </div>
       </div>
     </footer>
   );
 };
-
 export default Footer;
