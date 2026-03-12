@@ -1,93 +1,40 @@
-import { XCircle, CheckCircle2, HeartHandshake } from "lucide-react";
+import { useEffect, useRef } from "react";
 
-const beforeItems = [
-  { title: "CEO bị kéo vào mọi việc nhỏ" },
-  { title: "Giao việc qua Zalo/chat rời rạc" },
-  { title: "Không có số liệu theo dõi hiệu suất" },
-  { title: "Báo cáo đến cuối tháng mới có" },
-  { title: "Nhân sự không biết ưu tiên gì" },
-];
-
-const afterItems = [
-  { title: "CEO tập trung vào chiến lược" },
-  { title: "Công việc tập trung 1 nền tảng" },
-  { title: "Dashboard realtime — nhìn là biết" },
-  { title: "Thông tin có ngay trong ngày" },
-  { title: "Mọi người biết rõ việc mình cần làm" },
-];
+const beforeItems = ["CEO bị kéo vào mọi việc nhỏ, mọi quyết định đều phải chờ duyệt", "Giao việc qua Zalo, chat, email — dễ sót, khó kiểm soát", "Nhân sự làm chăm chỉ nhưng không có số liệu đo hiệu quả", "Báo cáo cuối tháng mới có — phát hiện vấn đề khi đã quá muộn", "Đội ngũ không biết ưu tiên gì, chờ sếp chỉ đạo từng bước"];
+const afterItems = ["Sếp hỏi 1 câu — AI Agent tổng hợp và trả lời ngay", "Công việc và thông tin tập trung trong 1 nền tảng duy nhất", "Dashboard realtime — AI alert khi có bất thường trước khi sếp hỏi", "Thông tin có ngay trong ngày, phát hiện và xử lý vấn đề kịp thời", "Nhân sự biết rõ việc mình cần làm — AI trả lời quy trình 24/7"];
 
 const BeforeAfterSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); observer.unobserve(e.target); } }), { threshold: 0.08 });
+    sectionRef.current?.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="section-padding bg-secondary/30">
+    <section ref={sectionRef} className="section-padding-sm">
       <div className="container-content">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
-            Trước và sau khi được Lark Consult{" "}
-            <span className="text-primary">tư vấn hệ thống vận hành</span>
-          </h2>
-        </div>
-
-        {/* Before / After Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* BEFORE Column */}
-          <div className="rounded-2xl bg-destructive/5 border border-destructive/15 p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-                <XCircle className="w-5 h-5 text-destructive" />
-              </div>
-              <h3 className="text-lg font-bold text-destructive">BEFORE</h3>
-            </div>
-            <div className="space-y-4">
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Trước và sau</div>
+        <h2 className="heading-h2 reveal">Sự thay đổi khi có <span className="kw">hệ thống vận hành rõ ràng</span></h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 mt-12 rounded-[20px] overflow-hidden reveal" style={{ border: "1px solid rgba(255,255,255,0.09)", boxShadow: "0 24px 60px rgba(0,0,0,0.3)" }}>
+          <div className="p-8" style={{ background: "linear-gradient(160deg, rgba(239,68,68,0.06), #0A1628)", borderRight: "1px solid rgba(255,255,255,0.09)" }}>
+            <div className="flex items-center gap-2 font-bold text-base mb-6 text-r-400"><span>✕</span> Khi chưa có hệ thống</div>
+            <div className="flex flex-col gap-4">
               {beforeItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 animate-fade-in"
-                  style={{ animationDelay: `${i * 0.06}s` }}
-                >
-                  <XCircle className="w-5 h-5 text-destructive/60 flex-shrink-0" />
-                  <span className="font-medium text-foreground text-sm">{item.title}</span>
+                <div key={i} className="flex items-start gap-2.5 text-sm text-t-secondary" style={{ lineHeight: 1.6 }}>
+                  <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5 bg-r-500 text-white">✕</div>{item}
                 </div>
               ))}
             </div>
           </div>
-
-          {/* AFTER Column */}
-          <div className="rounded-2xl bg-[hsl(var(--success))]/5 border border-[hsl(var(--success))]/15 p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-[hsl(var(--success))]/10 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))]" />
-              </div>
-              <h3 className="text-lg font-bold text-[hsl(var(--success))]">AFTER</h3>
-            </div>
-            <div className="space-y-4">
+          <div className="p-8" style={{ background: "linear-gradient(160deg, rgba(16,185,129,0.06), #0A1628)" }}>
+            <div className="flex items-center gap-2 font-bold text-base mb-6 text-g-400"><span>✓</span> Sau khi có Lark + AI Agent</div>
+            <div className="flex flex-col gap-4">
               {afterItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 animate-fade-in"
-                  style={{ animationDelay: `${i * 0.06}s` }}
-                >
-                  <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))]/60 flex-shrink-0" />
-                  <span className="font-medium text-foreground text-sm">{item.title}</span>
+                <div key={i} className="flex items-start gap-2.5 text-sm text-t-secondary" style={{ lineHeight: 1.6 }}>
+                  <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5 bg-g-500 text-white">✓</div>{item}
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Commitment Banner */}
-        <div className="mt-10 max-w-3xl mx-auto">
-          <div className="flex items-center gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-5 md:p-6">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <HeartHandshake className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <p className="font-semibold text-foreground mb-1">
-                Đồng hành xuyên suốt – không bỏ rơi giữa chừng
-              </p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Lark Consult không chỉ triển khai rồi rời đi. Chúng tôi đồng hành cùng doanh nghiệp từ khâu phân tích, thiết kế hệ thống đến tối ưu liên tục.
-              </p>
             </div>
           </div>
         </div>
