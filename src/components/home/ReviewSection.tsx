@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 const reviews = [
   { quote: "Trước mỗi sáng tôi mất 1 tiếng chỉ để check xem ai đang làm gì. Sau 6 tuần triển khai, tôi chỉ nhìn dashboard 5 phút là nắm tất cả. Team chủ động hơn rõ rệt.", name: "Khang Phạm", role: "Founder – Agency Marketing · 15 nhân sự", color: "#2563EB", initial: "K" },
-  { quote: "Dashboard giúp chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng. Quan trọng hơn là phát hiện vấn đề sớm hơn và xử lý kịp thời.", name: "Huy Trần", role: "Giám đốc vận hành – Công ty thương mại", color: "#10B981", initial: "H" },
+  { quote: "Từ khi dùng Lark dashboard, chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng. Quan trọng hơn là phát hiện vấn đề sớm hơn và xử lý kịp thời.", name: "Huy Trần", role: "Giám đốc vận hành – Công ty thương mại", color: "#10B981", initial: "H" },
   { quote: "Quan trọng nhất là đội ngũ chủ động hơn, không còn phụ thuộc quá nhiều vào lãnh đạo. Sau 3 tháng, chúng tôi giảm gần 40% thời gian xử lý công việc hàng ngày.", name: "Hưng Nguyễn", role: "CEO – Doanh nghiệp dịch vụ · 25 nhân sự", color: "#F59E0B", initial: "H" },
 ];
 const ReviewSection = () => {
