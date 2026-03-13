@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 const personas = [
-  { num: "01", title: "CEO / Founder — 10 đến 50 nhân sự", desc: "Bị kéo vào quá nhiều việc vặt, không còn thời gian làm chiến lược. Mọi quyết định đều phải chờ bạn duyệt." },
-  { num: "02", title: "Giám đốc vận hành / COO", desc: "Khó theo dõi tiến độ và hiệu suất đội ngũ theo thời gian thực. Báo cáo đến chậm, vấn đề phát hiện muộn." },
-  { num: "03", title: "Chủ doanh nghiệp đang scale", desc: "Quy trình cũ dùng Zalo + Excel không còn đáp ứng được khi team lớn hơn. Cần hệ thống mới bài bản hơn." },
-  { num: "04", title: "Doanh nghiệp dùng nhiều tool rời rạc", desc: "Dữ liệu nằm rải rác trên Zalo, sheet, pancake,... — thông tin mất kiểm soát, phối hợp khó khăn." },
+  { num: "01", title: "Bán được nhưng không biết thực sự đang lãi hay lỗ ở đâu", desc: "Doanh thu trông ổn, nhưng margin thực, chi phí ẩn, deal nào đang bù lỗ cho deal nào — không có con số rõ ràng để quyết định." },
+  { num: "02", title: "Giao việc xong rồi... không biết đang chạy đến đâu", desc: "Task giao qua Zalo, deadline trong đầu mỗi người. Muốn biết tiến độ thì phải đi hỏi — mà hỏi xong cũng chưa chắc biết thật sự đang như thế nào." },
+  { num: "03", title: "Sales hứa khách, Ops không biết — phối hợp qua Zalo và trí nhớ", desc: "Không có luồng thông tin chung giữa các phòng. Mỗi bộ phận tự chạy riêng, sự cố xảy ra rồi mới phát hiện ra chỗ đứt gãy." },
+  { num: "04", title: "Dữ liệu ở khắp nơi, không có bức tranh tổng", desc: "Pancake, Shopify, Meta Ads, Sepay chạy song song — không có một nơi duy nhất để nhìn thấy toàn bộ kinh doanh." },
 ];
 
 const WhoIsThisForSection = () => {
@@ -19,7 +19,7 @@ const WhoIsThisForSection = () => {
     <section id="for" ref={sectionRef} className="section-padding">
       <div className="container-content">
         <div className="eyebrow reveal"><div className="eyebrow-pip" />Đối tượng phù hợp</div>
-        <h2 className="heading-h2 reveal">Lark Consult phù hợp với bạn <span className="kw">nếu...</span></h2>
+        <h2 className="heading-h2 reveal">Bạn đang <span className="kw">gặp vấn đề này</span> không?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
           {personas.map((p, i) => (
             <div key={p.num} className={`card-dark p-6 flex gap-4 items-start reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
@@ -30,9 +30,6 @@ const WhoIsThisForSection = () => {
               </div>
             </div>
           ))}
-        </div>
-        <div className="mt-6 p-4 px-5 rounded-[10px] text-sm text-t-secondary reveal" style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)", lineHeight: 1.6 }}>
-          <strong className="text-r-400">Chưa phù hợp nếu:</strong> doanh nghiệp dưới 5 nhân sự hoặc chưa có quy trình vận hành cơ bản nào.
         </div>
       </div>
     </section>

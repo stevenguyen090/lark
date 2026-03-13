@@ -1,7 +1,17 @@
 import { useEffect, useRef } from "react";
 
-const beforeItems = ["CEO bị kéo vào mọi việc nhỏ, mọi quyết định đều phải chờ duyệt", "Giao việc qua Zalo, chat, email — dễ sót, khó kiểm soát", "Nhân sự làm chăm chỉ nhưng không có số liệu đo hiệu quả", "Báo cáo cuối tháng mới có — phát hiện vấn đề khi đã quá muộn", "Đội ngũ không biết ưu tiên gì, chờ sếp chỉ đạo từng bước"];
-const afterItems = ["Sếp hỏi 1 câu — AI Agent tổng hợp và trả lời ngay", "Công việc và thông tin tập trung trong 1 nền tảng duy nhất", "Dashboard realtime — AI alert khi có bất thường trước khi sếp hỏi", "Thông tin có ngay trong ngày, phát hiện và xử lý vấn đề kịp thời", "Nhân sự biết rõ việc mình cần làm — AI trả lời quy trình 24/7"];
+const beforeItems = [
+  "Giao việc qua Zalo, chat, email — dễ sót, khó kiểm soát",
+  "Nhân sự làm chăm chỉ nhưng không có số liệu đo hiệu quả",
+  "Báo cáo cuối tháng mới có — phát hiện vấn đề khi đã quá muộn",
+  "Đội ngũ không biết ưu tiên gì, chờ sếp chỉ đạo từng bước",
+];
+const afterItems = [
+  "Công việc và thông tin tập trung trong 1 nền tảng duy nhất",
+  "Dashboard realtime — AI alert khi có bất thường trước khi sếp hỏi",
+  "Thông tin có ngay trong ngày, phát hiện và xử lý vấn đề kịp thời",
+  "Nhân sự biết rõ việc mình cần làm — AI trả lời quy trình 24/7",
+];
 
 const BeforeAfterSection = () => {
   const sectionRef = useRef<HTMLElement>(null);

@@ -1,4 +1,16 @@
-const logos = ["VIFIT Active", "EcomElite", "Biva", "PT Fitness", "Bơ Hometel"];
+import vifit from "@/assets/logos/vifit.png";
+import ecomelite from "@/assets/logos/ecomelite.png";
+import biva from "@/assets/logos/biva.png";
+import ptfitness from "@/assets/logos/ptfitness.png";
+import bohometel from "@/assets/logos/bohometel.png";
+
+const logos = [
+  { name: "VIFIT Active", src: vifit },
+  { name: "EcomElite", src: ecomelite },
+  { name: "Biva", src: biva },
+  { name: "PT Fitness", src: ptfitness },
+  { name: "Bơ Hometel", src: bohometel },
+];
 
 const SocialProofSection = () => {
   return (
@@ -9,10 +21,14 @@ const SocialProofSection = () => {
             Đồng hành với hơn 30+ doanh nghiệp
           </span>
           <div className="flex items-center gap-8 flex-wrap flex-1">
-            {logos.map((name) => (
-              <span key={name} className="font-bold text-sm text-t-tertiary hover:text-t-secondary transition-colors" style={{ letterSpacing: "0.5px" }}>
-                {name}
-              </span>
+            {logos.map((logo) => (
+              <img
+                key={logo.name}
+                src={logo.src}
+                alt={logo.name}
+                className="h-8 w-auto object-contain opacity-50 hover:opacity-80 transition-opacity"
+                title={logo.name}
+              />
             ))}
           </div>
         </div>
