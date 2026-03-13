@@ -288,6 +288,27 @@ const HeroSection = () => {
               </div>
             </div>
 
+<<<<<<< HEAD
+            {/* Headline — NO reveal class, inline animation */}
+            <h1 style={{
+              fontSize: "clamp(48px, 5vw, 56px)",
+              fontWeight: 700,
+              lineHeight: 1.2,
+              letterSpacing: "-0.02em",
+              color: "#E8EAF0",
+              marginBottom: 20,
+              animation: "fadeSlideUp 0.7s ease 0.1s both",
+            }}>
+              Xây hệ thống vận hành để AI giúp việc{" "}
+              <span style={{
+                background: "linear-gradient(135deg,#3B82F6,#22D3EE)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
+                quản lý nhàn hơn
+              </span>
+=======
             {/* Headline — NO reveal class, inline animation */}
             <h1 style={{
               fontSize: "clamp(32px, 4vw, 52px)",
@@ -307,6 +328,7 @@ const HeroSection = () => {
               }}>
                 quản lý nhàn hơn
               </span>
+>>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
             </h1>
 
             {/* Subheadline */}
