@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 
-<<<<<<< HEAD
-=======
 /* ── Keyframes injected once ── */
 const KEYFRAMES = `
 @keyframes csSlideUp {
@@ -64,43 +62,21 @@ const INDUSTRIES = [
 /* ════════════════════════════════════════════
    Main Component
 ════════════════════════════════════════════ */
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
 const CaseStudyPreview = () => {
-<<<<<<< HEAD
-  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
-  const { data: allCases, isLoading } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
-  const ref = useRef<HTMLElement>(null);
-=======
   const [selected, setSelected] = useState<string | null>(null);
   const { data: allCases, isLoading } = usePublishedCaseStudies(
     selected ? { industry: selected } : undefined
   );
 
   /* inject keyframes once */
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
   useEffect(() => {
-<<<<<<< HEAD
-    const o = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("revealed"); o.unobserve(e.target); } }), { threshold: 0.08 });
-    ref.current?.querySelectorAll(".reveal").forEach(el => o.observe(el));
-    return () => o.disconnect();
-=======
     if (document.getElementById("cs-keyframes")) return;
     const s = document.createElement("style");
     s.id = "cs-keyframes";
     s.textContent = KEYFRAMES;
     document.head.appendChild(s);
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
   }, []);
 
-<<<<<<< HEAD
-  const industries = [
-    { value: null, label: "Tất cả" },
-    { value: "service", label: "Dịch vụ" },
-    { value: "retail", label: "Bán lẻ" },
-    { value: "fitness", label: "Fitness" },
-    { value: "manufacturing", label: "Sản xuất" },
-  ];
-=======
   /* sort: cards with thumbnail first, cap at 3 */
   const cases: CaseItem[] = [...((allCases as CaseItem[]) || [])]
     .sort((a, b) => (getThumbnail(b) ? 1 : 0) - (getThumbnail(a) ? 1 : 0))
@@ -112,17 +88,7 @@ const CaseStudyPreview = () => {
       padding: "96px 0",
       background: "#060D18",
     } as React.CSSProperties,
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
 
-<<<<<<< HEAD
-  const getThumbnail = (cs: any): string | null => {
-    try { const sol = cs.solution as any; if (sol?.attachments) { const img = sol.attachments.find((a: any) => a.type === "image"); if (img) return img.url; } } catch {} return null;
-  };
-  const previewCases = [...(allCases || [])].sort((a, b) => { const aH = !!getThumbnail(a); const bH = !!getThumbnail(b); return (bH ? 1 : 0) - (aH ? 1 : 0); }).slice(0, 3);
-  const getKeyResult = (cs: any): string | null => { try { const r = cs.results as any; if (Array.isArray(r) && r.length > 0) return r[0].label || r[0].value || null; } catch {} return null; };
-  const tagColor = (ind: string) => {
-    switch (ind) { case "service": return { bg: "rgba(37,99,235,0.1)", color: "#3B82F6" }; case "fitness": return { bg: "rgba(245,158,11,0.1)", color: "#FBBF24" }; case "retail": return { bg: "rgba(16,185,129,0.1)", color: "#34D399" }; default: return { bg: "rgba(37,99,235,0.1)", color: "#3B82F6" }; }
-=======
     container: {
       maxWidth: 1200,
       margin: "0 auto",
@@ -186,7 +152,6 @@ const CaseStudyPreview = () => {
       gridTemplateColumns: "1fr",
       gap: 20,
     } as React.CSSProperties,
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
   };
 
   const filterBtn = (active: boolean) => ({
@@ -213,15 +178,6 @@ const CaseStudyPreview = () => {
   }, []);
 
   return (
-<<<<<<< HEAD
-    <section id="cases" ref={ref} className="section-padding">
-      <div className="container-content">
-        <div className="eyebrow reveal"><div className="eyebrow-pip" />Case Studies</div>
-        <h2 className="heading-h2 reveal">Doanh nghiệp giống bạn đã giải quyết <span className="kw">như thế nào?</span></h2>
-        <div className="flex gap-2 flex-wrap mt-8 mb-6 reveal">
-          {industries.map((ind) => (
-            <button key={ind.label} onClick={() => setSelectedIndustry(ind.value)} className="px-3.5 py-1.5 rounded-full text-sm font-semibold transition-all cursor-pointer" style={{ background: selectedIndustry === ind.value ? "#2563EB" : "#0E1E35", color: selectedIndustry === ind.value ? "white" : "#94A3B8", border: `1px solid ${selectedIndustry === ind.value ? "#2563EB" : "rgba(255,255,255,0.09)"}`, fontFamily: "Inter, system-ui, sans-serif" }}>{ind.label}</button>
-=======
     <section id="cases" style={S.section}>
       <div style={S.container}>
 
@@ -259,14 +215,8 @@ const CaseStudyPreview = () => {
             >
               {ind.label}
             </button>
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
           ))}
         </div>
-<<<<<<< HEAD
-        {isLoading ? <div className="text-center py-12 text-t-secondary">Đang tải...</div> : previewCases.length === 0 ? <div className="text-center py-12 text-t-secondary">Chưa có case study.</div> : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {previewCases.map((cs, i) => {
-=======
 
         {/* Content */}
         {isLoading ? (
@@ -307,18 +257,11 @@ const CaseStudyPreview = () => {
             }}
           >
             {cases.map((cs, i) => {
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
               const tc = tagColor(cs.industry || "");
               const result = getKeyResult(cs);
               const delays = [0.35, 0.45, 0.55];
 
               return (
-<<<<<<< HEAD
-                <Link key={cs.id} to={`/case-studies/${cs.slug}`} className={`card-dark p-6 cursor-pointer reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
-                  <div className="flex gap-2 flex-wrap mb-4">
-                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: tc.bg, color: tc.color }}>{cs.industryLabel}</span>
-                    <span className="text-[11px] font-bold px-2 py-[3px] rounded" style={{ background: "#132540", color: "#4E6380" }}>{cs.scaleLabel}</span>
-=======
                 <Link
                   key={cs.id}
                   to={`/case-studies/${cs.slug}`}
@@ -367,14 +310,7 @@ const CaseStudyPreview = () => {
                         {cs.scaleLabel}
                       </span>
                     )}
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
                   </div>
-<<<<<<< HEAD
-                  <div className="text-[11px] font-semibold text-t-tertiary mb-1.5">Vấn đề: {cs.mainProblemLabel}</div>
-                  <div className="font-semibold text-base text-t-primary mb-4" style={{ lineHeight: 1.5 }}>{cs.title}</div>
-                  {result && <div className="text-sm font-bold text-g-400 flex items-center gap-1.5">⚡ {result}</div>}
-                  <div className="text-sm font-semibold text-b-500 mt-3 flex items-center gap-1">Xem chi tiết →</div>
-=======
 
                   {/* Problem label */}
                   {cs.mainProblemLabel && (
@@ -416,7 +352,6 @@ const CaseStudyPreview = () => {
                   }}>
                     Xem chi tiết →
                   </div>
->>>>>>> 92e9407e5e7577c9437118178bbf18c951310382
                 </Link>
               );
             })}
@@ -427,4 +362,5 @@ const CaseStudyPreview = () => {
     </section>
   );
 };
+
 export default CaseStudyPreview;
