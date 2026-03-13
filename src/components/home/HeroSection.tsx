@@ -1,53 +1,219 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { ArrowRight } from "lucide-react";
 
-const CTA_LINK =
-  "https://larkconsult.sg.larksuite.com/share/base/form/shrlgOQm9YZugwbV6FaVibRHQ3b";
+const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgOQm9YZugwbV6FaVibRHQ3b";
 
-/* ─── Keyframes injected once ─── */
-const KEYFRAMES = `
-@keyframes dashFloat {
-  0%,100% { transform: translateY(0px); }
-  50%      { transform: translateY(-8px); }
-}
-@keyframes alertIn {
-  from { opacity:0; transform:translateX(20px); }
-  to   { opacity:1; transform:translateX(0); }
-}
-@keyframes alertPulse {
-  0%,100% { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0px rgba(245,158,11,0); }
-  50%     { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 18px rgba(245,158,11,0.18); }
-}
-@keyframes chatIn {
-  from { opacity:0; transform:translateY(16px) scale(0.97); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-@keyframes hwDraw {
-  to { stroke-dashoffset: 0; }
-}
-@keyframes dotPop {
-  to { opacity:1; }
-}
-@keyframes barGrow {
-  to { transform: scaleY(1); }
-}
-@keyframes areaFade {
-  to { opacity:1; }
-}
-@keyframes typingBounce {
-  0%,80%,100% { transform:translateY(0); }
-  40%         { transform:translateY(-4px); }
-}
-@keyframes blink {
-  0%,100% { opacity:1; }
-  50%     { opacity:0.3; }
-}
-@keyframes fadeSlideUp {
-  from { opacity:0; transform:translateY(18px); }
-  to   { opacity:1; transform:translateY(0); }
-}
+/* ─────────────────────────────────────────────────────────────────
+   CSS classes được inject từ HTML source (larkconsult-updated.html)
+   Giữ nguyên 100% giá trị gốc — không thay đổi bất kỳ token nào
+───────────────────────────────────────────────────────────────── */
+const INJECTED_CSS = `
+  /* ── CSS Variables (design tokens) ── */
+  :root {
+    --blue-50:#EFF6FF; --blue-100:#DBEAFE; --blue-500:#3B82F6;
+    --blue-600:#2563EB; --blue-700:#1D4ED8; --blue-900:#1E3A8A;
+    --cyan-400:#22D3EE; --cyan-500:#06B6D4;
+    --amber-400:#FBBF24; --amber-500:#F59E0B;
+    --green-400:#34D399; --green-500:#10B981;
+    --red-400:#F87171; --red-500:#EF4444;
+    --neutral-950:#060D18; --neutral-900:#0A1628; --neutral-850:#0E1E35;
+    --neutral-800:#132540; --neutral-750:#182D4C; --neutral-700:#1E3558;
+    --neutral-600:#2A4570; --neutral-400:#64748B; --neutral-300:#94A3B8;
+    --neutral-200:#CBD5E1; --neutral-100:#E2E8F0; --neutral-50:#F8FAFC;
+    --bg: var(--neutral-950);
+    --surface-1: var(--neutral-900); --surface-2: var(--neutral-850);
+    --surface-3: var(--neutral-800); --surface-4: var(--neutral-750);
+    --border-subtle:rgba(255,255,255,0.05); --border-default:rgba(255,255,255,0.09);
+    --border-strong:rgba(255,255,255,0.14); --border-blue:rgba(37,99,235,0.35);
+    --text-primary:#F0F6FF; --text-secondary:#94A3B8; --text-tertiary:#4E6380;
+    --glow-blue:0 0 60px rgba(37,99,235,0.18); --glow-cyan:0 0 40px rgba(6,182,212,0.12);
+    --font-primary:'Inter',system-ui,-apple-system,sans-serif;
+    --text-hero:clamp(48px,5vw,56px); --text-h1:40px; --text-h2:32px;
+    --text-h3:24px; --text-body:16px; --text-small:14px;
+    --fw-hero:700; --fw-h1:700; --fw-h2:600; --fw-h3:600;
+    --fw-body:400; --fw-small:400;
+    --lh-hero:1.2; --lh-heading:1.25; --lh-body:1.65;
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+    --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+    --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+    --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px; --r-full:9999px;
+    --t-fast:150ms; --t-base:250ms; --t-slow:400ms;
+    --ease:cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── Typography ── */
+  .heading-hero {
+    font-family: var(--font-primary);
+    font-size: var(--text-hero);
+    font-weight: var(--fw-hero);
+    line-height: var(--lh-hero);
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .heading-h2 {
+    font-family: var(--font-primary);
+    font-size: var(--text-h2);
+    font-weight: var(--fw-h2);
+    line-height: var(--lh-heading);
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+  }
+  .body-lg {
+    font-size: var(--text-body);
+    font-weight: var(--fw-body);
+    color: var(--text-secondary);
+    line-height: var(--lh-body);
+  }
+  .kw { color: var(--blue-500); font-weight: inherit; }
+
+  /* ── Eyebrow ── */
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    font-size: var(--text-small); font-weight: 600; letter-spacing: 1px;
+    color: var(--cyan-400); margin-bottom: var(--space-4);
+  }
+  .eyebrow-pip {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green-400);
+    animation: pip-blink 2.4s ease-in-out infinite;
+  }
+  @keyframes pip-blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--space-2); border: none; border-radius: var(--r-md);
+    font-family: var(--font-primary); font-weight: 600;
+    transition: all var(--t-base) var(--ease);
+    white-space: nowrap; text-decoration: none; cursor: pointer;
+  }
+  .btn--lg  { padding: 14px 28px; font-size: 15px; }
+  .btn--md  { padding: 11px 22px; font-size: var(--text-small); }
+  .btn--sm  { padding:  8px 16px; font-size: var(--text-small); }
+  .btn--primary {
+    background: var(--blue-600); color: #fff;
+    box-shadow: 0 0 0 1px var(--blue-700), 0 4px 20px rgba(37,99,235,0.35);
+  }
+  .btn--primary:hover {
+    background: var(--blue-500); transform: translateY(-2px);
+    box-shadow: 0 0 0 1px var(--blue-600), 0 8px 32px rgba(37,99,235,0.5);
+  }
+  .btn--ghost {
+    background: transparent; color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+  }
+  .btn--ghost:hover {
+    color: var(--text-primary); border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+  .btn--glow {
+    background: #fff; color: var(--blue-700);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.15);
+  }
+  .btn--glow:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(0,0,0,0.4); }
+  .btn-icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border-default);
+    border-radius: var(--r-lg);
+    transition: border-color var(--t-base), box-shadow var(--t-base), transform var(--t-base);
+  }
+  .card:hover {
+    border-color: var(--border-blue);
+    box-shadow: var(--glow-blue);
+    transform: translateY(-3px);
+  }
+
+  /* ── Container ── */
+  .container-content { max-width: 1180px; margin: 0 auto; padding: 0 var(--space-6); }
+
+  /* ── Reveal (tự trigger ngay, không cần IntersectionObserver) ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease); }
+  .reveal.revealed { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 80ms; }
+  .reveal-d2 { transition-delay: 160ms; }
+  .reveal-d3 { transition-delay: 240ms; }
+  .reveal-d4 { transition-delay: 320ms; }
+
+  /* ── Blink dot ── */
+  .blink-dot { animation: pip-blink 2s ease-in-out infinite; }
+
+  /* ── Hero layout ── */
+  .hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 120px 0 80px; background: var(--bg); }
+  .hero__orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(100px); }
+  .hero__orb--1 { width:600px; height:600px; background:radial-gradient(circle,rgba(37,99,235,0.14) 0%,transparent 70%); top:-100px; right:-150px; }
+  .hero__orb--2 { width:400px; height:400px; background:radial-gradient(circle,rgba(6,182,212,0.08) 0%,transparent 70%); bottom:0; left:-100px; }
+  .hero__orb--3 { width:300px; height:300px; background:radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%); top:40%; left:40%; }
+  .hero__inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; position:relative; z-index:1; }
+  .hero__label { margin-bottom: var(--space-6); }
+  .hero__live-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--surface-2); border:1px solid var(--border-default);
+    border-radius:var(--r-full); padding:6px 14px;
+    font-size:var(--text-small); font-weight:500; color:var(--text-secondary);
+    backdrop-filter:blur(10px);
+  }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green-400); box-shadow:0 0 6px var(--green-400); animation:pip-blink 2s infinite; }
+  .hero__heading { margin-bottom: var(--space-5); }
+  .hero__sub { max-width:520px; margin-bottom:var(--space-8); }
+  .hero__proof { display:flex; align-items:center; gap:var(--space-4); margin-bottom:var(--space-8); flex-wrap:wrap; }
+  .proof-item { display:flex; align-items:center; gap:6px; font-size:var(--text-small); font-weight:500; color:var(--text-secondary); }
+  .proof-item--stars { gap:5px; }
+  .proof-stars { display:flex; gap:1px; align-items:center; }
+  .proof-item strong { color:var(--text-primary); font-weight:700; }
+  .proof-sep { width:3px; height:3px; background:var(--border-strong); border-radius:50%; }
+  .hero__ctas { display:flex; gap:var(--space-3); flex-wrap:wrap; margin-bottom:var(--space-5); }
+  .hero__visual { position:relative; padding-right:20px; padding-bottom:20px; }
+  .hero__visual-glow { position:absolute; inset:-40px; background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(37,99,235,0.14) 0%,rgba(6,182,212,0.06) 50%,transparent 75%); pointer-events:none; z-index:0; }
+
+  /* ── Dashboard widget animations ── */
+  @keyframes dashFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  @keyframes alertIn    { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes alertPulse { 0%,100%{box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 rgba(245,158,11,0)} 50%{box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 18px rgba(245,158,11,.18)} }
+  @keyframes chatIn     { from{opacity:0;transform:translateY(16px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes hwDraw     { to{stroke-dashoffset:0} }
+  @keyframes dotPop     { to{opacity:1} }
+  @keyframes barGrow    { to{transform:scaleY(1)} }
+  @keyframes areaFade   { to{opacity:1} }
+  @keyframes typingBounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-4px)} }
+
+  /* ── Case study classes ── */
+  .section { padding: var(--space-24) 0; }
+  .section-padding { padding: var(--space-24) 0; }
+  .cs-filters { display:flex; gap:var(--space-2); flex-wrap:wrap; margin:var(--space-8) 0 var(--space-6); }
+  .cs-filter { padding:7px 16px; border-radius:var(--r-full); font-size:var(--text-small); font-weight:600; cursor:pointer; background:var(--surface-2); color:var(--text-secondary); border:1px solid var(--border-default); transition:all var(--t-base); font-family:var(--font-primary); }
+  .cs-filter.active, .cs-filter:hover { background:var(--blue-600); color:#fff; border-color:var(--blue-600); }
+  .cs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-5); }
+  .cs-card { padding:var(--space-6); cursor:pointer; }
+  .cs-tags { display:flex; gap:var(--space-2); flex-wrap:wrap; margin-bottom:var(--space-4); }
+  .cs-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px; }
+  .cs-tag--svc { background:rgba(37,99,235,0.1); color:var(--blue-500); }
+  .cs-tag--fit { background:rgba(245,158,11,0.1); color:var(--amber-400); }
+  .cs-tag--ret { background:rgba(16,185,129,0.1); color:var(--green-400); }
+  .cs-tag--mfg { background:rgba(167,139,250,0.1); color:#A78BFA; }
+  .cs-tag--sz  { background:var(--surface-3); color:var(--text-tertiary); }
+  .cs-pain { font-size:11px; font-weight:600; color:var(--text-tertiary); margin-bottom:6px; }
+  .cs-title { font-weight:600; font-size:var(--text-body); line-height:1.5; margin-bottom:var(--space-4); color:var(--text-primary); }
+  .cs-result { font-size:var(--text-small); font-weight:700; color:var(--green-400); display:flex; align-items:center; gap:6px; }
+  .cs-arrow { font-size:var(--text-small); font-weight:600; color:var(--blue-500); margin-top:var(--space-3); display:flex; align-items:center; gap:4px; }
+
+  /* ── Text color helpers ── */
+  .text-t-secondary { color: var(--text-secondary); }
+  .text-t-primary   { color: var(--text-primary); }
+  .text-t-tertiary  { color: var(--text-tertiary); }
+  .text-b-500       { color: var(--blue-500); }
+  .text-g-400       { color: var(--green-400); }
+
+  @media (max-width: 768px) {
+    .hero__inner { grid-template-columns: 1fr; }
+    .cs-grid { grid-template-columns: 1fr; }
+    .hero__visual { display: none; }
+  }
 `;
 
-/* ─── Chat conversation script ─── */
+/* ── Hero Chat Conversation ── */
 const HERO_CONV = [
   { delay: 1200, role: "user" as const, text: "Cho tôi tóm tắt tình hình kinh doanh tuần này" },
   {
@@ -71,42 +237,41 @@ const HERO_CONV = [
   },
 ];
 
-/* ─── Star icon ─── */
-const StarFull = () => (
-  <svg viewBox="0 0 20 20" fill="#FBBF24" width="13" height="13">
-    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-  </svg>
-);
-const StarPartial = () => (
-  <svg viewBox="0 0 20 20" width="13" height="13">
-    <defs>
-      <linearGradient id="pstar67">
-        <stop offset="67%" stopColor="#FBBF24" />
-        <stop offset="67%" stopColor="#4B5563" />
-      </linearGradient>
-    </defs>
-    <path fill="url(#pstar67)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-  </svg>
+const StarIcon = ({ full = true }: { full?: boolean }) => (
+  full ? (
+    <svg viewBox="0 0 20 20" fill="#FBBF24" width="13" height="13"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+  ) : (
+    <svg viewBox="0 0 20 20" width="13" height="13"><defs><linearGradient id="pstar"><stop offset="67%" stopColor="#FBBF24"/><stop offset="67%" stopColor="#4B5563"/></linearGradient></defs><path fill="url(#pstar)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+  )
 );
 
-/* ─── Main Component ─── */
 const HeroSection = () => {
   const chatRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  /* inject keyframes once */
+  /* ── Inject CSS + trigger reveal ── */
   useEffect(() => {
-    if (document.getElementById("hero-keyframes")) return;
-    const style = document.createElement("style");
-    style.id = "hero-keyframes";
-    style.textContent = KEYFRAMES;
-    document.head.appendChild(style);
+    if (!document.getElementById("lc-injected-css")) {
+      const style = document.createElement("style");
+      style.id = "lc-injected-css";
+      style.textContent = INJECTED_CSS;
+      document.head.appendChild(style);
+    }
+    /* Trigger tất cả .reveal trong section này ngay lập tức (stagger by delay) */
+    const timer = setTimeout(() => {
+      sectionRef.current?.querySelectorAll(".reveal").forEach(el => {
+        el.classList.add("revealed");
+      });
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const addMsg = useCallback((role: string, html: string) => {
     const container = chatRef.current;
     if (!container) return;
     const el = document.createElement("div");
+    el.className = role === "user" ? "hw-bubble-user" : "hw-bubble-ai";
     Object.assign(el.style, {
       alignSelf: role === "user" ? "flex-end" : "flex-start",
       background: role === "user" ? "#2563EB" : "#182D4C",
@@ -124,12 +289,12 @@ const HeroSection = () => {
     });
     el.innerHTML = html;
     container.appendChild(el);
-    requestAnimationFrame(() =>
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         el.style.opacity = "1";
         el.style.transform = "translateY(0)";
-      })
-    );
+      });
+    });
     container.scrollTop = container.scrollHeight;
   }, []);
 
@@ -137,6 +302,7 @@ const HeroSection = () => {
     const container = chatRef.current;
     if (!container) return;
     const el = document.createElement("div");
+    el.className = "hw-bubble-typing";
     Object.assign(el.style, {
       alignSelf: "flex-start",
       background: "#182D4C",
@@ -149,20 +315,14 @@ const HeroSection = () => {
       opacity: "0",
       transition: "opacity 0.2s ease",
     });
-    el.className = "hw-typing";
-    el.innerHTML = [0, 0.15, 0.3]
-      .map(
-        (d) =>
-          `<div style="width:5px;height:5px;border-radius:50%;background:#4E6380;animation:typingBounce 1.2s ease-in-out ${d}s infinite"></div>`
-      )
-      .join("");
+    el.innerHTML = `<div style="width:5px;height:5px;border-radius:50%;background:#4E6380;animation:typingBounce 1.2s ease-in-out infinite"></div><div style="width:5px;height:5px;border-radius:50%;background:#4E6380;animation:typingBounce 1.2s ease-in-out infinite 0.15s"></div><div style="width:5px;height:5px;border-radius:50%;background:#4E6380;animation:typingBounce 1.2s ease-in-out infinite 0.3s"></div>`;
     container.appendChild(el);
     requestAnimationFrame(() => { el.style.opacity = "1"; });
     container.scrollTop = container.scrollHeight;
   }, []);
 
   const removeTyping = useCallback(() => {
-    chatRef.current?.querySelectorAll(".hw-typing").forEach((el) => el.remove());
+    chatRef.current?.querySelectorAll(".hw-bubble-typing").forEach(el => el.remove());
   }, []);
 
   const runConv = useCallback(() => {
@@ -175,7 +335,7 @@ const HeroSection = () => {
         removeTyping();
         if (step.role === "user") {
           addMsg("user", step.text);
-          setTimeout(addTyping, 400);
+          setTimeout(() => addTyping(), 400);
         } else {
           addMsg("ai", step.html);
         }
@@ -192,314 +352,169 @@ const HeroSection = () => {
     };
   }, [runConv]);
 
-  /* ── metrics data ── */
-  const METRICS = [
-    { label: "Doanh thu tháng", val: "1.24", unit: "tỷ", delta: "↑ 18.4% so T2", dColor: "#34D399", bar: "linear-gradient(90deg,#2563EB,#22D3EE)" },
-    { label: "Task hoàn thành", val: "94", unit: "%", delta: "↑ 8pp vs tuần trước", dColor: "#34D399", bar: "linear-gradient(90deg,#10B981,#34D399)" },
-    { label: "Deal đang chạy", val: "12", unit: "/15", delta: "3 cần follow-up", dColor: "#FBBF24", bar: "linear-gradient(90deg,#F59E0B,#FBBF24)" },
-  ];
-
-  const BARS = [
-    { h: 42, color: "linear-gradient(to top,#1D4ED8,#3B82F6)", label: "Direct", d: 0.8 },
-    { h: 30, color: "linear-gradient(to top,#0891B2,#22D3EE)", label: "Zalo", d: 0.95 },
-    { h: 36, color: "linear-gradient(to top,#059669,#34D399)", label: "Ref", d: 1.1 },
-    { h: 20, color: "linear-gradient(to top,#D97706,#FBBF24)", label: "Ads", d: 1.25 },
-    { h: 48, color: "linear-gradient(to top,#1D4ED8,#3B82F6)", label: "Online", d: 1.4 },
-  ];
-
-  const TASKS = [
-    { name: "Báo cáo doanh thu T2", status: "Done", c: "#34D399", bg: "rgba(16,185,129,0.15)" },
-    { name: "Onboarding VIFIT", status: "Đang chạy", c: "#FBBF24", bg: "rgba(245,158,11,0.15)" },
-    { name: "Cập nhật quy trình CSKH", status: "Trễ", c: "#F87171", bg: "rgba(239,68,68,0.15)" },
-    { name: "Review campaign T2", status: "Done", c: "#34D399", bg: "rgba(16,185,129,0.15)" },
-  ];
-
-  /* ── inline style helpers ── */
-  const S = {
-    section: {
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      position: "relative" as const,
-      overflow: "hidden",
-      padding: "120px 0 80px",
-      background: "#060D18",
-    } as React.CSSProperties,
-
-    orb1: { position: "absolute" as const, width: 600, height: 600, top: -100, right: -150, background: "radial-gradient(circle,rgba(37,99,235,0.14) 0%,transparent 70%)", filter: "blur(100px)", pointerEvents: "none" as const },
-    orb2: { position: "absolute" as const, width: 400, height: 400, bottom: 0, left: -100, background: "radial-gradient(circle,rgba(6,182,212,0.08) 0%,transparent 70%)", filter: "blur(100px)", pointerEvents: "none" as const },
-    orb3: { position: "absolute" as const, width: 300, height: 300, top: "40%", left: "40%", background: "radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%)", filter: "blur(100px)", pointerEvents: "none" as const },
-
-    grid: {
-      backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)",
-      backgroundSize: "60px 60px",
-      position: "absolute" as const,
-      inset: 0,
-      pointerEvents: "none" as const,
-      maskImage: "radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent)",
-      WebkitMaskImage: "radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent)",
-    } as React.CSSProperties,
-
-    container: {
-      maxWidth: 1200,
-      margin: "0 auto",
-      padding: "0 24px",
-      position: "relative" as const,
-      zIndex: 1,
-      width: "100%",
-    } as React.CSSProperties,
-
-    twoCol: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: 80,
-      alignItems: "center",
-    } as React.CSSProperties,
-  };
-
   return (
-    <section style={S.section}>
-      {/* Orbs + grid */}
-      <div style={S.orb1} />
-      <div style={S.orb2} />
-      <div style={S.orb3} />
-      <div style={S.grid} />
+    <section className="hero" ref={sectionRef}>
+      <div className="hero__orb hero__orb--1" />
+      <div className="hero__orb hero__orb--2" />
+      <div className="hero__orb hero__orb--3" />
+      <div className="container-content">
+        <div className="hero__inner">
 
-      <div style={S.container}>
-        <div style={S.twoCol}>
-
-          {/* ════ LEFT COLUMN ════ */}
-          <div>
-            {/* Badge */}
-            <div style={{ marginBottom: 24 }}>
-              <div style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "6px 14px", borderRadius: 999,
-                background: "#0E1E35", border: "1px solid rgba(255,255,255,0.09)",
-                fontSize: 14, fontWeight: 500, color: "#8892A4",
-              }}>
-                <span style={{
-                  width: 7, height: 7, borderRadius: "50%",
-                  background: "#34D399", boxShadow: "0 0 6px #34D399",
-                  animation: "blink 2s ease-in-out infinite",
-                  display: "inline-block",
-                }} />
+          {/* ── Left: Content ── */}
+          <div className="hero__content">
+            <div className="hero__label">
+              <div className="hero__live-badge">
+                <span className="live-dot blink-dot" />
                 Đặt lịch tư vấn · Không ràng buộc
               </div>
             </div>
 
-            {/* Headline — NO reveal class, inline animation */}
-            <h1 style={{
-              fontSize: "clamp(32px, 4vw, 52px)",
-              fontWeight: 800,
-              lineHeight: 1.15,
-              letterSpacing: "-0.02em",
-              color: "#E8EAF0",
-              marginBottom: 20,
-              animation: "fadeSlideUp 0.7s ease 0.1s both",
-            }}>
-              Xây hệ thống vận hành để AI giúp việc{" "}
-              <span style={{
-                background: "linear-gradient(135deg,#3B82F6,#22D3EE)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>
-                quản lý nhàn hơn
-              </span>
+            <h1 className="heading-hero hero__heading reveal">
+              Xây hệ thống vận hành để AI giúp việc <span className="kw">quản lý nhàn hơn</span>
             </h1>
 
-            {/* Subheadline */}
-            <p style={{
-              fontSize: 18,
-              lineHeight: 1.7,
-              color: "#8892A4",
-              maxWidth: 520,
-              marginBottom: 32,
-              animation: "fadeSlideUp 0.7s ease 0.25s both",
-            }}>
+            <p className="body-lg hero__sub reveal reveal-d1">
               Lark Consult xây hệ thống vận hành đủ chuẩn trên Lark — nền tảng để AI Agent giúp các sếp nắm tình hình qua 1 câu hỏi.
             </p>
 
-            {/* Proof row */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-              marginBottom: 32,
-              animation: "fadeSlideUp 0.7s ease 0.4s both",
-            }}>
-              {/* 30+ */}
-              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: "#8892A4", fontWeight: 500 }}>
-                <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>30+</strong> doanh nghiệp
-              </div>
-              <div style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.14)" }} />
-              {/* Stars + 4.67 */}
-              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: "#8892A4", fontWeight: 500 }}>
-                <span style={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <StarFull /><StarFull /><StarFull /><StarFull /><StarPartial />
+            <div className="hero__proof reveal reveal-d2">
+              <div className="proof-item"><strong>30+</strong> doanh nghiệp</div>
+              <div className="proof-sep" />
+              <div className="proof-item proof-item--stars">
+                <span className="proof-stars">
+                  <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon full={false} />
                 </span>
-                <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>4.67</strong> hài lòng
+                <strong>4.67</strong> hài lòng
               </div>
-              <div style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.14)" }} />
-              {/* 30–50% */}
-              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: "#8892A4", fontWeight: 500 }}>
-                <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>30–50%</strong> giảm thời gian quản lý
-              </div>
+              <div className="proof-sep" />
+              <div className="proof-item"><strong>30–50%</strong> giảm thời gian quản lý</div>
             </div>
 
-            {/* CTAs */}
-            <div style={{
-              display: "flex", gap: 12, flexWrap: "wrap",
-              animation: "fadeSlideUp 0.7s ease 0.55s both",
-            }}>
-              <a
-                href={CTA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  padding: "13px 28px", borderRadius: 10,
-                  background: "linear-gradient(135deg,#2563EB,#1D4ED8)",
-                  color: "white", fontSize: 15, fontWeight: 600,
-                  textDecoration: "none",
-                  boxShadow: "0 4px 24px rgba(37,99,235,0.4)",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(37,99,235,0.5)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(37,99,235,0.4)"; }}
-              >
+            <div className="hero__ctas reveal reveal-d3">
+              <a href={CTA_LINK} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">
                 Đặt lịch tư vấn
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                <ArrowRight className="btn-icon" />
               </a>
-              <a
-                href="#ai-agent"
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  padding: "13px 24px", borderRadius: 10,
-                  background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#8892A4", fontSize: 15, fontWeight: 500,
-                  textDecoration: "none",
-                  transition: "border-color 0.2s, color 0.2s",
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.25)"; (e.currentTarget as HTMLElement).style.color = "#E8EAF0"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)"; (e.currentTarget as HTMLElement).style.color = "#8892A4"; }}
-              >
-                Xem AI Agent →
-              </a>
+              <a href="#ai-agent" className="btn btn--ghost btn--lg">Xem AI Agent →</a>
             </div>
           </div>
 
-          {/* ════ RIGHT COLUMN — Dashboard ════ */}
-          <div style={{ position: "relative", paddingRight: 20, paddingBottom: 20 }}>
-            {/* Glow behind widget */}
-            <div style={{
-              position: "absolute", inset: -40, pointerEvents: "none", zIndex: 0,
-              background: "radial-gradient(ellipse 70% 60% at 50% 50%,rgba(37,99,235,0.14) 0%,rgba(6,182,212,0.06) 50%,transparent 75%)",
-            }} />
+          {/* ── Right: Dashboard Widget ── */}
+          <div className="hero__visual reveal reveal-d1">
+            <div className="hero__visual-glow" />
 
-            {/* ── Main Dashboard Card ── */}
-            <div style={{
-              position: "relative", zIndex: 1,
-              borderRadius: 20, overflow: "hidden",
+            {/* Main Dashboard */}
+            <div className="relative z-[1] rounded-[20px] overflow-hidden" style={{
               background: "#0A1628",
               border: "1px solid rgba(255,255,255,0.09)",
-              boxShadow: "0 40px 100px rgba(0,0,0,0.6),0 0 0 1px rgba(37,99,235,0.12),inset 0 1px 0 rgba(255,255,255,0.05)",
+              boxShadow: "0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.05)",
               animation: "dashFloat 7s ease-in-out infinite",
             }}>
               {/* Title bar */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "11px 16px", background: "#0E1E35", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <div style={{ display: "flex", gap: 5 }}>
-                  {["#FF5F57","#FEBC2E","#28C840"].map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />)}
+              <div className="flex items-center gap-2.5 px-4 py-[11px]" style={{ background: "#0E1E35", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="flex gap-[5px]">
+                  <div className="w-[9px] h-[9px] rounded-full" style={{ background: "#FF5F57" }} />
+                  <div className="w-[9px] h-[9px] rounded-full" style={{ background: "#FEBC2E" }} />
+                  <div className="w-[9px] h-[9px] rounded-full" style={{ background: "#28C840" }} />
                 </div>
-                <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 7, fontSize: 11, color: "#4E6380", fontWeight: 500 }}>
-                  <div style={{ width: 17, height: 17, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "white", background: "linear-gradient(135deg,#2563EB,#06B6D4)" }}>✦</div>
+                <div className="flex-1 flex items-center gap-[7px] text-[11px] text-t-tertiary font-medium">
+                  <div className="w-[17px] h-[17px] rounded flex items-center justify-center text-[9px] text-white" style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)" }}>✦</div>
                   Lark — Dashboard vận hành · Q1/2025
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10, fontWeight: 600, color: "#34D399" }}>
-                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 6px #34D399", animation: "blink 2s ease-in-out infinite", display: "inline-block" }} />
+                <div className="flex items-center gap-[5px] text-[10px] font-semibold" style={{ color: "#34D399" }}>
+                  <span className="w-1.5 h-1.5 rounded-full blink-dot" style={{ background: "#34D399", boxShadow: "0 0 6px #34D399" }} />
                   Live
                 </div>
               </div>
 
               {/* Body */}
-              <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 12 }}>
-                {/* Greeting */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "#E8EAF0" }}>👋 Xin chào Anh Khang</span>
-                  <span style={{ fontSize: 10, color: "#4E6380" }}>Thứ Tư, 12/03 · 09:15</span>
+              <div className="p-3.5 flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-t-primary">👋 Xin chào Anh Khang</span>
+                  <span className="text-[10px] text-t-tertiary">Thứ Tư, 12/03 · 09:15</span>
                 </div>
 
-                {/* Metrics row */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                  {METRICS.map((m, i) => (
-                    <div key={i} style={{ position: "relative", overflow: "hidden", borderRadius: 10, padding: "10px 11px", background: "#132540", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, borderRadius: "10px 10px 0 0", background: m.bar }} />
-                      <div style={{ fontSize: 9, fontWeight: 600, color: "#4E6380", marginBottom: 4, letterSpacing: ".5px" }}>{m.label}</div>
-                      <div style={{ fontSize: 18, fontWeight: 700, color: "#E8EAF0", lineHeight: 1, marginBottom: 3 }}>
-                        {m.val}<span style={{ fontSize: 11, color: "#4E6380" }}>{m.unit}</span>
-                      </div>
-                      <div style={{ fontSize: 9, fontWeight: 600, color: m.dColor }}>{m.delta}</div>
+                {/* Metrics */}
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: "Doanh thu tháng", val: "1.24", unit: "tỷ", delta: "↑ 18.4% so T2", deltaColor: "#34D399", bar: "linear-gradient(90deg, #2563EB, #22D3EE)" },
+                    { label: "Task hoàn thành", val: "94", unit: "%", delta: "↑ 8pp vs tuần trước", deltaColor: "#34D399", bar: "linear-gradient(90deg, #10B981, #34D399)" },
+                    { label: "Deal đang chạy", val: "12", unit: "/15", delta: "3 cần follow-up", deltaColor: "#FBBF24", bar: "linear-gradient(90deg, #F59E0B, #FBBF24)" },
+                  ].map((m, i) => (
+                    <div key={i} className="relative overflow-hidden rounded-[10px] p-[10px_11px]" style={{ background: "#132540", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[10px]" style={{ background: m.bar }} />
+                      <div className="text-[9px] font-semibold text-t-tertiary mb-1" style={{ letterSpacing: ".5px" }}>{m.label}</div>
+                      <div className="text-[18px] font-bold text-t-primary leading-none mb-[3px]">{m.val}<span className="text-[11px]" style={{ color: "#2A4570" }}>{m.unit}</span></div>
+                      <div className="text-[9px] font-semibold" style={{ color: m.deltaColor }}>{m.delta}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* Line chart */}
-                <div style={{ borderRadius: 12, padding: 12, background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#8892A4" }}>Doanh thu — 8 tuần gần nhất</span>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      {[["#3B82F6","Tháng này"],["#22D3EE","Tháng trước"]].map(([c,l]) => (
-                        <span key={l} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: "#4E6380", fontWeight: 500 }}>
-                          <span style={{ width: 6, height: 6, borderRadius: "50%", background: c, display: "inline-block" }} />{l}
-                        </span>
-                      ))}
+                {/* Line Chart */}
+                <div className="rounded-xl p-3" style={{ background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[10px] font-semibold text-t-secondary">Doanh thu — 8 tuần gần nhất</span>
+                    <div className="flex gap-2.5">
+                      <span className="flex items-center gap-1 text-[9px] text-t-tertiary font-medium"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#3B82F6" }} />Tháng này</span>
+                      <span className="flex items-center gap-1 text-[9px] text-t-tertiary font-medium"><span className="w-1.5 h-1.5 rounded-full" style={{ background: "#22D3EE" }} />Tháng trước</span>
                     </div>
                   </div>
-                  <svg width="100%" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ height: 90, overflow: "visible" }}>
+                  <svg className="w-full overflow-visible" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ height: 90 }}>
                     <defs>
-                      <linearGradient id="gRev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3B82F6" stopOpacity="0.2"/><stop offset="100%" stopColor="#3B82F6" stopOpacity="0"/></linearGradient>
-                      <linearGradient id="gLast" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#22D3EE" stopOpacity="0.1"/><stop offset="100%" stopColor="#22D3EE" stopOpacity="0"/></linearGradient>
+                      <linearGradient id="hwGradRev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3B82F6" stopOpacity="0.2"/><stop offset="100%" stopColor="#3B82F6" stopOpacity="0"/></linearGradient>
+                      <linearGradient id="hwGradLast" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#22D3EE" stopOpacity="0.1"/><stop offset="100%" stopColor="#22D3EE" stopOpacity="0"/></linearGradient>
                     </defs>
-                    {[22,45,68].map(y => <line key={y} x1="0" y1={y} x2="520" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
-                    <path d="M38,72C100,68 130,64 168,58C206,52 240,62 280,55C318,48 350,52 390,44C420,38 460,40 510,34L510,90L38,90Z" fill="url(#gLast)" style={{ opacity:0, animation:"areaFade 0.6s ease 2.3s forwards" }}/>
-                    <path d="M38,62C100,55 130,48 168,42C206,36 240,50 280,38C318,26 350,32 390,20C420,14 460,18 510,12L510,90L38,90Z" fill="url(#gRev)" style={{ opacity:0, animation:"areaFade 0.6s ease 2.3s forwards" }}/>
-                    <path d="M38,72C100,68 130,64 168,58C206,52 240,62 280,55C318,48 350,52 390,44C420,38 460,40 510,34" fill="none" stroke="#22D3EE" strokeWidth="2" strokeLinecap="round" style={{ strokeDasharray:600, strokeDashoffset:600, animation:"hwDraw 2s ease-out 0.3s forwards" }}/>
-                    <path d="M38,62C100,55 130,48 168,42C206,36 240,50 280,38C318,26 350,32 390,20C420,14 460,18 510,12" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" style={{ strokeDasharray:600, strokeDashoffset:600, animation:"hwDraw 2s ease-out 0.6s forwards" }}/>
-                    {[[38,62,2.1],[168,42,2.2],[280,38,2.3],[390,20,2.4],[510,12,2.5]].map(([cx,cy,d],i) => (
-                      <circle key={i} cx={cx} cy={cy} r={3} fill="#3B82F6" style={{ opacity:0, animation:`dotPop 0.25s ease ${d}s forwards` }}/>
+                    <line x1="0" y1="22" x2="520" y2="22" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>
+                    <line x1="0" y1="45" x2="520" y2="45" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>
+                    <line x1="0" y1="68" x2="520" y2="68" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>
+                    <path d="M 38,62 C 100,55 130,48 168,42 C 206,36 240,50 280,38 C 318,26 350,32 390,20 C 420,14 460,18 510,12 L 510,90 L 38,90 Z" fill="url(#hwGradRev)" style={{ opacity: 0, animation: "areaFade 0.6s ease 2.3s forwards" }}/>
+                    <path d="M 38,72 C 100,68 130,64 168,58 C 206,52 240,62 280,55 C 318,48 350,52 390,44 C 420,38 460,40 510,34 L 510,90 L 38,90 Z" fill="url(#hwGradLast)" style={{ opacity: 0, animation: "areaFade 0.6s ease 2.3s forwards" }}/>
+                    <path d="M 38,72 C 100,68 130,64 168,58 C 206,52 240,62 280,55 C 318,48 350,52 390,44 C 420,38 460,40 510,34" fill="none" stroke="#22D3EE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: 600, strokeDashoffset: 600, animation: "hwDraw 2s ease-out 0.3s forwards" }}/>
+                    <path d="M 38,62 C 100,55 130,48 168,42 C 206,36 240,50 280,38 C 318,26 350,32 390,20 C 420,14 460,18 510,12" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: 600, strokeDashoffset: 600, animation: "hwDraw 2s ease-out 0.6s forwards" }}/>
+                    {[{ cx: 38, cy: 62, d: 2.1 }, { cx: 168, cy: 42, d: 2.2 }, { cx: 280, cy: 38, d: 2.3 }, { cx: 390, cy: 20, d: 2.4 }, { cx: 510, cy: 12, d: 2.5 }].map((dot, i) => (
+                      <circle key={i} cx={dot.cx} cy={dot.cy} r={3} fill="#3B82F6" style={{ opacity: 0, animation: `dotPop 0.25s ease ${dot.d}s forwards` }}/>
                     ))}
                   </svg>
-                  <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 4 }}>
+                  <div className="flex justify-between px-0.5 mt-1">
                     {["T1/W1","T1/W2","T1/W3","T2/W1","T2/W2","T2/W3","T3/W1","T3/W2"].map(l => (
-                      <span key={l} style={{ fontSize: 8, color: "#2A4570" }}>{l}</span>
+                      <span key={l} className="text-[8px]" style={{ color: "#2A4570" }}>{l}</span>
                     ))}
                   </div>
                 </div>
 
-                {/* Bottom row: bars + tasks */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  {/* Bar chart */}
-                  <div style={{ borderRadius: 10, padding: "10px 12px", background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
-                    <div style={{ fontSize: 9, fontWeight: 600, color: "#8892A4", marginBottom: 10 }}>Doanh thu theo kênh (triệu đ)</div>
-                    <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 52 }}>
-                      {BARS.map((b, i) => (
-                        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                          <div style={{ width: "100%", overflow: "hidden", height: b.h, borderRadius: "3px 3px 0 0", transformOrigin: "bottom", animation: `barGrow 1s ease-out ${b.d}s forwards`, transform: "scaleY(0)" }}>
-                            <div style={{ width: "100%", height: "100%", background: b.color, borderRadius: "3px 3px 0 0" }} />
+                {/* Bottom row */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="rounded-[10px] p-[10px_12px]" style={{ background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="text-[9px] font-semibold text-t-secondary mb-2.5">Doanh thu theo kênh (triệu đ)</div>
+                    <div className="flex items-end gap-[5px]" style={{ height: 52 }}>
+                      {[
+                        { h: 42, color: "linear-gradient(to top, #1D4ED8, #3B82F6)", label: "Direct", delay: 0.8 },
+                        { h: 30, color: "linear-gradient(to top, #0891B2, #22D3EE)", label: "Zalo", delay: 0.95 },
+                        { h: 36, color: "linear-gradient(to top, #059669, #34D399)", label: "Ref", delay: 1.1 },
+                        { h: 20, color: "linear-gradient(to top, #D97706, #FBBF24)", label: "Ads", delay: 1.25 },
+                        { h: 48, color: "linear-gradient(to top, #1D4ED8, #3B82F6)", label: "Online", delay: 1.4 },
+                      ].map((bar, i) => (
+                        <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                          <div className="w-full overflow-hidden" style={{ height: bar.h, borderRadius: "3px 3px 0 0", transformOrigin: "bottom", animation: `barGrow 1s ease-out ${bar.delay}s forwards`, transform: "scaleY(0)" }}>
+                            <div className="w-full h-full" style={{ background: bar.color, borderRadius: "3px 3px 0 0" }} />
                           </div>
-                          <span style={{ fontSize: 8, color: "#2A4570" }}>{b.label}</span>
+                          <span className="text-[8px]" style={{ color: "#2A4570" }}>{bar.label}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                  {/* Task list */}
-                  <div style={{ borderRadius: 10, padding: "10px 12px", background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
-                    <div style={{ fontSize: 9, fontWeight: 600, color: "#8892A4", marginBottom: 8 }}>Task hôm nay</div>
-                    {TASKS.map((t, i) => (
-                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 0", borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: t.c, flexShrink: 0 }} />
-                        <span style={{ fontSize: 9, color: "#8892A4", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.name}</span>
-                        <span style={{ fontSize: 8, fontWeight: 600, padding: "1px 5px", borderRadius: 3, background: t.bg, color: t.c, flexShrink: 0 }}>{t.status}</span>
+                  <div className="rounded-[10px] p-[10px_12px]" style={{ background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="text-[9px] font-semibold text-t-secondary mb-2">Task hôm nay</div>
+                    {[
+                      { name: "Báo cáo doanh thu T2", status: "Done", color: "#34D399", bg: "rgba(16,185,129,0.15)" },
+                      { name: "Onboarding VIFIT", status: "Đang chạy", color: "#FBBF24", bg: "rgba(245,158,11,0.15)" },
+                      { name: "Cập nhật quy trình CSKH", status: "Trễ", color: "#F87171", bg: "rgba(239,68,68,0.15)" },
+                      { name: "Review campaign T2", status: "Done", color: "#34D399", bg: "rgba(16,185,129,0.15)" },
+                    ].map((task, i) => (
+                      <div key={i} className="flex items-center gap-1.5 py-1" style={{ borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                        <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: task.color }} />
+                        <span className="text-[9px] text-t-secondary flex-1 truncate">{task.name}</span>
+                        <span className="text-[8px] font-semibold px-[5px] py-px rounded-[3px]" style={{ background: task.bg, color: task.color }}>{task.status}</span>
                       </div>
                     ))}
                   </div>
@@ -507,57 +522,46 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* ── Floating Alert ── */}
-            <div style={{
-              position: "absolute", top: 54, right: 0, zIndex: 12,
-              display: "flex", alignItems: "center", gap: 7,
-              borderRadius: 10, padding: "7px 10px",
-              background: "#0E1E35",
-              border: "1px solid rgba(245,158,11,0.35)",
-              color: "#FBBF24", fontSize: 9, fontWeight: 600,
-              boxShadow: "0 8px 24px rgba(0,0,0,0.4),0 0 20px rgba(245,158,11,0.08)",
-              animation: "alertIn 0.5s cubic-bezier(0.16,1,0.3,1) 3.5s both,alertPulse 2s ease-in-out 4s infinite",
-              whiteSpace: "nowrap",
+            {/* Floating Alert */}
+            <div className="absolute top-[54px] right-0 z-[12] flex items-center gap-[7px] rounded-[10px] p-[7px_10px] text-[9px] font-semibold" style={{
+              background: "#0E1E35", border: "1px solid rgba(245,158,11,0.35)", color: "#FBBF24",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.08)",
+              animation: "alertIn 0.5s cubic-bezier(0.16,1,0.3,1) 3.5s both, alertPulse 2s ease-in-out 4s infinite",
             }}>
-              <span style={{ fontSize: 12 }}>⚠️</span>
+              <span className="text-xs">⚠️</span>
               <div style={{ lineHeight: 1.4 }}>
                 Deal VIFIT — 5 ngày chưa update
-                <span style={{ display: "block", color: "#4E6380", fontWeight: 400, fontSize: 8 }}>AI Agent phát hiện · vừa xong</span>
+                <span className="block text-t-secondary font-normal text-[8px]">AI Agent phát hiện · vừa xong</span>
               </div>
             </div>
 
-            {/* ── Chatbot panel ── */}
-            <div style={{
-              position: "absolute", bottom: 0, right: 0, zIndex: 11,
-              width: 232, borderRadius: 16, overflow: "hidden",
-              background: "#0E1E35",
-              border: "1px solid rgba(37,99,235,0.4)",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(6,182,212,0.08),0 0 40px rgba(37,99,235,0.1)",
+            {/* Chatbot */}
+            <div className="absolute bottom-0 right-0 z-[11] w-[232px] rounded-2xl overflow-hidden" style={{
+              background: "#0E1E35", border: "1px solid rgba(37,99,235,0.4)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(6,182,212,0.08), 0 0 40px rgba(37,99,235,0.1)",
               animation: "chatIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.3s both",
             }}>
-              {/* Chat header */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "#132540", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div style={{ width: 22, height: 22, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "white", flexShrink: 0, background: "linear-gradient(135deg,#2563EB,#06B6D4)", boxShadow: "0 0 10px rgba(37,99,235,0.4)" }}>✦</div>
+              <div className="flex items-center gap-2 px-3 py-[9px]" style={{ background: "#132540", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="w-[22px] h-[22px] rounded-md flex items-center justify-center text-[10px] text-white flex-shrink-0" style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)", boxShadow: "0 0 10px rgba(37,99,235,0.4)" }}>✦</div>
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: "#E8EAF0" }}>Lark AI Agent</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 8, color: "#34D399" }}>
-                    <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 4px #34D399", animation: "blink 2s ease-in-out infinite", display: "inline-block" }} />
+                  <div className="text-[10px] font-bold text-t-primary">Lark AI Agent</div>
+                  <div className="flex items-center gap-[3px] text-[8px]" style={{ color: "#34D399" }}>
+                    <span className="w-1 h-1 rounded-full blink-dot" style={{ background: "#34D399", boxShadow: "0 0 4px #34D399" }} />
                     Đang kết nối · realtime
                   </div>
                 </div>
               </div>
-              {/* Messages area */}
-              <div ref={chatRef} style={{ display: "flex", flexDirection: "column", gap: 7, padding: "10px 10px 8px", minHeight: 180, maxHeight: 220, overflow: "hidden" }} />
-              {/* Input bar */}
-              <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 10px", borderTop: "1px solid rgba(255,255,255,0.05)", background: "#0A1628" }}>
-                <span style={{ flex: 1, fontSize: 9, color: "#2A4570" }}>Hỏi AI về vận hành...</span>
-                <div style={{ width: 22, height: 22, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: "#2563EB", flexShrink: 0 }}>
+              <div ref={chatRef} className="flex flex-col gap-[7px] overflow-hidden" style={{ padding: "10px 10px 8px", minHeight: 180, maxHeight: 220 }} />
+              <div className="flex items-center gap-1.5 p-[7px_10px]" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", background: "#0A1628" }}>
+                <span className="flex-1 text-[9px]" style={{ color: "#2A4570" }}>Hỏi AI về vận hành...</span>
+                <div className="w-[22px] h-[22px] rounded-[5px] flex items-center justify-center" style={{ background: "#2563EB" }}>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="white" stroke="none"/></svg>
                 </div>
               </div>
             </div>
           </div>
-          {/* END right column */}
+          {/* end hero__visual */}
+
         </div>
       </div>
     </section>

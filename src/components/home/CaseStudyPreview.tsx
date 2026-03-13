@@ -2,216 +2,156 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { usePublishedCaseStudies } from "@/hooks/useCaseStudies";
 
-/* ── Keyframes injected once ── */
-const KEYFRAMES = `
-@keyframes csSlideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* ─────────────────────────────────────────────────────────────────
+   CSS classes inject từ HTML source — giữ nguyên 100% giá trị gốc
+   (cùng file INJECTED_CSS với HeroSection, idempotent)
+───────────────────────────────────────────────────────────────── */
+const INJECTED_CSS = `
+  :root {
+    --blue-500:#3B82F6; --blue-600:#2563EB; --blue-700:#1D4ED8;
+    --cyan-400:#22D3EE; --cyan-500:#06B6D4;
+    --amber-400:#FBBF24; --green-400:#34D399; --green-500:#10B981;
+    --red-400:#F87171;
+    --neutral-950:#060D18; --neutral-900:#0A1628; --neutral-850:#0E1E35;
+    --neutral-800:#132540; --neutral-750:#182D4C; --neutral-600:#2A4570;
+    --neutral-300:#94A3B8;
+    --bg:var(--neutral-950);
+    --surface-1:var(--neutral-900); --surface-2:var(--neutral-850);
+    --surface-3:var(--neutral-800); --surface-4:var(--neutral-750);
+    --border-subtle:rgba(255,255,255,0.05); --border-default:rgba(255,255,255,0.09);
+    --border-strong:rgba(255,255,255,0.14); --border-blue:rgba(37,99,235,0.35);
+    --text-primary:#F0F6FF; --text-secondary:#94A3B8; --text-tertiary:#4E6380;
+    --glow-blue:0 0 60px rgba(37,99,235,0.18);
+    --font-primary:'Inter',system-ui,-apple-system,sans-serif;
+    --text-hero:clamp(48px,5vw,56px); --text-h2:32px; --text-body:16px; --text-small:14px;
+    --fw-hero:700; --fw-h2:600; --fw-body:400;
+    --lh-hero:1.2; --lh-heading:1.25; --lh-body:1.65;
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+    --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+    --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+    --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px; --r-full:9999px;
+    --t-fast:150ms; --t-base:250ms; --t-slow:400ms;
+    --ease:cubic-bezier(0.4,0,0.2,1);
+  }
+  .heading-hero { font-family:var(--font-primary); font-size:var(--text-hero); font-weight:var(--fw-hero); line-height:var(--lh-hero); letter-spacing:-0.02em; color:var(--text-primary); }
+  .heading-h2   { font-family:var(--font-primary); font-size:var(--text-h2);   font-weight:var(--fw-h2);   line-height:var(--lh-heading); letter-spacing:-0.015em; color:var(--text-primary); }
+  .body-lg      { font-size:var(--text-body); font-weight:var(--fw-body); color:var(--text-secondary); line-height:var(--lh-body); }
+  .kw           { color:var(--blue-500); font-weight:inherit; }
+  .eyebrow      { display:inline-flex; align-items:center; gap:var(--space-2); font-size:var(--text-small); font-weight:600; letter-spacing:1px; color:var(--cyan-400); margin-bottom:var(--space-4); }
+  .eyebrow-pip  { width:5px; height:5px; border-radius:50%; background:var(--green-400); animation:pip-blink 2.4s ease-in-out infinite; }
+  @keyframes pip-blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:var(--space-2); border:none; border-radius:var(--r-md); font-family:var(--font-primary); font-weight:600; transition:all var(--t-base) var(--ease); white-space:nowrap; text-decoration:none; cursor:pointer; }
+  .btn--lg  { padding:14px 28px; font-size:15px; }
+  .btn--primary { background:var(--blue-600); color:#fff; box-shadow:0 0 0 1px var(--blue-700),0 4px 20px rgba(37,99,235,0.35); }
+  .btn--primary:hover { background:var(--blue-500); transform:translateY(-2px); box-shadow:0 0 0 1px var(--blue-600),0 8px 32px rgba(37,99,235,0.5); }
+  .btn--ghost { background:transparent; color:var(--text-secondary); border:1px solid var(--border-default); }
+  .btn--ghost:hover { color:var(--text-primary); border-color:var(--border-strong); background:var(--surface-2); }
+  .card { background:var(--surface-1); border:1px solid var(--border-default); border-radius:var(--r-lg); transition:border-color var(--t-base),box-shadow var(--t-base),transform var(--t-base); }
+  .card:hover { border-color:var(--border-blue); box-shadow:var(--glow-blue); transform:translateY(-3px); }
+  .container-content { max-width:1180px; margin:0 auto; padding:0 var(--space-6); }
+  .section-padding { padding:var(--space-24) 0; }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity var(--t-slow) var(--ease),transform var(--t-slow) var(--ease); }
+  .reveal.revealed { opacity:1; transform:translateY(0); }
+  .reveal-d1 { transition-delay:80ms; }
+  .reveal-d2 { transition-delay:160ms; }
+  .reveal-d3 { transition-delay:240ms; }
+  .cs-filters { display:flex; gap:var(--space-2); flex-wrap:wrap; margin:var(--space-8) 0 var(--space-6); }
+  .cs-filter { padding:7px 16px; border-radius:var(--r-full); font-size:var(--text-small); font-weight:600; cursor:pointer; background:var(--surface-2); color:var(--text-secondary); border:1px solid var(--border-default); transition:all var(--t-base); font-family:var(--font-primary); }
+  .cs-filter.active, .cs-filter:hover { background:var(--blue-600); color:#fff; border-color:var(--blue-600); }
+  .cs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-5); }
+  .cs-card { padding:var(--space-6); cursor:pointer; }
+  .cs-tags { display:flex; gap:var(--space-2); flex-wrap:wrap; margin-bottom:var(--space-4); }
+  .cs-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px; }
+  .cs-tag--svc { background:rgba(37,99,235,0.1);   color:var(--blue-500); }
+  .cs-tag--fit { background:rgba(245,158,11,0.1);  color:var(--amber-400); }
+  .cs-tag--ret { background:rgba(16,185,129,0.1);  color:var(--green-400); }
+  .cs-tag--mfg { background:rgba(167,139,250,0.1); color:#A78BFA; }
+  .cs-tag--sz  { background:var(--surface-3); color:var(--text-tertiary); }
+  .cs-pain   { font-size:11px; font-weight:600; color:var(--text-tertiary); margin-bottom:6px; }
+  .cs-title  { font-weight:600; font-size:var(--text-body); line-height:1.5; margin-bottom:var(--space-4); color:var(--text-primary); }
+  .cs-result { font-size:var(--text-small); font-weight:700; color:var(--green-400); display:flex; align-items:center; gap:6px; }
+  .cs-arrow  { font-size:var(--text-small); font-weight:600; color:var(--blue-500); margin-top:var(--space-3); display:flex; align-items:center; gap:4px; }
+  .text-t-secondary { color:var(--text-secondary); }
+  .text-t-primary   { color:var(--text-primary); }
+  .text-t-tertiary  { color:var(--text-tertiary); }
+  .text-b-500       { color:var(--blue-500); }
+  .text-g-400       { color:var(--green-400); }
+  @media (max-width:768px) { .cs-grid { grid-template-columns:1fr; } }
 `;
 
-/* ── Static data shape ── */
-type CaseItem = {
-  id: string;
-  slug: string;
-  title: string;
-  industry?: string;
-  industryLabel?: string;
-  scaleLabel?: string;
-  mainProblemLabel?: string;
-  results?: unknown;
-  solution?: unknown;
-};
-
-/* ── Helpers ── */
-const getKeyResult = (cs: CaseItem): string | null => {
-  try {
-    const r = cs.results as { label?: string; value?: string }[];
-    if (Array.isArray(r) && r.length > 0) return r[0].label || r[0].value || null;
-  } catch {}
-  return null;
-};
-
-const getThumbnail = (cs: CaseItem): string | null => {
-  try {
-    const sol = cs.solution as { attachments?: { type: string; url: string }[] };
-    if (sol?.attachments) {
-      const img = sol.attachments.find((a) => a.type === "image");
-      if (img) return img.url;
-    }
-  } catch {}
-  return null;
-};
-
-const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  service:       { bg: "rgba(37,99,235,0.12)",  color: "#3B82F6" },
-  fitness:       { bg: "rgba(245,158,11,0.12)", color: "#FBBF24" },
-  retail:        { bg: "rgba(16,185,129,0.12)", color: "#34D399" },
-  manufacturing: { bg: "rgba(167,139,250,0.12)",color: "#A78BFA" },
-};
-const tagColor = (ind: string) => TAG_COLORS[ind] ?? { bg: "rgba(37,99,235,0.12)", color: "#3B82F6" };
-
-const INDUSTRIES = [
-  { value: null,             label: "Tất cả" },
-  { value: "service",        label: "Dịch vụ" },
-  { value: "retail",         label: "Bán lẻ" },
-  { value: "fitness",        label: "Fitness" },
-  { value: "manufacturing",  label: "Sản xuất" },
-];
-
-/* ════════════════════════════════════════════
-   Main Component
-════════════════════════════════════════════ */
 const CaseStudyPreview = () => {
-  const [selected, setSelected] = useState<string | null>(null);
-  const { data: allCases, isLoading } = usePublishedCaseStudies(
-    selected ? { industry: selected } : undefined
-  );
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const { data: allCases, isLoading } = usePublishedCaseStudies(selectedIndustry ? { industry: selectedIndustry } : undefined);
+  const ref = useRef<HTMLElement>(null);
 
-  /* inject keyframes once */
+  /* ── Inject CSS + trigger reveal ── */
   useEffect(() => {
-    if (document.getElementById("cs-keyframes")) return;
-    const s = document.createElement("style");
-    s.id = "cs-keyframes";
-    s.textContent = KEYFRAMES;
-    document.head.appendChild(s);
+    if (!document.getElementById("lc-injected-css")) {
+      const style = document.createElement("style");
+      style.id = "lc-injected-css";
+      style.textContent = INJECTED_CSS;
+      document.head.appendChild(style);
+    }
+    const timer = setTimeout(() => {
+      ref.current?.querySelectorAll(".reveal").forEach(el => el.classList.add("revealed"));
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  /* sort: cards with thumbnail first, cap at 3 */
-  const cases: CaseItem[] = [...((allCases as CaseItem[]) || [])]
-    .sort((a, b) => (getThumbnail(b) ? 1 : 0) - (getThumbnail(a) ? 1 : 0))
-    .slice(0, 3);
+  /* Re-trigger reveal khi data load xong */
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        ref.current?.querySelectorAll(".reveal").forEach(el => el.classList.add("revealed"));
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
-  /* ── Styles ── */
-  const S = {
-    section: {
-      padding: "96px 0",
-      background: "#060D18",
-    } as React.CSSProperties,
+  const industries = [
+    { value: null,            label: "Tất cả" },
+    { value: "service",       label: "Dịch vụ" },
+    { value: "retail",        label: "Bán lẻ" },
+    { value: "fitness",       label: "Fitness" },
+    { value: "manufacturing", label: "Sản xuất" },
+  ];
 
-    container: {
-      maxWidth: 1200,
-      margin: "0 auto",
-      padding: "0 24px",
-    } as React.CSSProperties,
-
-    eyebrow: {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 8,
-      fontSize: 12,
-      fontWeight: 700,
-      letterSpacing: "0.1em",
-      textTransform: "uppercase" as const,
-      color: "#3B82F6",
-      marginBottom: 16,
-      animation: "csSlideUp 0.6s ease 0.05s both",
-    } as React.CSSProperties,
-
-    eyebrowPip: {
-      width: 6,
-      height: 6,
-      borderRadius: "50%",
-      background: "#3B82F6",
-      flexShrink: 0,
-    } as React.CSSProperties,
-
-    heading: {
-      fontSize: "clamp(26px, 3.5vw, 40px)",
-      fontWeight: 800,
-      lineHeight: 1.2,
-      letterSpacing: "-0.02em",
-      color: "#E8EAF0",
-      marginBottom: 32,
-      animation: "csSlideUp 0.6s ease 0.15s both",
-    } as React.CSSProperties,
-
-    kw: {
-      background: "linear-gradient(135deg, #3B82F6, #22D3EE)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
-      backgroundClip: "text",
-    } as React.CSSProperties,
-
-    filters: {
-      display: "flex",
-      gap: 8,
-      flexWrap: "wrap" as const,
-      marginBottom: 24,
-      animation: "csSlideUp 0.6s ease 0.25s both",
-    } as React.CSSProperties,
-
-    grid: {
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 20,
-    } as React.CSSProperties,
-
-    gridMobile: {
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      gap: 20,
-    } as React.CSSProperties,
+  const getThumbnail = (cs: any): string | null => {
+    try { const sol = cs.solution as any; if (sol?.attachments) { const img = sol.attachments.find((a: any) => a.type === "image"); if (img) return img.url; } } catch {} return null;
   };
 
-  const filterBtn = (active: boolean) => ({
-    padding: "7px 16px",
-    borderRadius: 999,
-    fontSize: 13,
-    fontWeight: 600,
-    cursor: "pointer",
-    border: `1px solid ${active ? "#2563EB" : "rgba(255,255,255,0.09)"}`,
-    background: active ? "#2563EB" : "#0E1E35",
-    color: active ? "#ffffff" : "#94A3B8",
-    transition: "all 0.18s ease",
-    fontFamily: "Inter, system-ui, sans-serif",
-  } as React.CSSProperties);
+  const previewCases = [...(allCases || [])].sort((a, b) => {
+    const aH = !!getThumbnail(a); const bH = !!getThumbnail(b);
+    return (bH ? 1 : 0) - (aH ? 1 : 0);
+  }).slice(0, 3);
 
-  /* responsive grid: use CSS media query via a ref trick */
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [cols, setCols] = useState(3);
-  useEffect(() => {
-    const update = () => setCols(window.innerWidth < 768 ? 1 : 3);
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+  const getKeyResult = (cs: any): string | null => {
+    try { const r = cs.results as any; if (Array.isArray(r) && r.length > 0) return r[0].label || r[0].value || null; } catch {} return null;
+  };
+
+  const tagColor = (ind: string) => {
+    switch (ind) {
+      case "service":       return { bg: "rgba(37,99,235,0.1)",   color: "#3B82F6" };
+      case "fitness":       return { bg: "rgba(245,158,11,0.1)",  color: "#FBBF24" };
+      case "retail":        return { bg: "rgba(16,185,129,0.1)",  color: "#34D399" };
+      case "manufacturing": return { bg: "rgba(167,139,250,0.1)", color: "#A78BFA" };
+      default:              return { bg: "rgba(37,99,235,0.1)",   color: "#3B82F6" };
+    }
+  };
 
   return (
-    <section id="cases" style={S.section}>
-      <div style={S.container}>
-
-        {/* Eyebrow */}
-        <div style={S.eyebrow}>
-          <div style={S.eyebrowPip} />
-          Case Studies
-        </div>
-
-        {/* Heading */}
-        <h2 style={S.heading}>
-          Doanh nghiệp giống bạn đã giải quyết{" "}
-          <span style={S.kw}>như thế nào?</span>
-        </h2>
+    <section id="cases" ref={ref} className="section-padding">
+      <div className="container-content">
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Case Studies</div>
+        <h2 className="heading-h2 reveal">Doanh nghiệp giống bạn đã giải quyết <span className="kw">như thế nào?</span></h2>
 
         {/* Filter tabs */}
-        <div style={S.filters}>
-          {INDUSTRIES.map((ind) => (
+        <div className="cs-filters reveal">
+          {industries.map((ind) => (
             <button
               key={ind.label}
-              onClick={() => setSelected(ind.value)}
-              style={filterBtn(selected === ind.value)}
-              onMouseEnter={e => {
-                if (selected !== ind.value) {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.2)";
-                  (e.currentTarget as HTMLButtonElement).style.color = "#E8EAF0";
-                }
-              }}
-              onMouseLeave={e => {
-                if (selected !== ind.value) {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.09)";
-                  (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8";
-                }
-              }}
+              onClick={() => setSelectedIndustry(ind.value)}
+              className={`cs-filter${selectedIndustry === ind.value ? " active" : ""}`}
             >
               {ind.label}
             </button>
@@ -220,144 +160,34 @@ const CaseStudyPreview = () => {
 
         {/* Content */}
         {isLoading ? (
-          /* Loading skeleton */
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 20 }}>
-            {[0, 1, 2].map((i) => (
-              <div key={i} style={{
-                borderRadius: 16,
-                background: "#0E1E35",
-                border: "1px solid rgba(255,255,255,0.06)",
-                padding: 24,
-                animation: `csSlideUp 0.5s ease ${i * 0.08}s both`,
-              }}>
-                {/* skeleton lines */}
-                {[80, 60, 100, 90, 70].map((w, j) => (
-                  <div key={j} style={{
-                    height: j === 0 ? 10 : j === 3 ? 16 : 10,
-                    width: `${w}%`,
-                    borderRadius: 6,
-                    background: "rgba(255,255,255,0.05)",
-                    marginBottom: j === 2 ? 16 : 8,
-                  }} />
-                ))}
-              </div>
-            ))}
-          </div>
-        ) : cases.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "48px 0", color: "#4E6380", fontSize: 15 }}>
-            Chưa có case study cho danh mục này.
-          </div>
+          <div className="text-t-secondary" style={{ textAlign: "center", padding: "48px 0" }}>Đang tải...</div>
+        ) : previewCases.length === 0 ? (
+          <div className="text-t-secondary" style={{ textAlign: "center", padding: "48px 0" }}>Chưa có case study.</div>
         ) : (
-          <div
-            ref={gridRef}
-            style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(${cols}, 1fr)`,
-              gap: 20,
-            }}
-          >
-            {cases.map((cs, i) => {
+          <div className="cs-grid">
+            {previewCases.map((cs, i) => {
               const tc = tagColor(cs.industry || "");
               const result = getKeyResult(cs);
-              const delays = [0.35, 0.45, 0.55];
-
               return (
                 <Link
                   key={cs.id}
                   to={`/case-studies/${cs.slug}`}
-                  style={{
-                    display: "block",
-                    textDecoration: "none",
-                    borderRadius: 16,
-                    background: "#0E1E35",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    padding: 24,
-                    cursor: "pointer",
-                    transition: "border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease",
-                    animation: `csSlideUp 0.6s ease ${delays[i] ?? 0.35}s both`,
-                    /* force visible — no opacity:0 trap */
-                    opacity: 1,
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "rgba(59,130,246,0.45)";
-                    el.style.boxShadow = "0 0 0 1px rgba(59,130,246,0.12), 0 8px 32px rgba(37,99,235,0.15)";
-                    el.style.transform = "translateY(-3px)";
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "rgba(255,255,255,0.08)";
-                    el.style.boxShadow = "none";
-                    el.style.transform = "translateY(0)";
-                  }}
+                  className={`card cs-card reveal${i > 0 ? ` reveal-d${i}` : ""}`}
+                  style={{ textDecoration: "none", display: "block" }}
                 >
-                  {/* Tags */}
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
-                    <span style={{
-                      fontSize: 11, fontWeight: 700,
-                      padding: "3px 8px", borderRadius: 4,
-                      background: tc.bg, color: tc.color,
-                    }}>
-                      {cs.industryLabel || cs.industry}
-                    </span>
-                    {cs.scaleLabel && (
-                      <span style={{
-                        fontSize: 11, fontWeight: 700,
-                        padding: "3px 8px", borderRadius: 4,
-                        background: "rgba(255,255,255,0.05)",
-                        color: "#4E6380",
-                      }}>
-                        {cs.scaleLabel}
-                      </span>
-                    )}
+                  <div className="cs-tags">
+                    <span className="cs-tag" style={{ background: tc.bg, color: tc.color }}>{cs.industryLabel}</span>
+                    <span className="cs-tag cs-tag--sz">{cs.scaleLabel}</span>
                   </div>
-
-                  {/* Problem label */}
-                  {cs.mainProblemLabel && (
-                    <div style={{
-                      fontSize: 11, fontWeight: 600,
-                      color: "#4E6380", marginBottom: 8,
-                    }}>
-                      Vấn đề: {cs.mainProblemLabel}
-                    </div>
-                  )}
-
-                  {/* Title */}
-                  <div style={{
-                    fontSize: 15, fontWeight: 600,
-                    color: "#E8EAF0", lineHeight: 1.55,
-                    marginBottom: 16,
-                  }}>
-                    {cs.title}
-                  </div>
-
-                  {/* Key result */}
-                  {result && (
-                    <div style={{
-                      fontSize: 13, fontWeight: 700,
-                      color: "#34D399",
-                      display: "flex", alignItems: "center", gap: 6,
-                      marginBottom: 12,
-                    }}>
-                      ⚡ {result}
-                    </div>
-                  )}
-
-                  {/* CTA arrow */}
-                  <div style={{
-                    fontSize: 13, fontWeight: 600,
-                    color: "#3B82F6",
-                    display: "flex", alignItems: "center", gap: 4,
-                    marginTop: 4,
-                  }}>
-                    Xem chi tiết →
-                  </div>
+                  <div className="cs-pain">Vấn đề: {cs.mainProblemLabel}</div>
+                  <div className="cs-title">{cs.title}</div>
+                  {result && <div className="cs-result">⚡ {result}</div>}
+                  <div className="cs-arrow">Xem chi tiết →</div>
                 </Link>
               );
             })}
           </div>
         )}
-
       </div>
     </section>
   );
