@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+
+const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgOQm9YZugwbV6FaVibRHQ3b";
+
 const Footer = () => {
   return (
     <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "48px 0 32px" }}>
@@ -9,7 +12,7 @@ const Footer = () => {
               <div className="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center text-[11px] text-white" style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)" }}>✦</div>
               LarkConsult
             </div>
-            <p className="text-sm text-t-tertiary max-w-[260px]" style={{ lineHeight: 1.6 }}>Hệ thống vận hành tập trung cho doanh nghiệp Việt Nam — để AI Agent giúp các sếp quản lý nhàn hơn.</p>
+            <p className="text-sm text-t-tertiary max-w-[260px]" style={{ lineHeight: 1.6 }}>Tư vấn, xây dựng hệ thống vận hành để AI Agent giúp các sếp quản lý nhàn hơn.</p>
           </div>
           <div>
             <div className="text-[11px] font-bold text-t-tertiary mb-4" style={{ letterSpacing: 1 }}>ĐIỀU HƯỚNG</div>
@@ -30,7 +33,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-3 list-none">
               <li><a href="https://zalo.me/0905652628" target="_blank" rel="noopener noreferrer" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Zalo: 0905.652.628</a></li>
               <li><a href="mailto:hello@larkconsult.vn" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">hello@larkconsult.vn</a></li>
-              <li><a href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d" target="_blank" rel="noopener noreferrer" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Đặt lịch tư vấn</a></li>
+              <li><a href={CTA_LINK} target="_blank" rel="noopener noreferrer" className="text-sm text-t-tertiary hover:text-t-secondary transition-colors">Đặt lịch tư vấn</a></li>
             </ul>
           </div>
         </div>

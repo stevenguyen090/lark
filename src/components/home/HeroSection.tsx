@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowRight } from "lucide-react";
 
+const CTA_LINK = "https://larkconsult.sg.larksuite.com/share/base/form/shrlgOQm9YZugwbV6FaVibRHQ3b";
+
 /* ── Hero Chat Conversation ── */
 const HERO_CONV = [
   { delay: 1200, role: "user" as const, text: "Cho tôi tóm tắt tình hình kinh doanh tuần này" },
@@ -24,6 +26,14 @@ const HERO_CONV = [
     html: `Deal <strong>VIFIT Active</strong> đang ở giai đoạn <strong>Proposal</strong> từ 05/03.<br/><br/>Huy chưa gửi vì đang chờ báo giá từ team kỹ thuật — đã quá <strong>5 ngày SLA</strong>.<br/><br/>Tôi tạo reminder cho Huy và tag team kỹ thuật không?`,
   },
 ];
+
+const StarIcon = ({ full = true }: { full?: boolean }) => (
+  full ? (
+    <svg viewBox="0 0 20 20" fill="#FBBF24" width="13" height="13"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+  ) : (
+    <svg viewBox="0 0 20 20" width="13" height="13"><defs><linearGradient id="pstar"><stop offset="67%" stopColor="#FBBF24"/><stop offset="67%" stopColor="#4B5563"/></linearGradient></defs><path fill="url(#pstar)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+  )
+);
 
 const HeroSection = () => {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -142,34 +152,35 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* H1 */}
-            <h1 className="heading-hero mb-5">
+            <h1 className="heading-hero mb-5 reveal">
               Xây hệ thống vận hành để AI giúp việc <span className="kw">quản lý nhàn hơn</span>
             </h1>
 
-            {/* Sub */}
-            <p className="body-lg mb-8" style={{ maxWidth: 520 }}>
+            <p className="body-lg mb-8 reveal reveal-d1" style={{ maxWidth: 520 }}>
               Lark Consult xây hệ thống vận hành đủ chuẩn trên Lark — nền tảng để AI Agent giúp các sếp nắm tình hình qua 1 câu hỏi.
             </p>
 
-            {/* Proof */}
-            <div className="flex items-center gap-4 flex-wrap mb-8">
+            {/* Proof with stars */}
+            <div className="flex items-center gap-4 flex-wrap mb-8 reveal reveal-d2">
               <div className="flex items-center gap-1.5 text-sm font-medium text-t-secondary">
                 <strong className="text-t-primary font-bold">30+</strong> doanh nghiệp
               </div>
               <div className="w-[3px] h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.14)" }} />
               <div className="flex items-center gap-1.5 text-sm font-medium text-t-secondary">
-                ⭐ <strong className="text-t-primary font-bold">92/100</strong> hài lòng
+                <span className="flex gap-px items-center">
+                  <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon full={false} />
+                </span>
+                <strong className="text-t-primary font-bold">4.67</strong> hài lòng
               </div>
               <div className="w-[3px] h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.14)" }} />
               <div className="flex items-center gap-1.5 text-sm font-medium text-t-secondary">
-                <strong className="text-t-primary font-bold">30–50%</strong> giảm thời gian xử lý
+                <strong className="text-t-primary font-bold">30–50%</strong> giảm thời gian quản lý
               </div>
             </div>
 
             {/* CTAs */}
-            <div className="flex gap-3 flex-wrap mb-5">
-              <a href="https://larkconsult.sg.larksuite.com/share/base/form/shrlgQE4t5vcnWnbcDirbBCXj9d" target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <div className="flex gap-3 flex-wrap mb-5 reveal reveal-d3">
+              <a href={CTA_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary">
                 Đặt lịch tư vấn
                 <ArrowRight className="w-4 h-4" />
               </a>
@@ -178,8 +189,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right: Dashboard Widget */}
-          <div className="hidden lg:block relative" style={{ paddingRight: 20, paddingBottom: 20 }}>
-            {/* Glow */}
+          <div className="hidden lg:block relative reveal reveal-d1" style={{ paddingRight: 20, paddingBottom: 20 }}>
             <div className="absolute pointer-events-none z-0" style={{ inset: -40, background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(37,99,235,0.14) 0%, rgba(6,182,212,0.06) 50%, transparent 75%)" }} />
 
             {/* Main Dashboard */}
@@ -263,7 +273,6 @@ const HeroSection = () => {
 
                 {/* Bottom row */}
                 <div className="grid grid-cols-2 gap-2">
-                  {/* Bar chart */}
                   <div className="rounded-[10px] p-[10px_12px]" style={{ background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <div className="text-[9px] font-semibold text-t-secondary mb-2.5">Doanh thu theo kênh (triệu đ)</div>
                     <div className="flex items-end gap-[5px]" style={{ height: 52 }}>
@@ -284,7 +293,6 @@ const HeroSection = () => {
                     </div>
                   </div>
 
-                  {/* Tasks */}
                   <div className="rounded-[10px] p-[10px_12px]" style={{ background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <div className="text-[9px] font-semibold text-t-secondary mb-2">Task hôm nay</div>
                     {[
