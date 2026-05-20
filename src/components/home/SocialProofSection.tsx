@@ -122,30 +122,22 @@ const SocialProofSection = () => {
             {marqueeLogos.map((logo, i) => (
               <div
                 key={`${logo.name}-${i}`}
-                className="flex items-center justify-center shrink-0"
+                className="flex items-center justify-center shrink-0 group"
                 style={{
-                  height: 64,
-                  minWidth: 160,
-                  padding: "0 16px",
+                  height: 88,
+                  minWidth: 180,
+                  padding: "12px 20px",
+                  background: "hsl(var(--surface-1) / 0.4)",
+                  border: "1px solid hsl(var(--border-subtle))",
+                  borderRadius: 12,
+                  transition: "all 250ms ease",
                 }}
               >
                 <img
                   src={logo.src}
                   alt={logo.name}
                   title={logo.name}
-                  className="h-12 w-auto object-contain transition-all duration-300"
-                  style={{
-                    filter: "brightness(0) invert(1)",
-                    opacity: 0.7,
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.opacity = "1";
-                    (e.currentTarget as HTMLImageElement).style.filter = "none";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.opacity = "0.7";
-                    (e.currentTarget as HTMLImageElement).style.filter = "brightness(0) invert(1)";
-                  }}
+                  className="max-h-16 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity"
                 />
               </div>
             ))}
