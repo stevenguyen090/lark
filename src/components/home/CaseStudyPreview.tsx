@@ -188,7 +188,7 @@ const CaseStudyPreview = () => {
         </div>
 
         {/* Heading */}
-        <h2 className="heading-h2 reveal" style={{ marginBottom: 32 }}>
+        <h2 className="heading-h2" style={{ marginBottom: 32 }}>
           Doanh nghiệp giống bạn đã giải quyết <span className="kw">như thế nào?</span>
         </h2>
 
