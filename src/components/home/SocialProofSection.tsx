@@ -3,6 +3,7 @@ import ecomelite from "@/assets/logos/ecomelite.png";
 import biva from "@/assets/logos/biva.png";
 import ptfitness from "@/assets/logos/ptfitness.png";
 import bohometel from "@/assets/logos/bohometel.png";
+import thanhkhangfood from "@/assets/logos/thanhkhangfood.png";
 
 const logos = [
   { name: "VIFIT Active", src: vifit },
@@ -10,6 +11,7 @@ const logos = [
   { name: "Biva", src: biva },
   { name: "PT Fitness", src: ptfitness },
   { name: "Bơ Hometel", src: bohometel },
+  { name: "Thành Khang Food", src: thanhkhangfood },
 ];
 
 const stats = [
