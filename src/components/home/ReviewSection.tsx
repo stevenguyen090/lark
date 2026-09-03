@@ -1,8 +1,27 @@
 import { useEffect, useRef } from "react";
+import khangAvatar from "@/assets/testimonials/khang-pham.png";
+import huyAvatar from "@/assets/testimonials/huy-tran.png";
+import hungAvatar from "@/assets/testimonials/hung-nguyen.png";
+
 const reviews = [
-  { quote: "Trước mỗi sáng tôi mất 1 tiếng chỉ để check xem ai đang làm gì. Sau 6 tuần triển khai, tôi chỉ nhìn dashboard 5 phút là nắm tất cả. Team chủ động hơn rõ rệt.", name: "Khang Phạm", role: "Founder – Agency Marketing · 15 nhân sự", color: "#2563EB", initial: "K" },
-  { quote: "Từ khi dùng Lark dashboard, chúng tôi nhìn rõ tình hình vận hành mỗi ngày thay vì đợi cuối tháng. Quan trọng hơn là phát hiện vấn đề sớm hơn và xử lý kịp thời.", name: "Huy Trần", role: "Giám đốc vận hành – Công ty thương mại", color: "#10B981", initial: "H" },
-  { quote: "Quan trọng nhất là đội ngũ chủ động hơn, không còn phụ thuộc quá nhiều vào lãnh đạo. Sau 3 tháng, chúng tôi giảm gần 40% thời gian xử lý công việc hàng ngày.", name: "Hưng Nguyễn", role: "CEO – Doanh nghiệp dịch vụ · 25 nhân sự", color: "#F59E0B", initial: "H" },
+  {
+    quote: "Trước đây sáng nào tôi cũng mở Zalo rồi hỏi từng người xem việc tới đâu. Có hôm mất gần một tiếng mà vẫn sót việc. Bây giờ tôi xem một màn hình khoảng 5 phút, chỉ gọi team khi có mục bị trễ. Nhẹ đầu nhất là mọi người tự cập nhật mà không chờ tôi nhắc.",
+    name: "Khang Phạm",
+    role: "Founder, agency marketing · 15 nhân sự",
+    avatar: khangAvatar,
+  },
+  {
+    quote: "Cái tôi cần không phải thêm một báo cáo đẹp, mà là biết sớm chỗ nào đang lệch. Tuần đầu dùng dashboard, tôi phát hiện một nhóm đơn bị chậm ngay trong ngày thay vì cuối tháng. Từ đó buổi họp vận hành ngắn hơn và đi thẳng vào việc cần xử lý.",
+    name: "Huy Trần",
+    role: "Giám đốc vận hành, công ty thương mại",
+    avatar: huyAvatar,
+  },
+  {
+    quote: "Trước đây tôi nghỉ một ngày là điện thoại đầy tin nhắn hỏi quy trình và xin duyệt. Sau khi đưa công việc lên Lark, đội ngũ biết tìm thông tin và theo dõi trạng thái ở đâu. Tôi vẫn nắm được số chính mỗi ngày nhưng không phải tham gia vào từng việc nhỏ.",
+    name: "Hưng Nguyễn",
+    role: "CEO, doanh nghiệp dịch vụ · 25 nhân sự",
+    avatar: hungAvatar,
+  },
 ];
 const ReviewSection = () => {
   const ref = useRef<HTMLElement>(null);
@@ -18,12 +37,12 @@ const ReviewSection = () => {
         <h2 className="heading-h2 reveal">Sau khi <span className="kw">triển khai hệ thống</span></h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
           {reviews.map((r, i) => (
-            <div key={i} className={`card-dark p-7 reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
+            <div key={i} className={`card-dark flex h-full flex-col p-7 reveal ${i > 0 ? `reveal-d${i}` : ""}`}>
               <div className="text-[48px] opacity-30 leading-[0.8] mb-4" style={{ color: "#2563EB" }}>"</div>
-              <p className="text-sm text-t-secondary mb-5 italic" style={{ lineHeight: 1.75 }}>{r.quote}</p>
-              <div className="flex items-center gap-3">
-                <div className="w-[38px] h-[38px] rounded-[10px] flex items-center justify-center font-extrabold text-base text-white flex-shrink-0" style={{ background: r.color }}>{r.initial}</div>
-                <div><div className="font-bold text-sm text-t-primary">{r.name}</div><div className="text-xs text-t-tertiary mt-0.5">{r.role}</div></div>
+              <p className="mb-6 flex-1 text-sm italic text-t-secondary" style={{ lineHeight: 1.75 }}>{r.quote}</p>
+              <div className="flex items-center gap-3 border-t border-white/5 pt-4">
+                <img src={r.avatar} alt={`Ảnh chân dung ${r.name}`} loading="lazy" decoding="async" className="h-11 w-11 flex-shrink-0 rounded-full object-cover ring-2 ring-white/10" />
+                <div><div className="font-bold text-sm text-t-primary">{r.name}</div><div className="mt-0.5 text-xs text-t-secondary">{r.role}</div></div>
               </div>
             </div>
           ))}

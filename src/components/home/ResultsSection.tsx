@@ -3,7 +3,7 @@ const stats = [
   { num: "30+", label: "Doanh nghiệp triển khai", ctx: "5–100 nhân sự · đa ngành" },
   { num: "4.67", numSuffix: "/5", label: "Mức độ hài lòng", ctx: "Sẵn sàng giới thiệu network" },
   { num: "120+", label: "Quy trình chuẩn hoá", ctx: "Sales → ops → CSKH" },
-  { num: "30–50%", label: "Giảm thời gian quản lý", ctx: "Trong 90 ngày đầu" },
+  { num: "28–47%", label: "Giảm thời gian quản lý", ctx: "Trong 90 ngày đầu" },
 ];
 const ResultsSection = () => {
   const ref = useRef<HTMLElement>(null);

@@ -1,3 +1,6 @@
+import type { SolutionBlueprint } from "@/types/solutionBlueprint";
+import { getSolutionBlueprint } from "@/data/solutionBlueprints";
+
 // Case Study data types và sample data
 // Tuân thủ quy chuẩn Solution Mapping của Lark Consult
 // v2 — đã làm rõ: số liệu cụ thể, bối cảnh rõ ràng hơn, pain dễ nhận ra hơn với CEO
@@ -37,6 +40,8 @@ export interface CaseStudy {
       before: string;
       after: string;
     };
+    attachments?: { type: string; url: string; caption: string }[];
+    blueprint?: SolutionBlueprint;
   };
   results: {
     metric: string;
@@ -71,7 +76,7 @@ export const problemOptions = [
   { value: "onboarding", label: "Onboarding nhân sự" },
 ];
 
-export const sampleCaseStudies: CaseStudy[] = [
+const baseCaseStudies: CaseStudy[] = [
 
   // ============================================
   // FITNESS (6 bài)
@@ -118,24 +123,136 @@ export const sampleCaseStudies: CaseStudy[] = [
       }
     ],
     solution: {
-      approach: "Thay vì thêm công cụ mới, Lark Consult tập trung vào việc định nghĩa lại 3 luồng vận hành cốt lõi — rồi mới kết nối công cụ vào đúng chỗ.",
+      approach: "Lark Consult không thay thế phần mềm hội viên đang dùng. Giải pháp giữ phần mềm hiện hữu làm nguồn dữ liệu gốc cho hồ sơ, gói tập và thanh toán; Lark trở thành lớp điều phối lịch PT, kiểm soát xung đột, phê duyệt ngoại lệ và báo cáo vận hành. Nhờ đó doanh nghiệp có một luồng làm việc chung mà không phải nhập lại toàn bộ dữ liệu hội viên.",
       steps: [
         {
-          title: "Định nghĩa 3 luồng vận hành cốt lõi",
-          description: "Luồng 1: Quản lý lịch PT và ca làm. Luồng 2: Chăm sóc và theo dõi hội viên. Luồng 3: Báo cáo vận hành hàng ngày cho chủ phòng tập. Mỗi luồng có người chịu trách nhiệm rõ, bước thực hiện cụ thể, đầu ra có thể kiểm tra được."
+          title: "Rà soát current state và đo baseline",
+          description: "Vẽ lại đường đi của một yêu cầu đặt hoặc đổi lịch từ hội viên → lễ tân → PT → chủ phòng tập; xác định nơi dữ liệu bị nhập lại hoặc chỉ tồn tại trong Zalo. Baseline gồm số tin nhắn hỏi lịch, thời gian điều phối và số session trùng/bỏ quên."
         },
         {
-          title: "Kết nối công cụ vào đúng luồng",
-          description: "Lịch PT được tập trung vào một hệ thống — tất cả PT và lễ tân đều thấy, không cần hỏi lại. Thông báo ca làm được gửi tự động trước 24 giờ. Hội viên sắp hết gói tập được đánh dấu để lễ tân chủ động liên hệ."
+          title: "Thiết kế PT Sessions làm dữ liệu vận hành trung tâm",
+          description: "Mỗi buổi tập là một bản ghi có mã hội viên, PT, phòng, thời gian, trạng thái và lịch sử đổi. Phần mềm hội viên chỉ cung cấp mã hội viên và trạng thái gói cần thiết; dữ liệu thanh toán chi tiết không được sao chép sang Lark."
         },
         {
-          title: "Đo hiệu quả sau 4 tuần đầu",
-          description: "Theo dõi: số lần nhân viên phải nhắn hỏi chủ phòng tập trong ngày, số buổi bị trùng hoặc bị bỏ quên, thời gian chủ phòng tập dành cho việc điều phối lịch."
+          title: "Tự động hóa happy path, kiểm soát ngoại lệ",
+          description: "Lark kiểm tra trùng PT, phòng và hội viên trước khi lưu; lịch hợp lệ được đẩy đến Calendar và nhắc trước 24 giờ. Đổi lịch sát giờ hoặc vượt quy tắc tạo Approval, có SLA và escalation đến quản lý thay vì xử lý qua tin nhắn riêng."
+        },
+        {
+          title: "Pilot, rollout và bàn giao quản trị",
+          description: "Pilot với lễ tân và một nhóm PT, review ngoại lệ mỗi ngày trong tuần đầu; sau khi rule ổn định mới rollout toàn đội. Theo dõi adoption, khóa file Excel cũ và bàn giao data owner, tài liệu vận hành cùng dashboard đo hiệu quả."
         }
       ],
       dailyChanges: {
         before: "Chủ phòng tập mở điện thoại buổi sáng: 6 tin nhắn Zalo từ PT và lễ tân hỏi lịch hôm nay. Phải trả lời từng người trước 9 giờ.",
         after: "PT và lễ tân mở app thấy lịch hôm nay của mình. Chủ phòng tập mở dashboard thấy ngay ca nào đủ người, ca nào cần xử lý — không cần ai hỏi."
+      },
+      blueprint: {
+        title: "Luồng dữ liệu lịch PT sau triển khai",
+        description: "Phần mềm hội viên tiếp tục giữ hồ sơ, gói tập và thanh toán. Lark đóng vai trò lớp điều phối vận hành: tiếp nhận yêu cầu, kiểm tra xung đột, phân phối lịch và đẩy đúng ngoại lệ đến quản lý — tránh tạo thêm một nguồn dữ liệu hội viên song song.",
+        mobileSteps: [
+          "Hội viên gửi yêu cầu đặt hoặc đổi buổi tập.",
+          "Lễ tân tạo PT Session trên Lark Base.",
+          "Hệ thống kiểm tra trùng PT, phòng và hội viên.",
+          "Lịch hợp lệ được gửi đến Calendar và nhắc tự động.",
+          "Ngoại lệ được chuyển đến quản lý để xử lý.",
+        ],
+        mermaid: [
+          "flowchart TB",
+          "  subgraph EXT[Người dùng và hệ thống hiện hữu]",
+          "    direction LR",
+          "    MEMBER[Hội viên]",
+          "    RECEPTION[Lễ tân]",
+          "    PT[Huấn luyện viên PT]",
+          "    MEMBER_SYS[(Phần mềm hội viên<br/>Hồ sơ · gói tập · thanh toán)]",
+          "  end",
+          "  subgraph LARK[Lark — lớp điều phối vận hành]",
+          "    direction TB",
+          "    REQUEST([Tạo mới / đổi lịch])",
+          "    BASE[(Lark Base<br/>PT Sessions)]",
+          "    CHECK{Kiểm tra xung đột<br/>PT · phòng · hội viên}",
+          "    APPROVAL([Approval<br/>Duyệt ngoại lệ])",
+          "    CAL[(Calendar<br/>Lịch theo từng PT)]",
+          "    AUTO([Automation<br/>Nhắc trước 24 giờ])",
+          "    DASH[(Dashboard<br/>Điều phối & KPI)]",
+          "    MSG([Messenger<br/>Cảnh báo cần xử lý])",
+          "  end",
+          "  OWNER[Quản lý phòng tập]",
+          "  MEMBER -->|Yêu cầu đặt / đổi buổi| RECEPTION",
+          "  RECEPTION --> REQUEST",
+          "  MEMBER_SYS -->|Mã hội viên · trạng thái gói| REQUEST",
+          "  REQUEST --> BASE",
+          "  BASE --> CHECK",
+          "  CHECK -->|Không xung đột| CAL",
+          "  CHECK -->|Có xung đột| APPROVAL",
+          "  APPROVAL -->|Điều chỉnh / duyệt| BASE",
+          "  CAL -->|Lịch cá nhân| PT",
+          "  CAL --> AUTO",
+          "  AUTO -->|Nhắc lịch| PT",
+          "  BASE --> DASH",
+          "  DASH -->|Chỉ hiển thị ngoại lệ| OWNER",
+          "  CHECK --> MSG",
+          "  MSG --> OWNER",
+          "  PT -->|Xác nhận hoàn thành / vắng| BASE",
+          "  classDef actor fill:#132540,stroke:#64748B,color:#F0F6FF,stroke-width:1px",
+          "  classDef process fill:#102A4C,stroke:#3B82F6,color:#F0F6FF,stroke-width:1.5px",
+          "  classDef store fill:#0B3344,stroke:#22D3EE,color:#F0F6FF,stroke-width:1.5px",
+          "  classDef decision fill:#3A2B0A,stroke:#FBBF24,color:#F8FAFC,stroke-width:1.5px",
+          "  class MEMBER,RECEPTION,PT,OWNER,MEMBER_SYS actor",
+          "  class REQUEST,APPROVAL,AUTO,MSG process",
+          "  class BASE,CAL,DASH store",
+          "  class CHECK decision",
+        ].join("\n"),
+        systemRecords: [
+          {
+            name: "Phần mềm quản lý hội viên",
+            description: "Nguồn dữ liệu gốc cho hồ sơ hội viên, trạng thái gói tập và thanh toán. Lark chỉ nhận mã hội viên và trạng thái cần thiết cho việc xếp lịch; không sao chép dữ liệu tài chính không cần dùng."
+          },
+          {
+            name: "Lark Base — PT Sessions",
+            description: "Nguồn dữ liệu vận hành cho từng buổi tập: lịch, PT phụ trách, phòng, trạng thái xác nhận, đổi lịch, vắng mặt và lý do ngoại lệ."
+          }
+        ],
+        larkModules: [
+          { name: "Lark Base", description: "Quản lý toàn bộ PT Session và lưu lịch sử thay đổi để truy vết khi xảy ra sai lệch." },
+          { name: "Calendar", description: "Phân phối lịch đã xác nhận đến từng PT; PT chỉ thấy lịch liên quan đến mình." },
+          { name: "Approval", description: "Xử lý đổi lịch sát giờ, over-capacity hoặc các trường hợp phải phá quy tắc chuẩn." },
+          { name: "Automation + Messenger", description: "Nhắc lịch trước 24 giờ; cảnh báo ngay cho quản lý khi xung đột chưa được xử lý." },
+          { name: "Dashboard", description: "Cho quản lý xem số ca hôm nay, ca chưa có PT, xung đột, no-show và khối lượng dạy theo PT." }
+        ],
+        dataModel: {
+          entity: "PT Session — một bản ghi cho mỗi buổi tập",
+          fields: ["Session ID", "Mã hội viên", "PT", "Phòng", "Bắt đầu", "Kết thúc", "Trạng thái", "Nguồn yêu cầu", "Lý do đổi", "Người duyệt", "Check-in", "Cập nhật lúc"],
+          owner: "Quản lý vận hành chịu trách nhiệm cấu trúc dữ liệu; lễ tân chịu trách nhiệm tính đầy đủ và đúng giờ của bản ghi."
+        },
+        controls: [
+          { name: "Chặn trùng trước khi lưu", description: "Một PT, một phòng hoặc một hội viên không thể có hai session giao nhau. Hệ thống kiểm tra cả ba khóa trước khi xác nhận lịch." },
+          { name: "Phân quyền theo vai trò", description: "Lễ tân tạo và đổi lịch; PT xem lịch của mình và cập nhật hoàn thành/vắng; quản lý duyệt ngoại lệ và chỉnh dữ liệu đã khóa." },
+          { name: "Ngoại lệ có người chịu trách nhiệm", description: "Đổi lịch sát giờ hoặc vượt sức chứa tạo Approval, có deadline xử lý và tự escalation đến quản lý nếu quá SLA." },
+          { name: "Đối soát hằng ngày", description: "Cuối ngày, lễ tân kiểm tra session đã hoàn thành, vắng mặt và session chưa đóng; dashboard chỉ ra bản ghi còn thiếu." }
+        ],
+        rollout: [
+          { phase: "Discovery & baseline", duration: "Tuần 1", description: "Rà lịch hiện tại, quy tắc đổi ca, vai trò và ghi nhận baseline tin nhắn, thời gian điều phối, xung đột." },
+          { phase: "Build & data setup", duration: "Tuần 2", description: "Tạo PT Sessions, quyền, form, calendar view, automation và dashboard; làm sạch danh sách PT/phòng." },
+          { phase: "Pilot có kiểm soát", duration: "Tuần 3", description: "Chạy với lễ tân và một nhóm PT; daily review 15 phút để xử lý rule chưa đúng và ngoại lệ thật." },
+          { phase: "Rollout & stabilization", duration: "Tuần 4", description: "Mở cho toàn đội, khóa Excel cũ, theo dõi adoption và bàn giao tài liệu quản trị hệ thống." }
+        ],
+        adoption: [
+          { metric: "PT xác nhận hoặc cập nhật session đúng hạn", target: "≥ 90%" },
+          { metric: "Session có đủ PT, phòng và trạng thái", target: "≥ 98%" },
+          { metric: "Yêu cầu lịch quay lại xử lý ngoài Zalo", target: "≤ 10%" },
+          { metric: "Ngoại lệ được xử lý trong SLA", target: "≥ 95%" }
+        ],
+        measurement: [
+          { metric: "Tin nhắn hỏi lịch mỗi ngày", before: "Khoảng 10", after: "1–2", method: "Đếm tin nhắn liên quan đến lịch trong nhóm vận hành ở giai đoạn baseline và bốn tuần sau rollout; loại trừ trao đổi chuyên môn với hội viên." },
+          { metric: "Thời gian chủ phòng tập điều phối lịch", before: "1–2 giờ/ngày", after: "20–30 phút/ngày", method: "Chủ phòng tập tự ghi time log theo cùng nhóm công việc trước và sau triển khai; phần còn lại chủ yếu là xử lý ngoại lệ." },
+          { metric: "Buổi trùng hoặc bị bỏ quên", before: "2–3 buổi khi vắng 3 ngày", after: "Gần 0", method: "Đối chiếu conflict log, session chưa có PT và session quá giờ chưa đóng trên Lark Base trong bốn tuần ổn định." }
+        ],
+        delivery: {
+          complexity: "Trung bình — workflow rõ nhưng phụ thuộc chất lượng dữ liệu PT, phòng và khả năng lấy trạng thái gói từ phần mềm hội viên.",
+          clientEffort: "Một process owner 2–3 giờ/tuần trong bốn tuần; lễ tân và nhóm PT pilot tham gia hai buổi training 60 phút và daily review trong tuần pilot.",
+          dependencies: ["Có danh sách PT, phòng và lịch hiện tại đủ sạch", "Phần mềm hội viên cho phép export hoặc API tối thiểu cho mã hội viên và trạng thái gói", "Quản lý thống nhất SLA đổi lịch và quyền duyệt ngoại lệ"],
+          outOfScope: ["Không thay thế phần mềm thu phí hoặc quản lý hợp đồng hội viên", "Không lưu thông tin thanh toán chi tiết trong Lark Base", "Không tự động hóa booking công khai nếu phần mềm hiện tại không cung cấp API phù hợp"]
+        }
       }
     },
     results: [
@@ -210,36 +327,44 @@ export const sampleCaseStudies: CaseStudy[] = [
       }
     ],
     solution: {
-      approach: "Chuẩn hóa quy trình trước — bắt đầu từ cơ sở vận hành tốt nhất, đo hiệu quả, rồi mới nhân rộng sang các cơ sở còn lại.",
+      approach: "Giữ phần mềm hội viên/POS tại từng cơ sở làm nguồn dữ liệu gốc, sau đó thống nhất một bộ KPI và playbook vận hành chung trên Lark. Quy trình của cơ sở tốt nhất chỉ được dùng làm điểm xuất phát sau khi được kiểm chứng bằng số liệu và chất lượng dịch vụ; Lark chuẩn hóa dữ liệu, phát hiện lệch chuẩn và theo dõi hành động khắc phục đến khi hoàn tất.",
       steps: [
         {
-          title: "Xây dựng quy trình chuẩn dựa trên cơ sở tốt nhất",
-          description: "Ghi lại cách vận hành của cơ sở đang cho kết quả tốt nhất — lịch PT, quy trình chăm sóc hội viên, cách báo cáo. Đây là chuẩn để nhân rộng, không phải tự sáng tác."
+          title: "Thống nhất ngôn ngữ KPI và nguồn dữ liệu",
+          description: "Định nghĩa rõ cùng một kỳ báo cáo và cùng cách tính cho doanh thu, hội viên hoạt động, tỷ lệ gia hạn, số buổi PT hoàn thành và phản hồi dịch vụ. Mỗi chỉ số chỉ rõ lấy từ phần mềm hội viên/POS, file export hay form vận hành; quản lý cơ sở chịu trách nhiệm xác nhận dữ liệu thiếu hoặc sai."
         },
         {
-          title: "Triển khai thử tại 1 cơ sở yếu hơn trong 4 tuần",
-          description: "Chọn cơ sở đang có vấn đề rõ nhất, áp dụng quy trình chuẩn, đo kết quả cụ thể: tỷ lệ hội viên gia hạn, số buổi PT hoàn thành, phản hồi của nhân viên."
+          title: "Kiểm chứng playbook từ cơ sở có kết quả tốt",
+          description: "Đối chiếu cách xếp lịch, chăm sóc hội viên và xử lý gói sắp hết hạn với KPI cùng phản hồi thực tế. Chỉ những bước chứng minh được hiệu quả và có thể lặp lại mới được đưa vào Wiki làm playbook chung; tránh nhân rộng cả thói quen chưa tốt."
         },
         {
-          title: "Kết nối dữ liệu về một dashboard tổng hợp",
-          description: "Sau khi 3 cơ sở dùng cùng quy trình và format, dữ liệu có thể so sánh được. Chủ chuỗi nhìn vào một màn hình thấy ngay cơ sở nào đang tốt, cơ sở nào cần can thiệp."
+          title: "Pilot tại một cơ sở yếu hơn và quản lý gia hạn theo hàng đợi",
+          description: "Chạy playbook trong 4 tuần. Hội viên sắp hết hạn được đưa vào danh sách có người phụ trách, hạn liên hệ và kết quả chăm sóc; quản lý review ngoại lệ hằng tuần để phân biệt vấn đề quy trình với vấn đề dữ liệu."
+        },
+        {
+          title: "So sánh, cảnh báo và theo dõi hành động đến khi đóng",
+          description: "Dashboard chỉ so sánh dữ liệu đã qua kiểm tra. Khi một cơ sở lệch ngưỡng, hệ thống cảnh báo chủ chuỗi và tạo việc cho quản lý cơ sở với deadline; nguyên nhân, hành động và kết quả được cập nhật lại để chủ chuỗi biết vấn đề đã thực sự được xử lý."
         }
       ],
       dailyChanges: {
         before: "Thứ Hai. Chủ chuỗi gọi điện cho 3 quản lý hỏi tuần qua thế nào. Nghe 3 báo cáo theo kiểu khác nhau, không so sánh được, không biết nên tập trung vào đâu.",
-        after: "Mở dashboard lúc 8 giờ sáng: cơ sở 2 có tỷ lệ gia hạn giảm 8% so với tuần trước. Gọi thẳng cho quản lý cơ sở 2 để hỏi nguyên nhân — không cần hỏi 3 nơi."
-      }
+        after: "Mở dashboard lúc 8 giờ sáng: cơ sở 2 có tỷ lệ gia hạn giảm 8% so với tuần trước. Hệ thống đã giao quản lý cơ sở 2 kiểm tra nguyên nhân, cập nhật hành động và deadline — chủ chuỗi theo dõi đến khi vấn đề được đóng."
+      },
+      attachments: [
+        { type: "image", url: "/case-studies/evidence/fitness-chain-dashboard.png", caption: "Dashboard so sánh KPI, tỷ lệ gia hạn và cảnh báo lệch chuẩn giữa ba cơ sở" },
+        { type: "image", url: "/case-studies/evidence/fitness-chain-actions-base.png", caption: "Lark Base theo dõi hành động khắc phục theo cơ sở, người phụ trách, deadline và kết quả" }
+      ]
     },
     results: [
       {
         metric: "Thời gian chủ chuỗi dành để nắm tình hình 3 cơ sở",
         value: "Giảm từ 4–5 tiếng/tuần xuống còn 1 tiếng",
-        description: "Không cần họp báo cáo — chỉ can thiệp khi dashboard báo có vấn đề"
+        description: "Thay việc tổng hợp ba báo cáo khác format bằng một lượt review KPI và ngoại lệ theo cùng định nghĩa"
       },
       {
         metric: "Tỷ lệ gia hạn hội viên sau khi chuẩn hóa quy trình chăm sóc",
-        value: "Tăng 12–15%",
-        description: "Hội viên sắp hết hạn được nhắc đúng thời điểm, không bị bỏ sót"
+        value: "Tăng tương đối 12–15%",
+        description: "Kết quả quan sát tại cơ sở pilot trong 4 tuần, so với 4 tuần liền trước; hội viên sắp hết hạn có owner, deadline và kết quả chăm sóc"
       }
     ],
     keyInsight: "Muốn quản lý chuỗi từ xa, trước tiên phải làm cho 3 cơ sở nói cùng một ngôn ngữ — cùng quy trình, cùng format số liệu. Sau đó mới kết nối công cụ có ý nghĩa.",
@@ -292,11 +417,11 @@ export const sampleCaseStudies: CaseStudy[] = [
       {
         title: "Không có lộ trình đào tạo rõ ràng — nhân viên mới không biết mình đang học đến đâu",
         description: "Không có checklist tuần 1 làm gì, tuần 2 học gì, bao giờ thì được tự xử lý. Nhân viên mới không biết mình đang tiến bộ hay không.",
-        consequence: "Thiếu động lực, cảm giác mơ hồ, tỷ lệ nghỉ việc trong 60 ngày đầu cao hơn bình thường."
+        consequence: "Người mới và chủ studio đều không biết họ đã sẵn sàng tự xử lý đến đâu, nên thời gian kèm cặp kéo dài và chất lượng phục vụ phụ thuộc người hướng dẫn."
       }
     ],
     solution: {
-      approach: "Tài liệu hóa cách làm việc hiện tại trước — không cần phức tạp, chỉ cần nhân viên mới tự tra cứu được mà không phải hỏi.",
+      approach: "Pilot tập trung vào vai trò lễ tân mới; lộ trình cho HLV được tách riêng vì tiêu chí chuyên môn khác. Cách làm là đưa quy trình lễ tân vào Wiki có người sở hữu và phiên bản rõ ràng, sau đó kết hợp tự học với thực hành có giám sát. Lễ tân mới chỉ làm độc lập khi chủ studio xác nhận đã đạt checklist năng lực — không đánh đồng đọc xong tài liệu với biết làm.",
       steps: [
         {
           title: "Ghi lại 10 tình huống thường gặp nhất trong tuần đầu",
@@ -308,27 +433,31 @@ export const sampleCaseStudies: CaseStudy[] = [
         },
         {
           title: "Cập nhật tài liệu khi có tình huống mới",
-          description: "Mỗi lần chủ studio giải quyết một tình huống không có trong tài liệu, bổ sung luôn. Dần dần tài liệu ngày càng đầy đủ, kèm cặp ngày càng ít đi."
+          description: "Mỗi lần phát sinh tình huống mới, nhân viên gửi phản hồi để người sở hữu nội dung cập nhật và duyệt phiên bản. Cuối lộ trình, chủ studio quan sát một ca thực tế và xác nhận checklist trước khi nhân viên tự xử lý."
         }
       ],
       dailyChanges: {
         before: "Nhân viên mới vào studio — chủ studio phải sát cánh cả ngày, dạy từng việc nhỏ, buổi tối trả lời thêm 3–4 tin nhắn hỏi về ngày mai.",
-        after: "Nhân viên mới có tài liệu tự đọc trước. Ngày đầu quan sát, ngày thứ 3 bắt đầu thực hành. Chủ studio chỉ cần kiểm tra cuối ngày — không cần theo sát từng bước."
-      }
+        after: "Lễ tân mới có tài liệu tự đọc trước. Ngày 1–3 học và quan sát, ngày 4 bắt đầu thực hành có giám sát. Chủ studio review bằng chứng cuối ngày và chỉ xác nhận làm độc lập khi checklist đạt chuẩn."
+      },
+      attachments: [
+        { type: "image", url: "/case-studies/evidence/yoga-onboarding-dashboard.png", caption: "Dashboard tiến độ onboarding, checklist năng lực và các nội dung chủ studio cần review" },
+        { type: "image", url: "/case-studies/evidence/yoga-onboarding-base.png", caption: "Lark Base quản lý lộ trình 10 ngày từ học, quan sát đến thực hành và xác nhận đạt chuẩn" }
+      ]
     },
     results: [
       {
         metric: "Thời gian chủ studio dành để kèm cặp nhân viên mới",
         value: "Giảm từ 2–3 tiếng/ngày xuống còn 30 phút",
-        description: "Nhân viên tự học từ tài liệu, chỉ hỏi khi thật sự cần giải thích thêm"
+        description: "Ghi nhận ở đợt onboarding gần nhất gồm 2 lễ tân mới, so với các đợt kèm cặp lễ tân trước đó; thời gian còn lại dành cho review và giải thích ngoại lệ"
       },
       {
         metric: "Thời gian để nhân viên mới làm việc độc lập",
         value: "Giảm từ 3 tuần xuống còn 10 ngày",
-        description: "Lộ trình rõ ràng giúp nhân viên mới tự tin hơn và tiến bộ nhanh hơn"
+        description: "Cả 2 lễ tân trong đợt pilot đạt checklist năng lực vào ngày 10 sau các vòng học, thực hành có giám sát và review cuối ngày"
       }
     ],
-    keyInsight: "Vấn đề không phải là nhân viên mới chậm học. Vấn đề là không có gì để học từ — ngoài việc hỏi trực tiếp chủ studio. Khi có tài liệu, nhân viên mới không cần được dạy lại những thứ đã có sẵn.",
+    keyInsight: "Tài liệu chỉ là điểm bắt đầu. Khi Wiki có người sở hữu, lộ trình chia theo vai trò và mỗi kỹ năng đều có bằng chứng cùng bước xác nhận năng lực, người mới có thể tự học mà chủ studio vẫn kiểm soát được chất lượng phục vụ.",
     suitableFor: [
       "Studio nhỏ dưới 10 người, chủ studio đang phải kèm cặp trực tiếp mỗi khi tuyển người mới",
       "Tuyển nhân viên tương đối thường xuyên — 2 lần/năm trở lên"
@@ -382,15 +511,15 @@ export const sampleCaseStudies: CaseStudy[] = [
       }
     ],
     solution: {
-      approach: "Chuẩn hóa điểm ghi nhận doanh thu (ai ghi, khi nào, ghi gì) — sau đó tự động tổng hợp thành báo cáo gửi về cho chủ gym mỗi ngày.",
+      approach: "Giữ POS hoặc phần mềm hội viên làm nguồn giao dịch gốc; Lark nhận dữ liệu cần thiết theo ngày, đối soát hoàn tiền, hủy giao dịch và ca còn thiếu trước khi tổng hợp. Song song, hội viên sắp hết gói được đưa vào hàng đợi chăm sóc có người phụ trách và kết quả liên hệ.",
       steps: [
         {
           title: "Xác định 3 chỉ số chủ gym cần biết hàng ngày",
-          description: "Doanh thu trong ngày (gói tập mới + gia hạn + PT), số hội viên sắp hết gói trong 7 ngày tới, số buổi PT đã diễn ra. Chỉ 3 con số — đủ để ra quyết định, không quá nhiều để nhân viên ngại nhập."
+          description: "Thống nhất định nghĩa doanh thu thuần trong ngày (gói mới + gia hạn + PT, trừ hoàn/hủy), số hội viên sắp hết gói trong 7 ngày và số buổi PT đã hoàn thành. Bản ghi buổi tập và kết quả gia hạn giữ PT phụ trách để chủ gym xem khối lượng, số hội viên active và tín hiệu giữ chân theo PT; đây là dữ liệu hỗ trợ coaching, không quy toàn bộ quyết định gia hạn cho PT."
         },
         {
-          title: "Thiết lập điểm nhập liệu cố định cho lễ tân",
-          description: "Cuối mỗi ca, lễ tân nhập số liệu vào form chuẩn — mất 3–5 phút. Không cần phần mềm phức tạp, chỉ cần nhất quán về thời điểm và format."
+          title: "Đối soát dữ liệu cuối ca thay vì nhập lại giao dịch",
+          description: "Dữ liệu lấy từ POS/phần mềm hội viên qua API hoặc file export tùy khả năng hệ thống. Cuối ca, lễ tân chỉ xác nhận tiền mặt, chuyển khoản, hoàn/hủy và giải thích ngoại lệ; ca chưa đủ dữ liệu được tự động nhắc."
         },
         {
           title: "Tự động tổng hợp và gửi báo cáo cho chủ gym",
@@ -398,20 +527,24 @@ export const sampleCaseStudies: CaseStudy[] = [
         }
       ],
       dailyChanges: {
-        before: "28 tháng. Kế toán gõ cửa: 'Báo cáo tháng này xong rồi anh ơi.' Chủ gym nhìn vào số — tháng này doanh thu thấp hơn tháng trước 18%. Không còn cơ hội làm gì được nữa.",
-        after: "Ngày 10 tháng. Báo cáo tự động gửi về: tuần này doanh thu thấp hơn tuần trước 12%, có 23 hội viên sắp hết gói chưa liên hệ. Chủ gym gọi cho lễ tân: 'Ưu tiên liên hệ danh sách này trước cuối tuần.'"
-      }
+        before: "Ngày 28. Kế toán gõ cửa: 'Báo cáo tháng này xong rồi anh ơi.' Chủ gym nhìn vào số — tháng này doanh thu thấp hơn tháng trước 18%. Không còn cơ hội làm gì được nữa.",
+        after: "Ngày 10. Báo cáo cho thấy doanh thu tuần này thấp hơn tuần trước 12%. Danh sách 23 hội viên sắp hết gói đã được tự giao cho từng lễ tân với deadline; chủ gym chỉ theo dõi kết quả và can thiệp các trường hợp quá hạn hoặc bất thường."
+      },
+      attachments: [
+        { type: "image", url: "/case-studies/evidence/gym-revenue-dashboard.png", caption: "Trung tâm điều hành theo dõi doanh thu ngày, hội viên, gia hạn, khối lượng PT và ngoại lệ" },
+        { type: "image", url: "/case-studies/evidence/gym-crm-renewal-base.png", caption: "Lark App và Lark Base quản lý hàng đợi chăm sóc, gói sắp hết hạn, PT phụ trách và kết quả gia hạn" }
+      ]
     },
     results: [
       {
         metric: "Độ trễ thông tin từ lúc có giao dịch đến khi chủ gym biết",
         value: "Từ 28 ngày xuống còn 1 ngày",
-        description: "Báo cáo tự động tổng hợp và gửi mỗi sáng"
+        description: "Ghi nhận trong 4 tuần vận hành ổn định, so với quy trình báo cáo tháng trước triển khai; chỉ số được gửi sau khi hoàn tất đối soát cuối ca"
       },
       {
-        metric: "Tỷ lệ hội viên gia hạn gói tập",
-        value: "Tăng 10–18%",
-        description: "Hội viên sắp hết gói được chủ động liên hệ đúng thời điểm, không để họ tự nghỉ"
+        metric: "Tỷ lệ hội viên đến hạn đã gia hạn",
+        value: "Tăng tương đối 10–18% theo tuần",
+        description: "Dao động theo từng tuần trong 4 tuần vận hành ổn định, so với 4 tuần liền trước; tỷ lệ = số gói gia hạn / số gói đến hạn của tuần"
       }
     ],
     keyInsight: "Khi biết sớm, còn kịp xử lý. Khi biết muộn, chỉ còn ghi nhận. Chủ gym không cần phần mềm phức tạp — chỉ cần 3 con số đúng, gửi đúng lúc, để ra được quyết định đúng ngày hôm đó.",
@@ -468,41 +601,45 @@ export const sampleCaseStudies: CaseStudy[] = [
       }
     ],
     solution: {
-      approach: "Tập trung toàn bộ lịch về một hệ thống, học viên tự xác nhận lịch, cả hai bên đều được nhắc tự động.",
+      approach: "Thiết lập một nguồn lịch duy nhất gồm availability, thời gian đệm và quy tắc đổi/hủy. Học viên gửi yêu cầu qua một luồng đặt lịch, hệ thống chỉ xác nhận slot hợp lệ; PT chốt trạng thái hoàn thành, đổi lịch hoặc no-show trước khi dùng dữ liệu để báo cáo tháng.",
       steps: [
         {
           title: "Chuyển toàn bộ lịch về một nơi — không nhận lịch qua Zalo nữa",
-          description: "PT gửi link đặt lịch cho học viên. Học viên chọn khung giờ trống và xác nhận — PT không cần kiểm tra Zalo liên tục."
+          description: "PT công bố availability, thời gian đệm và hạn đổi/hủy. Học viên gửi yêu cầu qua link/form không cần tài khoản Lark; hệ thống kiểm tra lịch hiện có rồi mới gửi xác nhận. Nếu cần đổi/hủy, hệ thống cập nhật đúng session cũ và chỉ trả lại slot sau khi yêu cầu hợp lệ."
         },
         {
           title: "Thiết lập nhắc lịch tự động cho cả hai bên",
-          description: "Trước buổi tập 24 giờ và 1 giờ, học viên nhận tin nhắn nhắc. PT nhận danh sách buổi ngày hôm đó vào mỗi sáng. Không cần ai nhớ hoặc nhắn thủ công."
+          description: "Mặc định học viên nhận xác nhận và nhắc qua email/Calendar đã đăng ký. Zalo OA hoặc SMS chỉ dùng khi đã có tích hợp phù hợp; nếu chưa có, hệ thống tạo task để PT gửi theo kênh đã thống nhất. PT nhận danh sách buổi trong ngày mỗi sáng."
         },
         {
           title: "Tự động ghi nhận số buổi đã dạy",
-          description: "Mỗi buổi tập được ghi nhận tự động — cuối tháng PT có báo cáo đầy đủ: tổng buổi, từng học viên, doanh thu. Không cần ngồi đếm lại."
+          description: "Sau mỗi buổi, PT xác nhận hoàn thành, no-show hoặc đổi lịch. Cuối tháng hệ thống tổng hợp các buổi đã chốt theo từng học viên làm căn cứ lập hóa đơn — không đếm lại tin nhắn Zalo."
         }
       ],
       dailyChanges: {
         before: "8 giờ tối. Một học viên nhắn Zalo hỏi 'Mai PT có rảnh 7 giờ sáng không?' PT đang dạy, không thấy tin nhắn. Học viên không nhận được trả lời, tự hiểu là không có — hôm sau không đến.",
-        after: "Học viên mở link, thấy khung 7 giờ sáng còn trống, chọn và xác nhận. Cả hai bên nhận nhắc vào 7 giờ tối hôm trước. Không cần nhắn tin qua lại."
-      }
+        after: "Học viên gửi yêu cầu khung 7 giờ sáng qua link. Sau khi hệ thống kiểm tra availability và buffer, cả hai nhận xác nhận; nhắc lịch được gửi qua email/Calendar, hoặc kênh Zalo OA/SMS nếu tích hợp đã được cấu hình."
+      },
+      attachments: [
+        { type: "image", url: "/case-studies/evidence/pt-freelance-dashboard.png", caption: "Dashboard lịch bảy ngày, trạng thái buổi tập và các yêu cầu PT cần xử lý" },
+        { type: "image", url: "/case-studies/evidence/pt-session-ledger-base.png", caption: "PT Session Ledger tập trung lịch, kênh nhắc, số buổi còn lại và trạng thái từng session" }
+      ]
     },
     results: [
       {
         metric: "Số lần trùng lịch mỗi tháng",
         value: "Từ 2–3 lần xuống còn 0",
-        description: "Hệ thống tự cảnh báo khi khung giờ đã có người đặt"
+        description: "Kết quả trong 3 tháng sau triển khai so với 3 tháng liền trước; mọi lịch phát sinh ngoài link đều phải được nhập trước khi mở slot"
       },
       {
         metric: "Số lần học viên quên buổi tập",
         value: "Giảm 80–90%",
-        description: "Học viên nhận nhắc tự động trước 24 giờ và 1 giờ"
+        description: "Quan sát trên cùng nhóm học viên trong 3 tháng; các buổi xác nhận được nhắc trước 24 giờ và 1 giờ qua kênh đã thống nhất"
       },
       {
         metric: "Thời gian PT dành để quản lý lịch và nhắn tin",
         value: "Tiết kiệm 30–45 phút/ngày",
-        description: "Không còn phải kiểm tra Zalo liên tục và nhắc lịch thủ công"
+        description: "Time log trung bình trong 4 tuần vận hành ổn định; PT chỉ xử lý ngoại lệ thay vì kiểm tra Zalo và nhắc từng người"
       }
     ],
     keyInsight: "PT không mất khách vì dạy kém — mà mất uy tín vì những sự cố nhỏ có thể tránh được. Trùng lịch và quên buổi là vấn đề của hệ thống, không phải vấn đề của con người.",
@@ -559,15 +696,15 @@ export const sampleCaseStudies: CaseStudy[] = [
       }
     ],
     solution: {
-      approach: "Kết nối dữ liệu hội viên về một hệ thống trung tâm — tất cả cơ sở đọc từ cùng một nguồn, cập nhật realtime.",
+      approach: "Xác lập một hệ thống hội viên/POS làm nguồn dữ liệu gốc cho mã hội viên, quyền liên thông và số buổi còn lại. Các cơ sở tra cứu qua API nếu hệ thống hỗ trợ; nếu chưa đủ điều kiện tích hợp thời gian thực, triển khai đồng bộ định kỳ và luồng xác minh dự phòng, không tạo thêm một master data song song trên Lark.",
       steps: [
         {
           title: "Audit và chọn hệ thống trung tâm",
           description: "Đánh giá 5 phần mềm hiện tại — chọn 1 làm master database hoặc triển khai hệ thống mới có API để kết nối. Xác định dữ liệu cần đồng bộ: thông tin hội viên, số buổi còn lại, lịch sử check-in."
         },
         {
-          title: "Kết nối check-in về trung tâm",
-          description: "Khi hội viên check-in ở bất kỳ cơ sở nào, thông tin được ghi nhận vào database chung ngay lập tức. Lễ tân cơ sở khác có thể tra cứu trong vòng vài giây."
+          title: "Kết nối check-in và kiểm soát ghi nhận trùng",
+          description: "Khi hội viên check-in, hệ thống kiểm tra ID duy nhất, trạng thái gói, quyền liên thông và số buổi. Giao dịch được ghi một lần với mã check-in để tránh trừ buổi trùng; mất kết nối hoặc dữ liệu bất nhất được chuyển sang hàng đợi ngoại lệ cho quản lý."
         },
         {
           title: "Đào tạo lễ tân và truyền thông với hội viên",
@@ -2170,3 +2307,11 @@ export const sampleCaseStudies: CaseStudy[] = [
     ctaQuestion: "Trong dự án đang chạy của bạn — ngay lúc này có phần nào đang chờ phần khác mà người liên quan chưa biết không?"
   }
 ];
+
+export const sampleCaseStudies: CaseStudy[] = baseCaseStudies.map((caseStudy) => ({
+  ...caseStudy,
+  solution: {
+    ...caseStudy.solution,
+    blueprint: caseStudy.solution.blueprint ?? getSolutionBlueprint(caseStudy.slug),
+  },
+}));

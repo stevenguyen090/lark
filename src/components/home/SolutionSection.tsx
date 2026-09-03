@@ -19,8 +19,8 @@ const SolutionSection = () => {
     const CONV = [
       { delay: 800, role: "user", text: "Doanh thu hôm nay so với hôm qua?" },
       { delay: 2400, role: "ai", html: '📊 Đọc <strong>Lark Base</strong>... Hôm nay <strong style="color:#34D399">+18%</strong> so hôm qua. Kênh Online dẫn đầu.' },
-      { delay: 6000, role: "user", text: "Assign task follow-up deal VIFIT cho Huy" },
-      { delay: 7800, role: "ai", html: '✅ Đã tạo task trên <strong>Lark</strong>, assign Huy, deadline sáng mai.' },
+      { delay: 6000, role: "user", text: "Điểm nào cần xử lý ngay?" },
+      { delay: 7800, role: "ai", html: '⚠️ Có <strong>3 công việc quá hạn</strong> và doanh thu cơ sở 2 giảm <strong style="color:#FBBF24">12%</strong> so với tuần trước.' },
     ];
 
     function run() {
@@ -96,25 +96,40 @@ const SolutionSection = () => {
   return (
     <section id="services" ref={sectionRef} className="section-padding">
       <div className="container-content">
-        <div className="eyebrow reveal"><div className="eyebrow-pip" />Cách chúng tôi làm việc</div>
-        <h2 className="heading-h2 reveal">2 tầng — từ nền tảng đến <span className="kw">AI vận hành</span></h2>
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Từ điểm nghẽn đến giải pháp</div>
+        <h2 className="heading-h2 reveal">2 tầng — từ nền tảng đến <span className="kw">báo cáo quản trị</span></h2>
         <p className="body-lg reveal mt-4" style={{ maxWidth: 560 }}>
-          Không phải cài tool rồi xong. Chúng tôi xây đủ 2 tầng để AI Agent thực sự hoạt động đúng.
+          Bắt đầu từ vấn đề doanh nghiệp đang gặp, chúng tôi chuẩn hóa cách làm việc trên Lark rồi tự động tổng hợp thông tin để lãnh đạo nắm tình hình đúng lúc.
         </p>
 
         {/* ── Data Flow Diagram ── */}
-        <div className="mt-14 overflow-x-auto pb-1 reveal">
+        <div className="solution-flow mt-14 overflow-x-auto pb-3 reveal" role="region" aria-label="Luồng dữ liệu từ nguồn vận hành đến báo cáo quản trị" tabIndex={0}>
+          <div className="md:hidden space-y-3">
+            {[
+              { step: "01", title: "Nguồn dữ liệu vận hành", body: "Bán hàng, khách hàng, công việc, chi phí và thanh toán được đưa về một luồng chung." },
+              { step: "02", title: "Chuẩn hoá trên Lark Base", body: "Dữ liệu có cấu trúc, người phụ trách và trạng thái rõ ràng để đội ngũ cùng cập nhật." },
+              { step: "03", title: "Dashboard quản trị", body: "Các chỉ số quan trọng được cập nhật tự động để lãnh đạo nhìn thấy tình hình hiện tại." },
+              { step: "04", title: "Trợ lý tổng hợp báo cáo", body: "Tóm tắt kết quả, cảnh báo điểm lệch và nêu việc cần xử lý theo ngày, tuần hoặc tháng." },
+            ].map((item, index) => (
+              <div key={item.step} className="relative rounded-xl border border-white/10 bg-n-850 p-4 pl-14">
+                <span className="absolute left-4 top-4 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-b-600 text-xs font-bold text-white">{item.step}</span>
+                <h3 className="text-base font-semibold text-t-primary">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-t-secondary">{item.body}</p>
+                {index < 3 && <span aria-hidden className="absolute -bottom-4 left-[27px] z-10 text-b-500">↓</span>}
+              </div>
+            ))}
+          </div>
           {/* Column labels */}
-          <div className="grid items-end mb-2" style={{ gridTemplateColumns: "1fr 52px 1.15fr 52px 1.1fr", minWidth: 880 }}>
+          <div className="hidden md:grid items-end mb-2" style={{ gridTemplateColumns: "1fr 52px 1.15fr 52px 1.1fr", minWidth: 880 }}>
             <div className="text-[9px] font-bold text-t-tertiary text-center tracking-wider uppercase">Nền tảng dữ liệu</div>
             <div />
             <div className="text-[9px] font-bold text-t-tertiary text-center tracking-wider uppercase">Lark System · Tầng 1</div>
             <div />
-            <div className="text-[9px] font-bold text-t-tertiary text-center tracking-wider uppercase">AI Agent · Tầng 2</div>
+            <div className="text-[9px] font-bold text-t-tertiary text-center tracking-wider uppercase">Trợ lý báo cáo · Tầng 2</div>
           </div>
 
           {/* Main flow */}
-          <div className="grid" style={{ gridTemplateColumns: "1fr 52px 1.15fr 52px 1.1fr", minWidth: 880, alignItems: "stretch" }}>
+          <div className="hidden md:grid" style={{ gridTemplateColumns: "1fr 52px 1.15fr 52px 1.1fr", minWidth: 880, alignItems: "stretch" }}>
             {/* COL A: Sources */}
             <div className="flex flex-col gap-2">
               {[
@@ -212,7 +227,7 @@ const SolutionSection = () => {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-t-primary">Lark Dashboard</div>
-                    <div className="text-[9px] text-t-tertiary">Báo cáo realtime</div>
+                    <div className="text-[9px] text-t-tertiary">Báo cáo cập nhật tức thời</div>
                   </div>
                 </div>
                 <svg viewBox="0 0 220 40" preserveAspectRatio="none" className="w-full overflow-visible" style={{ height: 40 }}>
@@ -224,7 +239,7 @@ const SolutionSection = () => {
                 </svg>
                 <div className="flex gap-2 text-[8px] font-semibold mt-1">
                   <span style={{ color: "#34D399" }}>↑ 18% DT</span>
-                  <span style={{ color: "#FBBF24" }}>94% Tasks</span>
+                  <span style={{ color: "#FBBF24" }}>94% công việc</span>
                   <span style={{ color: "#3B82F6" }}>12 Deal</span>
                 </div>
               </div>
@@ -244,7 +259,7 @@ const SolutionSection = () => {
               <div className="absolute right-1 top-1/2 -translate-y-1/2 text-sm" style={{ color: "#3B82F6" }}>›</div>
             </div>
 
-            {/* COL C: AI Agent */}
+            {/* COL C: AI reporting assistant */}
             <div className="flex flex-col">
               <div className="flex-1 rounded-[20px] p-4 relative overflow-hidden" style={{
                 background: "#0A1628",
@@ -258,10 +273,10 @@ const SolutionSection = () => {
                   <div className="flex items-center gap-2.5 mb-3">
                     <div className="w-8 h-8 rounded-[9px] flex items-center justify-center text-[13px] text-white flex-shrink-0" style={{ background: "linear-gradient(135deg, #2563EB, #06B6D4)", boxShadow: "0 0 14px rgba(37,99,235,0.4)" }}>✦</div>
                     <div>
-                      <div className="text-[13px] font-bold text-t-primary">Lark AI Agent</div>
+                      <div className="text-[13px] font-bold text-t-primary">Trợ lý báo cáo AI</div>
                       <div className="flex items-center gap-1 text-[9px] text-g-400 font-medium">
                         <span className="w-[5px] h-[5px] rounded-full blink-dot" style={{ background: "#34D399", boxShadow: "0 0 5px #34D399" }} />
-                        Realtime · đọc toàn bộ Lark
+                        Tổng hợp từ dữ liệu đã chuẩn hóa
                       </div>
                     </div>
                   </div>
@@ -273,8 +288,8 @@ const SolutionSection = () => {
                   <div className="flex flex-col gap-[5px]">
                     {[
                       { label: "Báo cáo tức thì", color: "#34D399" },
-                      { label: "Alert thông minh", color: "#FBBF24" },
-                      { label: "Giao task & follow-up", color: "#3B82F6" },
+                      { label: "Cảnh báo sớm", color: "#FBBF24" },
+                      { label: "Tóm tắt cho lãnh đạo", color: "#3B82F6" },
                     ].map((f, i) => (
                       <div key={i} className="flex items-center gap-1.5 text-[9px] font-semibold text-t-secondary">
                         <span className="w-[5px] h-[5px] rounded-full flex-shrink-0" style={{ background: f.color }} />
@@ -302,8 +317,8 @@ const SolutionSection = () => {
               {[
                 "Phân tích mô hình vận hành & điểm nghẽn",
                 "Thiết kế quy trình & phân công trách nhiệm rõ ràng",
-                "Triển khai Lark: task, docs, dashboard, tích hợp tool",
-                "Training đội ngũ cho đến khi vận hành ổn định",
+                "Triển khai Lark: công việc, tài liệu, báo cáo và kết nối công cụ",
+                "Hướng dẫn đội ngũ cho đến khi vận hành ổn định",
               ].map((step, i) => (
                 <div key={i} className="flex items-start gap-2.5 text-sm text-t-secondary" style={{ lineHeight: 1.55 }}>
                   <div className="w-[18px] h-[18px] rounded-md flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5" style={{ background: "rgba(37,99,235,0.15)", color: "#3B82F6" }}>✓</div>
@@ -317,19 +332,19 @@ const SolutionSection = () => {
           </div>
 
           {/* Layer 2 */}
-          <div className="card-dark p-8 relative overflow-hidden reveal reveal-d2">
+          <div id="ai-agent" className="card-dark p-8 relative overflow-hidden reveal reveal-d2 scroll-mt-24">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg, #06B6D4, #34D399)" }} />
-            <div className="text-sm font-semibold text-t-tertiary mb-4">Tầng 02 — AI Agent · Sau Tầng 1</div>
-            <div className="heading-h3 mb-3" style={{ lineHeight: 1.3 }}>Kích hoạt AI Agent trên nền Lark</div>
+            <div className="text-sm font-semibold text-t-tertiary mb-4">Tầng 02 — Báo cáo quản trị tự động</div>
+            <div className="heading-h3 mb-3" style={{ lineHeight: 1.3 }}>Trợ lý AI tổng hợp báo cáo</div>
             <p className="text-sm text-t-secondary mb-6" style={{ lineHeight: 1.7 }}>
-              Khi data đã sạch và có cấu trúc, AI Agent có thể đọc toàn bộ hệ thống và trả lời bất kỳ câu hỏi nào của lãnh đạo bằng ngôn ngữ tự nhiên.
+              Lãnh đạo nhận báo cáo định kỳ, cảnh báo sớm và câu trả lời nhanh từ số liệu vận hành đã được đối soát — không còn chờ nhân sự gom dữ liệu thủ công.
             </p>
             <div className="flex flex-col gap-3 mb-6">
               {[
-                "Tích hợp AI Agent vào Lark Messenger",
-                "Cấu hình knowledge base từ tài liệu nội bộ",
-                "Thiết lập alert tự động khi có bất thường",
-                "Training AI theo đặc thù vận hành của doanh nghiệp",
+                "Xác định bộ chỉ số lãnh đạo thực sự cần theo dõi",
+                "Tự động tổng hợp báo cáo theo ngày, tuần và tháng",
+                "Cảnh báo sớm khi KPI lệch, công việc trễ hoặc dữ liệu thiếu",
+                "Tra cứu nhanh số liệu đã đối soát ngay trong Lark",
               ].map((step, i) => (
                 <div key={i} className="flex items-start gap-2.5 text-sm text-t-secondary" style={{ lineHeight: 1.55 }}>
                   <div className="w-[18px] h-[18px] rounded-md flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5" style={{ background: "rgba(6,182,212,0.15)", color: "#22D3EE" }}>✓</div>
@@ -338,14 +353,8 @@ const SolutionSection = () => {
               ))}
             </div>
             <div className="flex items-center gap-[7px] p-3 px-4 rounded-[10px] text-sm font-semibold text-g-400" style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}>
-              ✓ Sếp hỏi 1 câu — AI trả lời tức thì từ dữ liệu thật
+              ✓ Nắm tình hình đúng lúc — giảm thời gian chờ và làm báo cáo
             </div>
-          </div>
-
-          {/* Connector */}
-          <div className="md:col-span-2 flex flex-col md:flex-row items-center justify-center gap-3 p-4 px-6 rounded-[10px] text-sm text-t-secondary reveal" style={{ background: "#0E1E35", border: "1px solid rgba(37,99,235,0.35)", lineHeight: 1.6, marginTop: -8, textAlign: "center" }}>
-            <span>🔗</span>
-            <span><strong className="text-c-400">Tầng 1 là điều kiện bắt buộc của Tầng 2</strong> — AI chỉ thông minh khi data phía dưới đã sạch và có cấu trúc. Đây là lý do các đơn vị chỉ cài AI mà bỏ qua nền tảng thường thất bại.</span>
           </div>
         </div>
       </div>

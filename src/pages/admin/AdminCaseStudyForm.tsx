@@ -234,6 +234,7 @@ const AdminCaseStudyForm = () => {
       previous_attempts_result: formData.previousAttemptsResult,
       root_causes: formData.rootCauses.filter(r => r.title),
       solution: {
+        ...(existingStudy?.solution || {}),
         description: formData.solutionDescription,
         approach: formData.solutionApproach,
         steps: formData.solutionSteps.filter(s => s.title),

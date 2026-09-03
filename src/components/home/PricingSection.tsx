@@ -12,7 +12,7 @@ const PricingSection = () => {
   return (
     <section id="pricing" ref={ref} className="section-padding">
       <div className="container-content">
-        <div className="eyebrow reveal"><div className="eyebrow-pip" />Pricing</div>
+        <div className="eyebrow reveal"><div className="eyebrow-pip" />Gói dịch vụ</div>
         <h2 className="heading-h2 reveal">Chọn mức độ đồng hành <span className="kw">phù hợp với bạn</span></h2>
         <p className="body-lg reveal mt-4">Dù bạn mới tìm hiểu hay đã sẵn sàng xây hệ thống — chúng tôi đều có cách phù hợp.</p>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-12 items-start">
@@ -39,7 +39,7 @@ const PricingSection = () => {
             <div className="mb-3"><span className="text-[32px] font-bold text-b-500 leading-none">149K</span><span className="text-sm text-t-tertiary ml-[5px]">/ giờ thực tế</span></div>
             <div className="text-sm text-t-secondary p-3 px-4 rounded-[10px] mb-6" style={{ background: "#0E1E35", lineHeight: 1.65 }}>Xây hệ thống vận hành bài bản trên Lark. Trung bình 40–80 giờ tuỳ quy mô.</div>
             <ul className="flex flex-col gap-3 mb-6 list-none">
-              {["Toàn bộ nội dung Gói 1", "Chuẩn hoá quy trình & phân công trách nhiệm", "Thiết kế & triển khai hệ thống Lark đầy đủ", "Tích hợp tool bên thứ 3 (Pancake, Shopify…)", "Training đội ngũ vận hành hệ thống"].map((f, i) => (
+              {["Toàn bộ nội dung Gói 1", "Chuẩn hoá quy trình và phân công trách nhiệm", "Thiết kế và triển khai hệ thống Lark đầy đủ", "Kết nối công cụ đang dùng (Pancake, Shopify…)", "Hướng dẫn đội ngũ vận hành hệ thống"].map((f, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-t-secondary" style={{ lineHeight: 1.55 }}>
                   <div className="w-[15px] h-[15px] rounded-full flex items-center justify-center text-[8px] font-bold flex-shrink-0 mt-0.5" style={{ background: "rgba(16,185,129,0.15)", color: "#34D399" }}>✓</div>{f}
                 </li>
@@ -50,11 +50,11 @@ const PricingSection = () => {
           {/* Gói 3 */}
           <div className="card-dark p-8 reveal reveal-d2">
             <div className="text-sm font-semibold text-t-tertiary mb-2">Gói 03</div>
-            <div className="heading-h2 mb-4" style={{ lineHeight: 1.2 }}>Kích hoạt AI Agent</div>
-            <div className="mb-3"><span className="text-2xl font-bold text-c-400 leading-none">Báo giá riêng</span></div>
-            <div className="text-sm text-t-secondary p-3 px-4 rounded-[10px] mb-6" style={{ background: "#0E1E35", lineHeight: 1.65 }}>Khi đã có nền tảng vận hành, kích hoạt AI Agent để sếp quản lý qua 1 dòng chat.</div>
+            <div className="heading-h2 mb-4" style={{ lineHeight: 1.2 }}>Trợ lý AI tổng hợp báo cáo</div>
+            <div className="mb-3"><span className="text-2xl font-bold text-c-400 leading-none">Báo giá theo phạm vi</span></div>
+            <div className="text-sm text-t-secondary p-3 px-4 rounded-[10px] mb-6" style={{ background: "#0E1E35", lineHeight: 1.65 }}>Dành cho lãnh đạo muốn nhận báo cáo đúng lúc, thấy sớm vấn đề và giảm thời gian chờ nhân sự tổng hợp số liệu.</div>
             <ul className="flex flex-col gap-3 mb-6 list-none">
-              {["Toàn bộ nội dung Gói 2", "Tích hợp AI Agent vào Lark Messenger", "Cấu hình knowledge base nội bộ", "Alert tự động khi có bất thường", "Training AI theo đặc thù doanh nghiệp"].map((f, i) => (
+              {["Toàn bộ nền tảng của Gói 2", "Thống nhất bộ chỉ số và mẫu báo cáo quản trị", "Tự động gửi báo cáo theo ngày, tuần hoặc tháng", "Cảnh báo sớm khi KPI bất thường hoặc công việc chậm", "Tra cứu nhanh từ dữ liệu vận hành đã đối soát"].map((f, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-t-secondary" style={{ lineHeight: 1.55 }}>
                   <div className="w-[15px] h-[15px] rounded-full flex items-center justify-center text-[8px] font-bold flex-shrink-0 mt-0.5" style={{ background: "rgba(6,182,212,0.15)", color: "#22D3EE" }}>✓</div>{f}
                 </li>

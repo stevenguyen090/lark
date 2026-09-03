@@ -8,9 +8,9 @@ const beforeItems = [
 ];
 const afterItems = [
   "Công việc và thông tin tập trung trong 1 nền tảng duy nhất",
-  "Dashboard realtime — AI alert khi có bất thường trước khi sếp hỏi",
+  "Báo cáo được tổng hợp tự động — cảnh báo sớm khi chỉ số bất thường",
   "Thông tin có ngay trong ngày, phát hiện và xử lý vấn đề kịp thời",
-  "Nhân sự biết rõ việc mình cần làm — AI trả lời quy trình 24/7",
+  "Nhân sự biết rõ việc cần làm, lãnh đạo giảm thời gian hỏi và chờ báo cáo",
 ];
 
 const BeforeAfterSection = () => {
@@ -38,7 +38,7 @@ const BeforeAfterSection = () => {
             </div>
           </div>
           <div className="p-8" style={{ background: "linear-gradient(160deg, rgba(16,185,129,0.06), #0A1628)" }}>
-            <div className="flex items-center gap-2 font-bold text-base mb-6 text-g-400"><span>✓</span> Sau khi có Lark + AI Agent</div>
+            <div className="flex items-center gap-2 font-bold text-base mb-6 text-g-400"><span>✓</span> Sau khi có hệ thống Lark + trợ lý báo cáo</div>
             <div className="flex flex-col gap-4">
               {afterItems.map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5 text-sm text-t-secondary" style={{ lineHeight: 1.6 }}>

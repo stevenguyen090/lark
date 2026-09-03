@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
 import { useCaseStudyBySlug } from "@/hooks/useCaseStudies";
 import RichTextViewer from "@/components/ui/rich-text-viewer";
 import AttachmentGallery from "@/components/case-study/AttachmentGallery";
+import SolutionBlueprint from "@/components/case-study/SolutionBlueprint";
 import { cn } from "@/lib/utils";
 
 const CTA_LINK =
@@ -49,7 +51,7 @@ const SectionHeader = ({
   <div className="flex items-center gap-3 mb-5">
     <span
       className="inline-flex items-center justify-center w-6 h-6 rounded-md
-                 bg-primary/10 text-primary text-xs font-semibold flex-shrink-0"
+                 bg-blue-500/20 text-blue-200 text-xs font-semibold flex-shrink-0"
     >
       {num}
     </span>
@@ -67,13 +69,24 @@ const SectionDivider = () => (
 const CaseStudyDetail = () => {
   const { slug } = useParams();
   const { data: caseStudy, isLoading, error } = useCaseStudyBySlug(slug);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileBlueprint, setShowMobileBlueprint] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   /* Loading */
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-live="polite">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <span className="sr-only">Đang tải case study…</span>
         </div>
       </Layout>
     );
@@ -126,14 +139,14 @@ const CaseStudyDetail = () => {
       <section className="hero-gradient py-8 md:py-12">
         <div className="container-content">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
-            <Link to="/" className="hover:text-primary transition-colors">
+          <nav className="mb-5 flex min-h-11 items-center gap-1.5 text-xs text-slate-300">
+            <Link to="/" className="inline-flex min-h-11 items-center hover:text-primary transition-colors">
               Trang chủ
             </Link>
             <span>/</span>
             <Link
               to="/case-studies"
-              className="hover:text-primary transition-colors"
+              className="inline-flex min-h-11 items-center hover:text-primary transition-colors"
             >
               Case Study
             </Link>
@@ -184,7 +197,7 @@ const CaseStudyDetail = () => {
               <SectionHeader num={1} title="Bối cảnh doanh nghiệp" />
               <div
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 rounded-xl
-                            bg-secondary/50 border border-border"
+                            bg-[#0e1e35] border border-white/15"
               >
                 {[
                   { label: "Loại hình", value: caseStudy.context.businessType },
@@ -192,7 +205,7 @@ const CaseStudyDetail = () => {
                   { label: "Quy mô", value: caseStudy.context.scale },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-0.5">
                       {label}
                     </p>
                     <p className="text-sm text-foreground">{value}</p>
@@ -200,10 +213,10 @@ const CaseStudyDetail = () => {
                 ))}
                 {/* Situation full width */}
                 <div className="sm:col-span-2 pt-3 border-t border-border/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                    Tình huống
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                    Case Study
                   </p>
-                  <p className="text-sm text-muted-foreground italic leading-relaxed">
+                  <p className="text-base text-slate-300 italic leading-7">
                     {caseStudy.context.situation}
                   </p>
                 </div>
@@ -223,7 +236,7 @@ const CaseStudyDetail = () => {
                   <li
                     key={i}
                     className="flex items-start gap-3 px-4 py-3 rounded-lg
-                               bg-background border border-border"
+                               bg-[#0e1e35] border border-white/15"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0 mt-2" />
                     <span className="text-sm leading-relaxed">{point}</span>
@@ -241,12 +254,12 @@ const CaseStudyDetail = () => {
                 {caseStudy.previousAttempts.map((attempt, i) => (
                   <li
                     key={i}
-                    className="flex items-center gap-3 px-4 py-3 bg-background
-                               text-sm text-muted-foreground"
+                    className="flex items-center gap-3 bg-[#0e1e35] px-4 py-3
+                               text-sm text-slate-300"
                   >
                     <span
                       className="inline-flex items-center justify-center w-4 h-4
-                                   rounded bg-destructive/10 text-destructive text-[9px]
+                                   rounded bg-red-400/15 text-red-200 text-xs
                                    font-bold flex-shrink-0"
                     >
                       ✕
@@ -256,9 +269,8 @@ const CaseStudyDetail = () => {
                 ))}
               </ul>
               <div
-                className="border-l-[3px] border-amber-400 bg-amber-50/50
-                            rounded-r-lg px-4 py-3 text-sm leading-relaxed
-                            text-foreground dark:bg-amber-900/10"
+                className="rounded-r-lg border-l-[3px] border-amber-300 bg-amber-300/[0.08]
+                            px-4 py-3 text-sm leading-6 text-slate-200"
               >
                 <RenderContent content={caseStudy.previousAttemptsResult} />
               </div>
@@ -273,16 +285,16 @@ const CaseStudyDetail = () => {
                 {caseStudy.rootCauses.map((cause, i) => (
                   <div
                     key={i}
-                    className="rounded-xl border border-border overflow-hidden bg-card"
+                    className="overflow-hidden rounded-xl border border-white/15 bg-[#0e1e35]"
                   >
                     {/* Header */}
                     <div
                       className="flex items-center gap-3 px-4 py-3
-                                  bg-secondary/60 border-b border-border"
+                                  bg-[#132540] border-b border-white/15"
                     >
                       <span
                         className="inline-flex items-center justify-center w-5 h-5
-                                     rounded bg-primary/10 text-primary text-[10px]
+                                     rounded bg-blue-500/20 text-blue-200 text-xs
                                      font-semibold flex-shrink-0"
                       >
                         {i + 1}
@@ -291,17 +303,16 @@ const CaseStudyDetail = () => {
                     </div>
                     {/* Body */}
                     <div className="px-4 py-3 space-y-3">
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-slate-300 leading-6">
                         {cause.description}
                       </p>
                       <div
-                        className="flex items-start gap-2 text-xs px-3 py-2.5
-                                    rounded-md bg-secondary"
+                        className="flex items-start gap-2 rounded-md border border-white/10 bg-[#07111f] px-3 py-2.5 text-sm"
                       >
-                        <span className="font-semibold text-muted-foreground flex-shrink-0 mt-0.5">
+                        <span className="font-semibold text-slate-100 flex-shrink-0 mt-0.5">
                           Hệ quả:
                         </span>
-                        <span className="text-muted-foreground leading-relaxed">
+                        <span className="text-slate-300 leading-6">
                           {cause.consequence}
                         </span>
                       </div>
@@ -321,16 +332,41 @@ const CaseStudyDetail = () => {
               {caseStudy.solution.description ? (
                 <RenderContent
                   content={caseStudy.solution.description}
-                  className="text-sm text-muted-foreground mb-5"
+                  className="mb-5 text-base leading-7 text-slate-300"
                 />
               ) : (
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                <p className="mb-5 text-base leading-7 text-slate-300">
                   {caseStudy.solution.approach}
                 </p>
               )}
 
+              {caseStudy.solution.blueprint && isMobile && (
+                <div className="mb-8 rounded-2xl border border-blue-400/25 bg-blue-500/[0.06] p-4">
+                  <h3 className="text-base font-semibold">Bản thiết kế giải pháp</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">Nắm luồng vận hành qua 5 bước; mở rộng khi bạn muốn xem hệ thống sử dụng những module nào.</p>
+                  <div className="mt-4 rounded-xl border border-white/15 bg-[#07111f] p-4">
+                    <ol className="space-y-3">
+                      {caseStudy.solution.blueprint.mobileSteps.map((step, index) => (
+                        <li key={step} className="flex items-center gap-3 text-sm text-slate-200">
+                          <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 font-semibold text-blue-200">{index + 1}</span>
+                          {step}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  <button type="button" onClick={() => setShowMobileBlueprint((value) => !value)} aria-expanded={showMobileBlueprint} className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-blue-300/40 px-5 text-sm font-semibold text-blue-200 hover:bg-blue-400/10">
+                    {showMobileBlueprint ? "Thu gọn chi tiết kỹ thuật" : "Xem chi tiết kỹ thuật"}
+                  </button>
+                  {showMobileBlueprint && <div className="mt-4"><SolutionBlueprint blueprint={caseStudy.solution.blueprint} hideMobileFlow /></div>}
+                </div>
+              )}
+
+              {caseStudy.solution.blueprint && !isMobile && (
+                <SolutionBlueprint blueprint={caseStudy.solution.blueprint} />
+              )}
+
               {/* Timeline steps */}
-              <div className="relative space-y-0 mb-8">
+              {!caseStudy.solution.blueprint && <div className="relative space-y-0 mb-8">
                 {caseStudy.solution.steps.map((step, i) => (
                   <div key={i} className="flex gap-4 pb-6 last:pb-0 relative">
                     {/* Connector line */}
@@ -341,7 +377,7 @@ const CaseStudyDetail = () => {
                     <div
                       className="relative z-10 flex-shrink-0 w-6 h-6 rounded-full
                                   border-2 border-primary/40 bg-primary/10 flex items-center
-                                  justify-center text-[11px] font-semibold text-primary"
+                                  justify-center text-xs font-semibold text-blue-200"
                     >
                       {i + 1}
                     </div>
@@ -351,33 +387,33 @@ const CaseStudyDetail = () => {
                       {isRichText(step.description) ? (
                         <RichTextViewer
                           content={step.description}
-                          className="text-sm text-muted-foreground"
+                          className="text-sm text-slate-300"
                         />
                       ) : (
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-slate-300 leading-6">
                           {step.description}
                         </p>
                       )}
                     </div>
                   </div>
                 ))}
-              </div>
+              </div>}
 
               {/* Before / After */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                <div className="rounded-xl p-4 bg-secondary border border-border">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                <div className="rounded-xl border border-red-300/20 bg-red-400/[0.06] p-4">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-red-200">
                     Trước đây
                   </p>
-                  <p className="text-sm leading-relaxed">
+                  <p className="text-sm leading-6 text-slate-200">
                     {caseStudy.solution.dailyChanges.before}
                   </p>
                 </div>
-                <div className="rounded-xl p-4 bg-emerald-50/60 border border-emerald-200 dark:bg-emerald-900/10 dark:border-emerald-800">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-2">
+                <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/[0.08] p-4">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-200">
                     Sau triển khai
                   </p>
-                  <p className="text-sm leading-relaxed">
+                  <p className="text-sm leading-6 text-slate-100">
                     {caseStudy.solution.dailyChanges.after}
                   </p>
                 </div>
@@ -386,8 +422,8 @@ const CaseStudyDetail = () => {
               {/* Attachments */}
               {caseStudy.solution.attachments?.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold mb-3">
-                    Tài liệu đính kèm
+                  <h3 className="mb-3 text-base font-semibold">
+                    Giao diện giải pháp đã triển khai
                   </h3>
                   <AttachmentGallery
                     attachments={caseStudy.solution.attachments}
@@ -398,33 +434,19 @@ const CaseStudyDetail = () => {
 
             <SectionDivider />
 
-            {/* ── 6. Results ── */}
-            <section>
+            {/* ── Results after solution ── */}
+            <section aria-labelledby="results-heading">
               <SectionHeader num={6} title="Kết quả đo được" />
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                {caseStudy.results.map((result, i) => (
-                  <div
-                    key={i}
-                    className="rounded-xl border border-border bg-secondary/50
-                               px-4 py-4 text-center"
-                  >
-                    <div className="text-xl md:text-2xl font-semibold text-primary mb-1 leading-tight">
-                      {result.value}
-                    </div>
-                    <div className="text-xs font-medium mb-1">{result.metric}</div>
-                    <div className="text-xs text-muted-foreground leading-relaxed">
-                      {result.description}
-                    </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {caseStudy.results.map((result) => (
+                  <div key={result.metric} className="rounded-xl border border-blue-400/20 bg-[#0e1e35] p-5">
+                    <div className="text-xl font-semibold leading-tight text-blue-300 md:text-2xl">{result.value}</div>
+                    <div className="mt-2 text-sm font-semibold text-slate-100">{result.metric}</div>
+                    <div className="mt-1 text-sm leading-6 text-slate-300">{result.description}</div>
                   </div>
                 ))}
               </div>
-
-              {/* Key insight */}
-              <div
-                className="rounded-xl border border-primary/20 bg-primary/5
-                            px-5 py-4 text-sm leading-relaxed text-foreground"
-              >
+              <div className="mt-4 rounded-xl border border-blue-400/20 bg-blue-400/[0.06] px-5 py-4 text-sm leading-6 text-slate-200">
                 {caseStudy.keyInsight}
               </div>
             </section>
@@ -442,7 +464,7 @@ const CaseStudyDetail = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span className="text-sm font-medium text-emerald-700">
+                    <span className="text-sm font-medium text-emerald-300">
                       Phù hợp nếu
                     </span>
                   </div>
@@ -452,7 +474,7 @@ const CaseStudyDetail = () => {
                         <span className="text-emerald-500 mt-0.5 flex-shrink-0">
                           ✓
                         </span>
-                        <span className="text-muted-foreground leading-relaxed">
+                        <span className="text-slate-300 leading-6">
                           {item}
                         </span>
                       </li>
@@ -464,7 +486,7 @@ const CaseStudyDetail = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <XCircle className="w-4 h-4 text-red-500" />
-                    <span className="text-sm font-medium text-red-600">
+                    <span className="text-sm font-medium text-red-300">
                       Không phù hợp nếu
                     </span>
                   </div>
@@ -474,7 +496,7 @@ const CaseStudyDetail = () => {
                         <span className="text-red-400 mt-0.5 flex-shrink-0">
                           ✗
                         </span>
-                        <span className="text-muted-foreground leading-relaxed">
+                        <span className="text-slate-300 leading-6">
                           {item}
                         </span>
                       </li>
@@ -491,38 +513,38 @@ const CaseStudyDetail = () => {
               <h2 className="text-xl md:text-2xl font-semibold mb-2 leading-tight">
                 {caseStudy.ctaQuestion}
               </h2>
-              <p className="text-sm text-muted-foreground mb-7 max-w-md mx-auto leading-relaxed">
+              <p className="mx-auto mb-7 max-w-md text-sm leading-6 text-slate-300">
                 Bạn không cần quyết định ngay. Hãy bắt đầu bằng một buổi đánh
                 giá nhanh cách vận hành hiện tại.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href={CTA_LINK} target="_blank" rel="noopener noreferrer">
-                  <Button variant="hero" size="lg">
+                <Button asChild variant="hero" size="lg">
+                  <a href={CTA_LINK} target="_blank" rel="noopener noreferrer">
                     <CalendarDays className="w-4 h-4" />
                     Đặt lịch trao đổi
-                  </Button>
-                </a>
-                <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer">
-                  <Button
+                  </a>
+                </Button>
+                <Button asChild
                     variant="outline"
                     size="lg"
-                    className="border-primary/30 text-primary hover:bg-primary/5"
+                    className="border-blue-300/40 text-blue-200 hover:bg-blue-400/10"
                   >
+                  <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-4 h-4" />
                     Nhắn Zalo để trao đổi nhanh
-                  </Button>
-                </a>
+                  </a>
+                </Button>
               </div>
             </section>
 
             {/* ── Navigation ── */}
             <div className="flex items-center justify-between mt-10 pt-8 border-t border-border">
-              <Link to="/case-studies">
-                <Button variant="ghost" size="sm">
+              <Button asChild variant="ghost" size="default" className="min-h-11">
+                <Link to="/case-studies">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Xem case study khác
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
           </div>

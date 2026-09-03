@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +7,6 @@
 /* LARK CONSULT DESIGN SYSTEM v3.0
    Dark theme · Inter font · Minimal dark aesthetic
 */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @layer base {
   :root {
@@ -78,7 +78,7 @@
     /* Text colors */
     --text-primary: 213 100% 97%;
     --text-secondary: 215 20% 65%;
-    --text-tertiary: 213 20% 30%;
+    --text-tertiary: 215 20% 65%;
 
     /* Surfaces */
     --surface-1: var(--neutral-900);
@@ -167,6 +167,10 @@
     padding: 0 24px;
   }
 
+  .brand-logo {
+    filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.08));
+  }
+
   /* Sections */
   .section-padding {
     padding: 96px 0;
@@ -175,9 +179,37 @@
     padding: 64px 0;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     .section-padding {
       padding: 64px 0;
+    }
+
+    .home-hero {
+      min-height: auto !important;
+      padding: 104px 0 64px !important;
+    }
+
+    .home-hero-container {
+      padding: 0 20px !important;
+    }
+
+    .home-hero-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 48px !important;
+    }
+
+    .home-hero-visual {
+      display: none !important;
+      padding-right: 8px !important;
+      padding-bottom: 24px !important;
+    }
+
+    .home-hero-mobile-summary {
+      border: 1px solid hsl(var(--border-default));
+      border-radius: 16px;
+      background: hsl(var(--surface-1));
+      padding: 16px;
+      box-shadow: var(--glow-blue);
     }
   }
 
@@ -384,6 +416,17 @@
     0%, 60%, 100% { transform: translateY(0); background: #4E6380; }
     30% { transform: translateY(-7px); background: #22D3EE; }
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
 }
 
 @layer utilities {

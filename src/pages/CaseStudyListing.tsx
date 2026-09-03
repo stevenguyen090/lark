@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,9 @@ const FilterPill = ({
 }) => (
   <button
     onClick={onClick}
+    aria-pressed={active}
     className={`
-      px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-200
+      min-h-11 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200
       ${
         active
           ? "bg-primary text-primary-foreground border-primary shadow-sm"
@@ -150,6 +151,8 @@ const CaseStudyListing = () => {
   const [selectedScales, setSelectedScales] = useState<string[]>([]);
   const [selectedProblems, setSelectedProblems] = useState<string[]>([]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(8);
 
   const {
     data: caseStudies = [],
@@ -171,6 +174,7 @@ const CaseStudyListing = () => {
     );
 
   const clearFilters = () => {
+    setSearchQuery("");
     setSelectedIndustries([]);
     setSelectedScales([]);
     setSelectedProblems([]);
@@ -178,20 +182,34 @@ const CaseStudyListing = () => {
   };
 
   const hasFilters =
+    searchQuery.trim().length > 0 ||
     selectedIndustries.length > 0 ||
     selectedScales.length > 0 ||
     selectedProblems.length > 0;
+  const filterCount = selectedIndustries.length + selectedScales.length + selectedProblems.length;
 
   const filtered = useMemo(
     () =>
       caseStudies.filter((cs) => {
+        const normalizedQuery = searchQuery.trim().toLocaleLowerCase("vi");
+        if (normalizedQuery) {
+          const searchable = [cs.title, cs.summary, cs.industryLabel, cs.scaleLabel, cs.mainProblemLabel]
+            .filter(Boolean)
+            .join(" ")
+            .toLocaleLowerCase("vi");
+          if (!searchable.includes(normalizedQuery)) return false;
+        }
         if (selectedIndustries.length && !selectedIndustries.includes(cs.industry)) return false;
         if (selectedScales.length && !selectedScales.includes(cs.scale)) return false;
         if (selectedProblems.length && !selectedProblems.includes(cs.mainProblem)) return false;
         return true;
       }),
-    [caseStudies, selectedIndustries, selectedScales, selectedProblems]
+    [caseStudies, searchQuery, selectedIndustries, selectedScales, selectedProblems]
   );
+
+  useEffect(() => {
+    setVisibleCount(8);
+  }, [searchQuery, selectedIndustries, selectedScales, selectedProblems]);
 
   /* ── Filter panel (shared between desktop sidebar & mobile drawer) ── */
   const FilterPanel = () => (
@@ -205,7 +223,7 @@ const CaseStudyListing = () => {
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="text-xs text-primary hover:underline font-medium"
+            className="inline-flex min-h-11 items-center px-2 text-xs text-primary hover:underline font-medium"
           >
             Xoá tất cả
           </button>
@@ -275,7 +293,7 @@ const CaseStudyListing = () => {
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold
                              text-primary uppercase tracking-widest mb-4">
               <span className="w-4 h-px bg-primary" />
-              Case Studies
+              Case Study
             </span>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4">
@@ -284,7 +302,7 @@ const CaseStudyListing = () => {
             </h1>
 
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
-              Tìm case study theo ngành, quy mô và vấn đề — để thấy mình trong
+              Tìm Case Study theo ngành, quy mô và vấn đề — để thấy mình trong
               đó trước khi đặt câu hỏi.
             </p>
           </div>
@@ -299,15 +317,17 @@ const CaseStudyListing = () => {
           <div className="lg:hidden mb-6 flex items-center gap-3">
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border
+              aria-expanded={mobileFilterOpen}
+              aria-controls="mobile-case-filters"
+              className="flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-xl border border-border
                          bg-background text-sm font-medium hover:border-primary/50 transition-colors"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Bộ lọc
-              {hasFilters && (
+              {filterCount > 0 && (
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-full
                                  bg-primary text-primary-foreground text-xs font-bold">
-                  {selectedIndustries.length + selectedScales.length + selectedProblems.length}
+                  {filterCount}
                 </span>
               )}
             </button>
@@ -315,16 +335,16 @@ const CaseStudyListing = () => {
             {hasFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                className="flex min-h-11 items-center gap-1.5 px-2 text-sm text-muted-foreground hover:text-foreground"
               >
-                <X className="w-3.5 h-3.5" /> Xoá bộ lọc
+                <X className="w-3.5 h-3.5" /> Xoá tìm kiếm và bộ lọc
               </button>
             )}
           </div>
 
           {/* Mobile: collapsible filter drawer */}
           {mobileFilterOpen && (
-            <div className="lg:hidden mb-8 p-5 rounded-2xl border border-border bg-card shadow-sm">
+            <div id="mobile-case-filters" className="lg:hidden mb-8 p-5 rounded-2xl border border-border bg-card shadow-sm">
               <FilterPanel />
             </div>
           )}
@@ -340,11 +360,22 @@ const CaseStudyListing = () => {
 
             {/* ── Results ── */}
             <div>
+              <label className="relative mb-6 block max-w-xl">
+                <span className="sr-only">Tìm Case Study</span>
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Tìm theo vấn đề, ngành hoặc quy mô…"
+                  className="min-h-12 w-full rounded-xl border border-border bg-card pl-12 pr-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </label>
               {/* Active filter chips + count row */}
               <div className="flex flex-wrap items-center gap-2 mb-6">
                 <p className="text-sm text-muted-foreground mr-1">
                   <span className="font-semibold text-foreground">{filtered.length}</span>{" "}
-                  case study
+                  Case Study
                 </p>
 
                 {/* Active chips */}
@@ -368,7 +399,7 @@ const CaseStudyListing = () => {
                   <button
                     key={v}
                     onClick={clear}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs
+                    className="inline-flex min-h-11 items-center gap-1.5 px-3 py-2 rounded-full text-xs
                                font-medium bg-primary/10 text-primary border border-primary/20
                                hover:bg-primary/20 transition-colors"
                   >
@@ -400,7 +431,7 @@ const CaseStudyListing = () => {
                 </div>
               ) : filtered.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
-                  {filtered.map((cs) => (
+                  {filtered.slice(0, visibleCount).map((cs) => (
                     <CaseStudyCard key={cs.id} caseStudy={cs} />
                   ))}
                 </div>
@@ -419,7 +450,14 @@ const CaseStudyListing = () => {
                   </p>
                   <Button variant="outline" onClick={clearFilters} size="sm">
                     <X className="w-4 h-4 mr-2" />
-                    Xoá bộ lọc
+                    Xoá tìm kiếm và bộ lọc
+                  </Button>
+                </div>
+              )}
+              {!isLoading && !isError && filtered.length > visibleCount && (
+                <div className="mt-8 flex justify-center">
+                  <Button variant="outline" className="min-h-11" onClick={() => setVisibleCount((count) => count + 8)}>
+                    Xem thêm {Math.min(8, filtered.length - visibleCount)} Case Study
                   </Button>
                 </div>
               )}

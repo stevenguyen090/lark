@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // Primary CTA - Lark style pill button
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-sm hover:shadow-md",
+        default: "bg-b-700 text-white hover:bg-b-600 rounded-full shadow-sm hover:shadow-md",
         // Secondary button - white with blue border
         secondary: "bg-background text-primary border-2 border-primary hover:bg-primary/5 rounded-full",
         // Outline - subtle border
@@ -22,7 +22,7 @@ const buttonVariants = cva(
         // Destructive
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full",
         // Hero CTA - larger, more prominent
-        hero: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-md hover:shadow-lg font-semibold",
+        hero: "bg-b-700 text-white hover:bg-b-600 rounded-full shadow-md hover:shadow-lg font-semibold",
         // Hero secondary
         heroSecondary: "bg-background text-primary border-2 border-primary hover:bg-primary/5 rounded-full font-semibold",
       },

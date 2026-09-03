@@ -18,7 +18,7 @@ const stats = [
   { value: "30+", label: "Doanh nghiệp SME" },
   { value: "4.67/5", label: "Mức độ hài lòng" },
   { value: "120+", label: "Quy trình triển khai" },
-  { value: "40%", label: "Giảm thời gian vận hành" },
+  { value: "28–47%", label: "Giảm thời gian quản lý" },
 ];
 
 const SocialProofSection = () => {
@@ -50,7 +50,7 @@ const SocialProofSection = () => {
         <div className="text-center mb-10">
           <div className="eyebrow justify-center" style={{ display: "inline-flex" }}>
             <span className="eyebrow-pip" />
-            TRUSTED BY
+            Được doanh nghiệp tin tưởng
           </div>
           <h2
             className="font-display"
@@ -66,7 +66,7 @@ const SocialProofSection = () => {
             Được tin tưởng bởi <span className="kw">30+ doanh nghiệp SME</span> đang tăng trưởng
           </h2>
           <p className="body-lg" style={{ maxWidth: 620, margin: "0 auto" }}>
-            Từ thương hiệu thể hình, F&B đến hometel — các founder chọn Lark Consult để chuẩn hoá vận hành và kích hoạt AI.
+            Từ thể hình, F&B đến lưu trú — chủ doanh nghiệp chọn Lark Consult để chuẩn hoá vận hành và nhận báo cáo đúng lúc.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ const SocialProofSection = () => {
               4.67/5
             </span>
             <span style={{ fontSize: 14, color: "hsl(var(--text-secondary))" }}>
-              từ founder & ops lead
+              từ chủ doanh nghiệp và quản lý vận hành
             </span>
           </div>
           <div style={{ width: 1, height: 20, background: "hsl(var(--border-default))" }} />

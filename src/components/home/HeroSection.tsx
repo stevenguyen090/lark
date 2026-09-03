@@ -53,13 +53,13 @@ const HERO_CONV = [
   {
     delay: 3200,
     role: "ai" as const,
-    html: `<div style="display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;background:rgba(37,99,235,0.15);color:#3B82F6;padding:1px 5px;border-radius:3px;margin-bottom:4px">✦ AI Agent · Tổng hợp realtime</div>
+    html: `<div style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;background:rgba(37,99,235,0.15);color:#60A5FA;padding:2px 6px;border-radius:3px;margin-bottom:4px">✦ Trợ lý AI · Báo cáo tức thời</div>
 <strong>Tuần 2/T3 — Báo cáo tóm tắt:</strong><br/><br/>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:6px 0 4px">
   <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#3B82F6;line-height:1">284tr</div><div style="font-size:8px;color:#4E6380;margin-top:1px">Doanh thu tuần</div><div style="font-size:8px;color:#34D399;margin-top:1px">↑ 18% vs T2</div></div>
-  <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#34D399;line-height:1">94%</div><div style="font-size:8px;color:#4E6380;margin-top:1px">Task hoàn thành</div><div style="font-size:8px;color:#34D399;margin-top:1px">↑ 8pp</div></div>
+  <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#34D399;line-height:1">94%</div><div style="font-size:10px;color:#94A3B8;margin-top:1px">Việc hoàn thành</div><div style="font-size:10px;color:#34D399;margin-top:1px">↑ 8 điểm</div></div>
   <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#FBBF24;line-height:1">12/15</div><div style="font-size:8px;color:#4E6380;margin-top:1px">Deal active</div><div style="font-size:8px;color:#FBBF24;margin-top:1px">3 cần follow</div></div>
-  <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#F87171;line-height:1">1</div><div style="font-size:8px;color:#4E6380;margin-top:1px">Task trễ hạn</div><div style="font-size:8px;color:#F87171;margin-top:1px">Cần xử lý</div></div>
+  <div style="background:#0E1E35;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 7px"><div style="font-size:13px;font-weight:700;color:#F87171;line-height:1">1</div><div style="font-size:10px;color:#94A3B8;margin-top:1px">Việc trễ hạn</div><div style="font-size:10px;color:#F87171;margin-top:1px">Cần xử lý</div></div>
 </div>
 ⚠️ Deal <strong>VIFIT</strong> (45tr) — 5 ngày chưa có update từ Huy.`,
   },
@@ -195,7 +195,7 @@ const HeroSection = () => {
   /* ── metrics data ── */
   const METRICS = [
     { label: "Doanh thu tháng", val: "1.24", unit: "tỷ", delta: "↑ 18.4% so T2", dColor: "#34D399", bar: "linear-gradient(90deg,#2563EB,#22D3EE)" },
-    { label: "Task hoàn thành", val: "94", unit: "%", delta: "↑ 8pp vs tuần trước", dColor: "#34D399", bar: "linear-gradient(90deg,#10B981,#34D399)" },
+    { label: "Việc hoàn thành", val: "94", unit: "%", delta: "↑ 8 điểm so tuần trước", dColor: "#34D399", bar: "linear-gradient(90deg,#10B981,#34D399)" },
     { label: "Deal đang chạy", val: "12", unit: "/15", delta: "3 cần follow-up", dColor: "#FBBF24", bar: "linear-gradient(90deg,#F59E0B,#FBBF24)" },
   ];
 
@@ -258,15 +258,15 @@ const HeroSection = () => {
   };
 
   return (
-    <section style={S.section}>
+    <section className="home-hero" style={S.section}>
       {/* Orbs + grid */}
       <div style={S.orb1} />
       <div style={S.orb2} />
       <div style={S.orb3} />
       <div style={S.grid} />
 
-      <div style={S.container}>
-        <div style={S.twoCol}>
+      <div className="home-hero-container" style={S.container}>
+        <div className="home-hero-grid" style={S.twoCol}>
 
           {/* ════ LEFT COLUMN ════ */}
           <div>
@@ -318,7 +318,7 @@ const HeroSection = () => {
               marginBottom: 32,
               animation: "fadeSlideUp 0.7s ease 0.25s both",
             }}>
-              Lark Consult xây hệ thống vận hành đủ chuẩn trên Lark — nền tảng để AI Agent giúp các sếp nắm tình hình qua 1 câu hỏi.
+              Lark Consult xây hệ thống vận hành trên Lark để chủ doanh nghiệp nắm số liệu, điểm bất thường và việc cần xử lý mà không phải chờ gom báo cáo.
             </p>
 
             {/* Proof row */}
@@ -340,9 +340,9 @@ const HeroSection = () => {
                 <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>4.67</strong> hài lòng
               </div>
               <div style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.14)" }} />
-              {/* 30–50% */}
+              {/* 28–47% */}
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: "#8892A4", fontWeight: 500 }}>
-                <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>30–50%</strong> giảm thời gian quản lý
+                <strong style={{ color: "#E8EAF0", fontWeight: 700 }}>28–47%</strong> giảm thời gian quản lý
               </div>
             </div>
 
@@ -384,13 +384,40 @@ const HeroSection = () => {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.25)"; (e.currentTarget as HTMLElement).style.color = "#E8EAF0"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)"; (e.currentTarget as HTMLElement).style.color = "#8892A4"; }}
               >
-                Xem AI Agent →
+                Xem trợ lý AI →
               </a>
             </div>
           </div>
 
+          <div className="home-hero-mobile-summary md:hidden" aria-label="Minh hoạ kết quả hệ thống vận hành">
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <div className="text-sm font-semibold text-t-primary">Báo cáo vận hành hôm nay</div>
+                <div className="mt-1 text-sm text-t-secondary">Dữ liệu đã cập nhật · 09:15</div>
+              </div>
+              <span className="rounded-full bg-g-400/10 px-3 py-1 text-xs font-semibold text-g-400">Đang hoạt động</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                ["1,24 tỷ", "Doanh thu tháng", "+18,4%"],
+                ["94%", "Việc hoàn thành", "+8 điểm"],
+                ["3", "Việc cần theo dõi", "Cần xử lý"],
+                ["1", "Cảnh báo mới", "Vừa phát hiện"],
+              ].map(([value, label, note]) => (
+                <div key={label} className="rounded-xl border border-white/10 bg-n-800 p-3">
+                  <div className="text-xl font-bold text-t-primary">{value}</div>
+                  <div className="mt-1 text-sm text-t-secondary">{label}</div>
+                  <div className="mt-1 text-xs font-semibold text-c-400">{note}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 rounded-xl border border-a-400/20 bg-a-400/5 p-3 text-sm leading-6 text-t-secondary">
+              <strong className="text-a-400">Cần chú ý:</strong> Deal VIFIT đã 5 ngày chưa cập nhật.
+            </div>
+          </div>
+
           {/* ════ RIGHT COLUMN — Dashboard ════ */}
-          <div style={{ position: "relative", paddingRight: 20, paddingBottom: 20 }}>
+          <div className="home-hero-visual" style={{ position: "relative", paddingRight: 20, paddingBottom: 20 }}>
             {/* Glow behind widget */}
             <div style={{
               position: "absolute", inset: -40, pointerEvents: "none", zIndex: 0,
@@ -413,7 +440,7 @@ const HeroSection = () => {
                 </div>
                 <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 7, fontSize: 11, color: "#4E6380", fontWeight: 500 }}>
                   <div style={{ width: 17, height: 17, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "white", background: "linear-gradient(135deg,#2563EB,#06B6D4)" }}>✦</div>
-                  Lark — Dashboard vận hành · Q1/2025
+                  Lark — Dashboard vận hành · Q3/2026
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10, fontWeight: 600, color: "#34D399" }}>
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 6px #34D399", animation: "blink 2s ease-in-out infinite", display: "inline-block" }} />
@@ -494,7 +521,7 @@ const HeroSection = () => {
                   </div>
                   {/* Task list */}
                   <div style={{ borderRadius: 10, padding: "10px 12px", background: "#0E1E35", border: "1px solid rgba(255,255,255,0.06)" }}>
-                    <div style={{ fontSize: 9, fontWeight: 600, color: "#8892A4", marginBottom: 8 }}>Task hôm nay</div>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: "#94A3B8", marginBottom: 8 }}>Công việc hôm nay</div>
                     {TASKS.map((t, i) => (
                       <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 0", borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
                         <div style={{ width: 6, height: 6, borderRadius: "50%", background: t.c, flexShrink: 0 }} />
@@ -521,8 +548,8 @@ const HeroSection = () => {
             }}>
               <span style={{ fontSize: 12 }}>⚠️</span>
               <div style={{ lineHeight: 1.4 }}>
-                Deal VIFIT — 5 ngày chưa update
-                <span style={{ display: "block", color: "#4E6380", fontWeight: 400, fontSize: 8 }}>AI Agent phát hiện · vừa xong</span>
+                Deal VIFIT — 5 ngày chưa cập nhật
+                <span style={{ display: "block", color: "#94A3B8", fontWeight: 400, fontSize: 10 }}>Trợ lý báo cáo phát hiện · vừa xong</span>
               </div>
             </div>
 
@@ -539,10 +566,10 @@ const HeroSection = () => {
               <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "#132540", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div style={{ width: 22, height: 22, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "white", flexShrink: 0, background: "linear-gradient(135deg,#2563EB,#06B6D4)", boxShadow: "0 0 10px rgba(37,99,235,0.4)" }}>✦</div>
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: "#E8EAF0" }}>Lark AI Agent</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#E8EAF0" }}>Trợ lý báo cáo Lark</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 8, color: "#34D399" }}>
                     <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 4px #34D399", animation: "blink 2s ease-in-out infinite", display: "inline-block" }} />
-                    Đang kết nối · realtime
+                    Đang kết nối · cập nhật tức thời
                   </div>
                 </div>
               </div>

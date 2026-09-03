@@ -55,7 +55,7 @@ const INDUSTRIES = [
   { value: null,             label: "Tất cả" },
   { value: "service",        label: "Dịch vụ" },
   { value: "retail",         label: "Bán lẻ" },
-  { value: "fitness",        label: "Fitness" },
+  { value: "fitness",        label: "Thể hình" },
   { value: "manufacturing",  label: "Sản xuất" },
 ];
 
@@ -64,7 +64,7 @@ const INDUSTRIES = [
 ════════════════════════════════════════════ */
 const CaseStudyPreview = () => {
   const [selected, setSelected] = useState<string | null>(null);
-  const { data: allCases, isLoading } = usePublishedCaseStudies(
+  const { data: allCases, isLoading, isError, refetch } = usePublishedCaseStudies(
     selected ? { industry: selected } : undefined
   );
 
@@ -155,7 +155,8 @@ const CaseStudyPreview = () => {
   };
 
   const filterBtn = (active: boolean) => ({
-    padding: "7px 16px",
+    minHeight: 44,
+    padding: "9px 16px",
     borderRadius: 999,
     fontSize: 13,
     fontWeight: 600,
@@ -184,7 +185,7 @@ const CaseStudyPreview = () => {
         {/* Eyebrow */}
         <div style={S.eyebrow}>
           <div style={S.eyebrowPip} />
-          Case Studies
+          Case Study
         </div>
 
         {/* Heading */}
@@ -198,6 +199,7 @@ const CaseStudyPreview = () => {
             <button
               key={ind.label}
               onClick={() => setSelected(ind.value)}
+              aria-pressed={selected === ind.value}
               style={filterBtn(selected === ind.value)}
               onMouseEnter={e => {
                 if (selected !== ind.value) {
@@ -242,6 +244,11 @@ const CaseStudyPreview = () => {
               </div>
             ))}
           </div>
+        ) : isError ? (
+          <div style={{ textAlign: "center", padding: "48px 20px", borderRadius: 16, background: "#0E1E35", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <p style={{ color: "#94A3B8", fontSize: 15, marginBottom: 16 }}>Chưa tải được Case Study.</p>
+            <button type="button" onClick={() => refetch()} className="btn-ghost min-h-11">Thử lại</button>
+          </div>
         ) : cases.length === 0 ? (
           <div style={{ textAlign: "center", padding: "48px 0", color: "#4E6380", fontSize: 15 }}>
             Chưa có case study cho danh mục này.
@@ -258,6 +265,7 @@ const CaseStudyPreview = () => {
             {cases.map((cs, i) => {
               const tc = tagColor(cs.industry || "");
               const result = getKeyResult(cs);
+              const thumbnail = getThumbnail(cs);
               const delays = [0.35, 0.45, 0.55];
 
               return (
@@ -290,10 +298,21 @@ const CaseStudyPreview = () => {
                     el.style.transform = "translateY(0)";
                   }}
                 >
+                  {thumbnail && (
+                    <div style={{ margin: "-24px -24px 20px", aspectRatio: "16 / 9", overflow: "hidden", borderRadius: "16px 16px 0 0", background: "#0A1628" }}>
+                      <img
+                        src={thumbnail}
+                        alt={`Giao diện giải pháp của ${cs.title}`}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      />
+                    </div>
+                  )}
                   {/* Tags */}
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
                     <span style={{
-                      fontSize: 11, fontWeight: 700,
+                      fontSize: 12, fontWeight: 700,
                       padding: "3px 8px", borderRadius: 4,
                       background: tc.bg, color: tc.color,
                     }}>
@@ -301,10 +320,10 @@ const CaseStudyPreview = () => {
                     </span>
                     {cs.scaleLabel && (
                       <span style={{
-                        fontSize: 11, fontWeight: 700,
+                        fontSize: 12, fontWeight: 700,
                         padding: "3px 8px", borderRadius: 4,
                         background: "rgba(255,255,255,0.05)",
-                        color: "#4E6380",
+                        color: "#94A3B8",
                       }}>
                         {cs.scaleLabel}
                       </span>
@@ -314,8 +333,8 @@ const CaseStudyPreview = () => {
                   {/* Problem label */}
                   {cs.mainProblemLabel && (
                     <div style={{
-                      fontSize: 11, fontWeight: 600,
-                      color: "#4E6380", marginBottom: 8,
+                      fontSize: 12, fontWeight: 600,
+                      color: "#94A3B8", marginBottom: 8,
                     }}>
                       Vấn đề: {cs.mainProblemLabel}
                     </div>
@@ -354,6 +373,12 @@ const CaseStudyPreview = () => {
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {!isLoading && !isError && cases.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <Link to="/case-studies" className="btn-ghost min-h-11">Xem tất cả Case Study →</Link>
           </div>
         )}
 

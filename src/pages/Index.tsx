@@ -4,7 +4,6 @@ import SocialProofSection from "@/components/home/SocialProofSection";
 import WhoIsThisForSection from "@/components/home/WhoIsThisForSection";
 import BeforeAfterSection from "@/components/home/BeforeAfterSection";
 import SolutionSection from "@/components/home/SolutionSection";
-import AIAgentSection from "@/components/home/AIAgentSection";
 import PricingSection from "@/components/home/PricingSection";
 import CaseStudyPreview from "@/components/home/CaseStudyPreview";
 import ReviewSection from "@/components/home/ReviewSection";
@@ -17,9 +16,8 @@ const Index = () => {
       <HeroSection />
       <SocialProofSection />
       <WhoIsThisForSection />
-      <BeforeAfterSection />
       <SolutionSection />
-      <AIAgentSection />
+      <BeforeAfterSection />
       <PricingSection />
       <CaseStudyPreview />
       <ReviewSection />

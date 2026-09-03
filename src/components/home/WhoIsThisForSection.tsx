@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const personas = [
   { num: "01", title: "Bán được nhưng không biết thực sự đang lãi hay lỗ ở đâu", desc: "Doanh thu trông ổn, nhưng margin thực, chi phí ẩn, deal nào đang bù lỗ cho deal nào — không có con số rõ ràng để quyết định." },
-  { num: "02", title: "Giao việc xong rồi... không biết đang chạy đến đâu", desc: "Task giao qua Zalo, deadline trong đầu mỗi người. Muốn biết tiến độ thì phải đi hỏi — mà hỏi xong cũng chưa chắc biết thật sự đang như thế nào." },
+  { num: "02", title: "Giao việc xong rồi... không biết đang chạy đến đâu", desc: "Công việc giao qua Zalo, thời hạn nằm trong đầu mỗi người. Muốn biết tiến độ thì phải đi hỏi — mà hỏi xong cũng chưa chắc biết thật sự đang như thế nào." },
   { num: "03", title: "Sales hứa khách, Ops không biết — phối hợp qua Zalo và trí nhớ", desc: "Không có luồng thông tin chung giữa các phòng. Mỗi bộ phận tự chạy riêng, sự cố xảy ra rồi mới phát hiện ra chỗ đứt gãy." },
   { num: "04", title: "Dữ liệu ở khắp nơi, không có bức tranh tổng", desc: "Pancake, Shopify, Meta Ads, Sepay chạy song song — không có một nơi duy nhất để nhìn thấy toàn bộ kinh doanh." },
 ];
